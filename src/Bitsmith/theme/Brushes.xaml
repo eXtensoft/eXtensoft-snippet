@@ -1,0 +1,60 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Bitsmith">
+    
+    
+
+    <SolidColorBrush x:Key="StandardBackground" Color="Gainsboro"/>
+    <SolidColorBrush x:Key="LightBackground" Color="White"/>
+    <SolidColorBrush x:Key="DisabledForeground" Color="Gray"/>
+
+    <SolidColorBrush x:Key="StandardDarkBackground" Color="DarkRed"/>
+    <SolidColorBrush x:Key="StandardMediumBackground" Color="DarkGray"/>
+    <SolidColorBrush x:Key="StandardLightBackground" Color="Gainsboro"/>
+    <SolidColorBrush x:Key="StandardHighlightBackground" Color="Red"/>
+
+    <SolidColorBrush x:Key="StandardDarkForeground" Color="DarkRed"/>
+    <SolidColorBrush x:Key="StandardMediumForeground" Color="Red"/>
+    <SolidColorBrush x:Key="StandardMediumLightForeground" Color="Gainsboro"/>
+    <SolidColorBrush x:Key="StandardLightForeground" Color="White"/>
+    <SolidColorBrush x:Key="StandardHighlightForeground" Color="Red"/>
+
+    <SolidColorBrush x:Key="PrimaryBackgroundLight" Color="White"/>
+    <SolidColorBrush x:Key="PrimaryBackgroundDark" Color="BurlyWood"/>
+    <SolidColorBrush x:Key="PrimaryDark" Color="#430000"/>
+    <SolidColorBrush x:Key="PrimaryMediumDark" Color="#4D1414"/>
+    <SolidColorBrush x:Key="PrimaryMediumDark5" Color="#4D1414" Opacity="0.5"/>
+    <SolidColorBrush x:Key="PrimaryMedium" Color="#670101"/>
+    <SolidColorBrush x:Key="PrimaryMedium5" Color="#670101" Opacity="0.5"/>
+    <SolidColorBrush x:Key="PrimaryMediumLight" Color="#b32e2e"/>
+    <SolidColorBrush x:Key="PrimaryLight" Color="#B35252"/>
+    <SolidColorBrush x:Key="PrimaryLight5" Color="#B35252" Opacity="0.5"/>
+
+    <SolidColorBrush x:Key="SecondaryADark" Color="#002828"/>
+    <SolidColorBrush x:Key="SecondaryADarkMedium" Color="#0c2e2e"/>
+    <SolidColorBrush x:Key="SecondaryAMedium" Color="#013E3E"/>
+    <SolidColorBrush x:Key="SecondaryAMediumLight" Color="#299E9E"/>
+    <SolidColorBrush x:Key="SecondaryALight" Color="#489E9E"/>
+    <SolidColorBrush x:Key="SecondaryAHighlight" Color="#013E3E"/>
+
+    <SolidColorBrush x:Key="SecondaryBDark" Color="#2A3E00"/>
+    <SolidColorBrush x:Key="SecondaryBDarkMedium" Color="#364813"/>
+    <SolidColorBrush x:Key="SecondaryBMedium" Color="#406001"/>
+    <SolidColorBrush x:Key="SecondaryBMediumLight" Color="#84B02D"/>
+    <SolidColorBrush x:Key="SecondaryBLight" Color="#90B050"/>
+    <SolidColorBrush x:Key="SecondaryBHighlight" Color="#406001"/>
+
+
+
+    <SolidColorBrush x:Key="CommandLight" Color="Silver"/>
+    <SolidColorBrush x:Key="CommandMedium" Color="DarkGray"/>
+    <SolidColorBrush x:Key="CommandMedium50" Color="DarkGreen"/>
+    <SolidColorBrush x:Key="CommandDark" Color="DarkGray"/>
+    <SolidColorBrush x:Key="CommandDark50" Color="DarkGray"/>
+    <SolidColorBrush x:Key="CommandDisabled" Color="DarkGray" Opacity="0.5"/>
+    <SolidColorBrush x:Key="CommandHover" Color="Silver"/>
+    <SolidColorBrush x:Key="CommandHoverRemove" Color="DarkGray"/>
+    <SolidColorBrush x:Key="LabelDark" Color="DarkGray"/>
+    
+ 
+</ResourceDictionary>

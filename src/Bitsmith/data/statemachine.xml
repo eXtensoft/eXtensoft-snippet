@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<StateMachine xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" beginState="LoggedOff" endState="LoggedOff">
+	<State name="LoggedOff" display="LoggedOff" />
+	<State name="Authenticated" display="Authenticated" />
+	<State name="Authorized" display="Authorized" />
+	<State name="Unauthorized" display="Unauthorized" />
+	<State name="Error" display="Error" />
+	<State name="Administration" display="Admin"/>
+	<State name="Lists" display="Lists"/>
+	<State name="Contacts" display="Contacts"/>
+  <State name="Credentials" display="Credentials"/>
+  <State name="Security" display="Security"/>
+  <State name="Todos" display="Todos"/>
+  <State name="Remote" display="Remote"/>
+  <State name="Projects" display="Projects"/>
+	<Transition name="Login" origin="LoggedOff" destination="Authenticated" order="0" />
+	<Transition name="UnAuthorize" origin="Authenticated" destination="Unauthorized" order="0" />
+	<Transition name="Authorize" origin="Authenticated" destination="Authorized" order="0" />
+	<Transition name="Logoff" origin="Authorized" destination="LoggedOff" order="0" />
+	<Transition name="Logoff" origin="Authenticated" destination="LoggedOff" order="0" />
+	<Transition name="Logoff" origin="Unauthorized" destination="LoggedOff" order="0" />
+	<Transition name="OnError" origin="Authenticated" destination="Error" order="0" />
+	<Transition name="OnError" origin="Authorized" destination="Error" order="0" />
+	<Transition name="Logoff" origin="Error" destination="LoggedOff" order="0" />
+	<Transition name="ToggleAdmin" origin="Authorized" destination="Administration" order="0" />
+	<Transition name="ToggleAdmin" origin="Administration" destination="Authorized" order="0" />
+	<Transition name="ToggleLists" origin="Authorized" destination="Lists" order="0" />
+	<Transition name="ToggleLists" origin="Lists" destination="Authorized" order="0" />
+	<Transition name="ToggleContacts" origin="Authorized" destination="Contacts" order="0" />
+	<Transition name="ToggleContacts" origin="Contacts" destination="Authorized" order="0" />
+  <Transition name="ToggleCredentials" origin="Authorized" destination="Credentials" order="0" />
+  <Transition name="ToggleCredentials" origin="Credentials" destination="Authorized" order="0" />
+  <Transition name="ToggleSecurity" origin="Authorized" destination="Security" order="0" />
+  <Transition name="ToggleSecurity" origin="Security" destination="Authorized" order="0" />
+  <Transition name="ToggleTodos" origin="Authorized" destination="Todos" order="0" />
+  <Transition name="ToggleTodos" origin="Todos" destination="Authorized" order="0" />
+  <Transition name="ToggleRemote" origin="Authorized" destination="Remote" order="0" />
+  <Transition name="ToggleRemote" origin="Remote" destination="Authorized" order="0" />
+  <Transition name="ToggleProjects" origin="Authorized" destination="Projects" order="0" />
+  <Transition name="ToggleProjects" origin="Projects" destination="Authorized" order="0" />
+  <Transition name="Logoff" origin="Projects" destination="LoggedOff" order="0" />
+	<Transition name="Logoff" origin="Administration" destination="LoggedOff" order="0"/>
+	<Transition name="Logoff" origin="Lists" destination="LoggedOff" order="0"/>
+	<Transition name="Logoff" origin="Contacts" destination="LoggedOff" order="0"/>
+
+</StateMachine>

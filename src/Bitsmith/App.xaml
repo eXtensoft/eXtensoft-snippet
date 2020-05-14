@@ -1,0 +1,40 @@
+﻿<Application x:Class="Bitsmith.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Bitsmith" 
+             xmlns:model="clr-namespace:Bitsmith.Models"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             StartupUri="Shell.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="theme/Brushes.xaml"/>
+                <ResourceDictionary Source="theme/Styles.xaml"/>
+                <ResourceDictionary Source="theme/DataTemplates.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <!--<local:BooleanToStringConverter x:Key="BoolToStringConverter"/>-->
+            <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
+            <local:TagConverter x:Key="TagConverter"/>
+            <ObjectDataProvider x:Key="Scopes" MethodName="GetValues" ObjectType="{x:Type sys:Enum }">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="model:ScopeOption"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+            <ObjectDataProvider x:Key="Scales" MethodName="GetValues" ObjectType="{x:Type sys:Enum }">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="model:ScaleOption"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+            <ObjectDataProvider x:Key="Statii" MethodName="GetValues" ObjectType="{x:Type sys:Enum }">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="model:StatusOption"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+            <!--<ObjectDataProvider x:Key="ChronosViews" MethodName="GetValues" ObjectType="{x:Type sys:Enum }">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="local:ChronosViewTypeOptions"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>-->
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

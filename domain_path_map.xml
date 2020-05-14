@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfDomainPathMap xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+ <DomainPathMap display="Default" id="cb883c5d-3141-4a67-97d8-6475527f3179">
+  <Node slug="/paths/rober" display="rober" />
+ </DomainPathMap>
+</ArrayOfDomainPathMap>

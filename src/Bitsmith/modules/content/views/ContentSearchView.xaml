@@ -1,0 +1,110 @@
+﻿<UserControl x:Class="Bitsmith.ContentSearchView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Bitsmith"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="260">
+    <UserControl.Resources>
+        <local:BooleanToStringConverter x:Key="cvtSearchType" TrueText="true" FalseText="false"/>
+    </UserControl.Resources>
+
+    <TabControl Grid.Column="0" Grid.Row="0" Style="{StaticResource ResourceKey=viewTab}" >
+        <TabItem Header="Search"  Style="{StaticResource ResourceKey=viewTabItem}">
+            <Grid Background="LightGray">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <GroupBox Grid.Row="0">
+                    <GroupBox.Header>
+                        <StackPanel Orientation="Horizontal">
+                        <ToggleButton IsChecked="{Binding Path=IsTagSearch}" 
+                                          Content="{Binding Path=IsTagSearch, Converter={StaticResource cvtSearchType}}" Style="{StaticResource CommandToggleButton}" />
+                            <Label Content="{Binding Path=SelectedDomain.Name}"/>
+                            <Button Style="{StaticResource DetailsCommandButton}" Command="{Binding Path=ViewDomainsCommand}"/>
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <StackPanel>
+                        <TextBox x:Name="txbSearch" Margin="2" TextWrapping="Wrap" Height="100"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"></ColumnDefinition>
+                                <ColumnDefinition Width="1*"></ColumnDefinition>
+                                <ColumnDefinition Width="1*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" HorizontalAlignment="Left" 
+                                    TabIndex="-1" Content="Save"  Style="{StaticResource CommandButton}" Command="{Binding Path=SaveWorkspaceCommand}"/>
+                            <Button Grid.Column="1" HorizontalAlignment="Center" TabIndex="-1" Content="Clear"  Style="{DynamicResource ResourceKey=CommandButton}"/>
+                            <Button Grid.Column="2" HorizontalAlignment="Right" IsDefault="True" Content="Search"  Style="{StaticResource ResourceKey=CommandButton}"/>
+                        </Grid>
+
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="Queries" Grid.Row="1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <RadioButton Content="Recent" Grid.Column="0" HorizontalAlignment="Center"/>
+                        <RadioButton Grid.Column="1" Content="Favorites" HorizontalAlignment="Right" Margin="0,0,22.4,194.8" Grid.RowSpan="2"/>
+                        
+                        <ListBox Grid.Row="1" Grid.ColumnSpan="2" Margin="10" BorderThickness="0" Background="LightGray" 
+                                 AlternationCount="2">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding Path=Title}" Grid.Column="1"/>
+                                        <Button Grid.Column="0" Tag="{Binding}" 
+                                            Content="query-type"
+                                            Style="{StaticResource ResourceKey=CommandButton}" 
+                                                Margin="5,2,10,2">
+                                            <!--<Button.Content>
+                                                
+                                                <Image Grid.Column="2" Height="12" Width="12" Source="{Binding Path=QueryType, Converter={StaticResource ResourceKey=ImageConverter},ConverterParameter=../../}"/>
+                                            </Button.Content>-->
+                                        </Button>
+                                    </Grid>
+
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </GroupBox>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Tags" Style="{StaticResource ResourceKey=viewTabItem}">
+            <Grid Background="LightGray">
+                <GroupBox Header="Tags">
+                    <ListBox Margin="10" BorderThickness="0" Background="LightGray" 
+                                 ItemsSource="{Binding Path=TagMaps}" AlternationCount="2">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Path=Count}" Margin="3,0" Width="20" TextAlignment="Right" Foreground="#003D79"/>
+                                    <TextBlock Text="{Binding Path=Key}" Margin="10,0"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </GroupBox>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Paths" Style="{StaticResource ResourceKey=viewTabItem}">
+            <local:ContentPathsView/>
+        </TabItem>
+    </TabControl>
+
+    
+</UserControl>

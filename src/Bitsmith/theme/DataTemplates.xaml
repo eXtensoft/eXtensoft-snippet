@@ -1,0 +1,93 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+                    xmlns:local="clr-namespace:Bitsmith" 
+                    xmlns:model="clr-namespace:Bitsmith.Models"
+                    xmlns:vm="clr-namespace:Bitsmith.ViewModels">
+    <!--<local:ImageMapConverter x:Key="ImageConverter"/>-->
+    <Style TargetType="{x:Type GridSplitter}">
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="Background" Value="LightGray"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="ShowsPreview" Value="True"/>
+        <Setter Property="Width" Value="6"/>
+        <Setter Property="Margin" Value="0,75"/>
+    </Style>
+
+    <HierarchicalDataTemplate DataType="{x:Type vm:DomainPathMapViewModel}" ItemsSource="{Binding Path=Items}">
+        <StackPanel Orientation="Horizontal">
+            <Label Content="{Binding Path=Display}"/>
+        </StackPanel>
+    </HierarchicalDataTemplate>
+    <HierarchicalDataTemplate DataType="{x:Type vm:PathNodeViewModel}" ItemsSource="{Binding Path=Items}">
+        <StackPanel Orientation="Horizontal">
+            <Label Content="{Binding Path=Display}"/>
+        </StackPanel>
+    </HierarchicalDataTemplate>
+    <!--<DataTemplate DataType="{x:Type local:ContentItemViewModel}">
+        <StackPanel Orientation="Horizontal">
+            <Image Height="18" Width="18" Source="{Binding Path=Mime, Converter={StaticResource ResourceKey=ImageConverter},ConverterParameter=../}"/>
+            <TextBlock Text="{Binding Path=Title}" ToolTip="{Binding Path=Text}"/>
+        </StackPanel>
+    </DataTemplate>-->
+
+    <!--<DataTemplate DataType="{x:Type local:TaskViewModel}">
+        <Grid HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Button Style="{StaticResource RemoveCommandButton}" Command="{Binding Path=ArchiveTaskCommand}"/>
+            <Label Grid.Column="1" Content="{Binding Path=Display}" HorizontalContentAlignment="Left" Margin="10,0,0,0"/>
+            <Label Grid.Column="3" Content="{Binding Path=Status}" HorizontalContentAlignment="Right" Margin="0,0,10,0"/>
+        </Grid>
+    </DataTemplate>-->
+
+    <!--<DataTemplate DataType="{x:Type local:NoteViewModel}">
+        <Grid Margin="10,5" MaxHeight="150">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Button Grid.Column="0" Grid.Row="0" Style="{StaticResource DetailsCommandButton}"
+                    Command="{Binding Path=DataContext.Tasks.OverlayNoteCommand, 
+                RelativeSource={RelativeSource FindAncestor,AncestorType=Window}}" CommandParameter="{Binding}"/>
+            <Label Grid.Row="0" Grid.Column="2" Content="{Binding Path=CreatedDisplay}"/>
+            <Label Grid.Row="2" Grid.Column="0" Content="Display"/>
+            <TextBox Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding Path=Display}"/>
+            <Button Grid.Row="0" Grid.Column="3" Style="{StaticResource RemoveCommandButton}" 
+                    Command="{Binding Path=RemoveCommand}" CommandParameter="{Binding}"/>
+            <Label Grid.Column="0" Grid.Row="4" Content="Text"/>
+            <TextBox Grid.Row="4" Grid.Column="2" 
+                     Grid.RowSpan="3" Grid.ColumnSpan="2" 
+                     Text="{Binding Path=Content}" HorizontalContentAlignment="Stretch"
+                     AcceptsReturn="True" AcceptsTab="True"
+                     TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/>
+        </Grid>
+    </DataTemplate>-->
+
+
+    <!--<DataTemplate x:Key="textFileDataTemplate">
+        <local:TextFileView/>
+    </DataTemplate>
+    <DataTemplate x:Key="htmlFileDataTemplate">
+        --><!--<local:HtmlFileView/>--><!--
+    </DataTemplate>
+    <DataTemplate x:Key="imageFileDataTemplate">
+        <local:ImageFileView/>
+    </DataTemplate>
+    <DataTemplate x:Key="noneFileDataTemplate">
+        <local:SystemFileView/>
+    </DataTemplate>-->
+
+</ResourceDictionary>

@@ -1,0 +1,311 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B3A1F5EE-B572-4B89-AC1E-1BF0FD9FD935}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Bitsmith</RootNamespace>
+    <AssemblyName>Bitsmith</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OverlayView.xaml.cs">
+      <DependentUpon>OverlayView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Shell.xaml.cs">
+      <DependentUpon>Shell.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="view\controls\RoundedBox.xaml.cs">
+      <DependentUpon>RoundedBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="window\WindowBase.cs" />
+    <Compile Include="window\WindowCommands.cs" />
+    <Compile Include="window\XSButton.cs" />
+    <Compile Include="window\XSButtonConverters.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="code\AppConstants.cs" />
+    <Compile Include="code\AppExtensions.cs" />
+    <Compile Include="code\Bootstrapper.cs" />
+    <Compile Include="code\ConfigValueProvider.cs" />
+    <Compile Include="code\controls\AnimatedTabControl.cs" />
+    <Compile Include="code\converters\BooleanToStringConverter.cs" />
+    <Compile Include="code\converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="code\converters\BoolToIntConverter.cs" />
+    <Compile Include="code\converters\TagConverter.cs" />
+    <Compile Include="code\Data.cs" />
+    <Compile Include="code\FileSystemDataProvider.cs" />
+    <Compile Include="code\GenericObjectManager.cs" />
+    <Compile Include="code\OverlayManager.cs" />
+    <Compile Include="code\TypedItem.cs" />
+    <Compile Include="code\UserData.cs" />
+    <Compile Include="code\UserSettings.cs" />
+    <Compile Include="code\Workspace.cs" />
+    <Compile Include="modules\.common\code\PathProvider.cs" />
+    <Compile Include="modules\.common\ContentTag.cs" />
+    <Compile Include="modules\.common\models\DomainPathMap.cs" />
+    <Compile Include="modules\.common\models\enums\FileTypeOption.cs" />
+    <Compile Include="modules\.common\models\enums\LinkTypeOption.cs" />
+    <Compile Include="modules\.common\models\enums\ScaleOption.cs" />
+    <Compile Include="modules\.common\models\enums\ScopeOption.cs" />
+    <Compile Include="modules\.common\models\enums\StatusOption.cs" />
+    <Compile Include="modules\.common\models\MimeMap.cs" />
+    <Compile Include="modules\.common\models\ModelExtensions.cs" />
+    <Compile Include="modules\.common\models\PathNode.cs" />
+    <Compile Include="modules\.common\Module.cs" />
+    <Compile Include="modules\.common\Module`1.cs" />
+    <Compile Include="modules\.common\view.models\base\HierarchicalViewModel`1.cs" />
+    <Compile Include="modules\.common\view.models\base\IHierarchicalViewModel.cs" />
+    <Compile Include="modules\.common\view.models\base\IViewModel.cs" />
+    <Compile Include="modules\.common\view.models\base\NavigationOption.cs" />
+    <Compile Include="modules\.common\view.models\base\PropertyValidator.cs" />
+    <Compile Include="modules\.common\view.models\base\PropertyValidatorCollection.cs" />
+    <Compile Include="modules\.common\view.models\base\SortableViewModel`1.cs" />
+    <Compile Include="modules\.common\view.models\base\ViewModel`1.cs" />
+    <Compile Include="modules\.common\view.models\commands\RelayCommand.cs" />
+    <Compile Include="modules\.common\view.models\commands\RelayCommand`1.cs" />
+    <Compile Include="modules\.common\view.models\DataViewModel.cs" />
+    <Compile Include="modules\.common\view.models\DomainPathMapViewModel.cs" />
+    <Compile Include="modules\.common\view.models\MimeMapViewModel.cs" />
+    <Compile Include="modules\.common\view.models\MimeModule.cs" />
+    <Compile Include="modules\.common\view.models\PathNodeViewModel.cs" />
+    <Compile Include="modules\.common\view.models\VirtualPathModule.cs" />
+    <Compile Include="modules\.common\view.models\WorkspaceViewModel.cs" />
+    <Compile Include="modules\.common\views\FilesView.xaml.cs">
+      <DependentUpon>FilesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\.common\views\MimeMapsView.xaml.cs">
+      <DependentUpon>MimeMapsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\.common\views\NotesView.xaml.cs">
+      <DependentUpon>NotesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\.common\views\PathsView.xaml.cs">
+      <DependentUpon>PathsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\.common\views\PropertiesView.xaml.cs">
+      <DependentUpon>PropertiesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\content\code\TagMap.cs" />
+    <Compile Include="modules\content\code\TagResolver.cs" />
+    <Compile Include="modules\content\code\TypeResolver.cs" />
+    <Compile Include="modules\content\ContentExtensions.cs" />
+    <Compile Include="modules\content\ContentModule.cs" />
+    <Compile Include="modules\content\models\Content.cs" />
+    <Compile Include="modules\content\models\ContentItem.cs" />
+    <Compile Include="modules\content\models\ContentTypeOption.cs" />
+    <Compile Include="modules\content\models\Domain.cs" />
+    <Compile Include="modules\content\view.models\DomainViewModel.cs" />
+    <Compile Include="modules\content\view.models\NewContentViewModel.cs" />
+    <Compile Include="modules\content\views\ContentPathsView.xaml.cs">
+      <DependentUpon>ContentPathsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\content\views\ContentSearchView.xaml.cs">
+      <DependentUpon>ContentSearchView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\content\views\ContentView.xaml.cs">
+      <DependentUpon>ContentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\content\views\DomainsView.xaml.cs">
+      <DependentUpon>DomainsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\content\views\NewContentView.xaml.cs">
+      <DependentUpon>NewContentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\content\views\SearchResultsView.xaml.cs">
+      <DependentUpon>SearchResultsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="data\statemachine.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="modules\.common\views\FilesView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="modules\.common\views\MimeMapsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="modules\.common\views\NotesView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="modules\.common\views\PathsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="modules\.common\views\PropertiesView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="modules\content\views\ContentPathsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="modules\content\views\ContentSearchView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="modules\content\views\ContentView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="modules\content\views\DomainsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="modules\content\views\NewContentView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="modules\content\views\SearchResultsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="OverlayView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Shell.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="themes\resColorsWindowBase.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="themes\resWindowBase.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="themes\resWindowBaseMaximized.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="themes\resWindowBaseNormal.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="themes\resWindowBaseStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="themes\resXSButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="themes\resXSButtonStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="theme\Brushes.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="theme\DataTemplates.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="theme\Styles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="theme\TabItemResource.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="view\controls\RoundedBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="model\" />
+    <Folder Include="modules\.common\view.models\shared\" />
+    <Folder Include="modules\project.management\models\" />
+    <Folder Include="modules\project.management\view.models\" />
+    <Folder Include="modules\project.management\views\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
