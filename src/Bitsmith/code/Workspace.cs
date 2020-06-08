@@ -33,6 +33,32 @@ namespace Bitsmith
             }
         }
 
+        private StateManager _State;
+        public StateManager State
+        {
+            get
+            {
+                if (_State == null)
+                {
+                    _State = Bootstrapper.StateMachine();
+                }
+                return _State;
+            }
+        }
+
+        private UserSettingsModule _Settings;
+        public UserSettingsModule Settings
+        {
+            get
+            {
+                if (_Settings == null)
+                {
+                    _Settings = new UserSettingsModule();
+                }
+                return _Settings;
+            }
+        }
+
         static Workspace()
         {
             _Instance = Bootstrapper.Workspace();

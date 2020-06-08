@@ -1,0 +1,43 @@
+﻿
+GroupTypes
+	Sprint
+	Project
+
+
+TaskTypes
+
+
+Roles
+	Analyst
+	Quality
+	Developer
+
+
+
+        None,
+        Analysis,
+        Planning,
+        OnDeck,
+        InProgress,
+        Blocked,
+        Backburner,
+        OnHold,
+        Completed,
+        InTesting,
+        Done,
+        Archived,
+
+
+
+StateMachine: Flow
+        States
+            Display, Token, id
+
+        Transitions
+            Display, From, To
+
+        Terminal
+            Begin[]
+            End[]
+	
+	

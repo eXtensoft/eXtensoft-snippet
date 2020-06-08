@@ -4,16 +4,20 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bitsmith"
-        MinWidth="{x:Static local:ConfigValueProvider.ShellWidth}"
-        MinHeight="{x:Static local:ConfigValueProvider.ShellHeight}"
-        Height="{x:Static local:ConfigValueProvider.ShellHeight}"
-        Width="{x:Static local:ConfigValueProvider.ShellWidth}"
+        Closing="WindowBase_Closing" Loaded="WindowBase_Loaded"
         Title="{x:Static local:ConfigValueProvider.ShellTitle}"
         mc:Ignorable="d">
     <Grid x:Name="grdRoot">
-        <local:ContentView/>
+        <!--<local:ContentView/>-->
         <!-- <local:MimeMapsView/>-->
         <!--<local:ContentDomainsView/>-->
         <!--<local:PathsView/>-->
     </Grid>
 </local:WindowBase>
+    
+    <!-- 
+        MinWidth="{x:Static local:ConfigValueProvider.ShellWidth}"
+        MinHeight="{x:Static local:ConfigValueProvider.ShellHeight}"
+        Height="{x:Static local:ConfigValueProvider.ShellHeight}"
+        Width="{x:Static local:ConfigValueProvider.ShellWidth}"
+        -->

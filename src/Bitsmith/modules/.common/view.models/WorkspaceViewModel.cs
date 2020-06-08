@@ -13,6 +13,8 @@ namespace Bitsmith.ViewModels
         public Grid Root { get; set; }
         public ContentModule Content { get; set; }
 
+        public ProjectModule Project { get; set; }
+
         //public Data Data { get; set; }
 
         public VirtualPathModule Paths { get; set; }
@@ -41,21 +43,31 @@ namespace Bitsmith.ViewModels
         public WorkspaceViewModel(Workspace model)
         {
             Overlay.RegisterOverlay(AppConstants.OverlayContent, ShowContentOverlay);
+            Paths = new VirtualPathModule();
+            Paths.Setup();
+            Mimes = new MimeModule();
+            Mimes.Setup();
+
             Content = new ContentModule();
-            //Content.Setup();
+            Content.Setup(Paths,Mimes);
             //Data = new Data();
             //Data.Setup();
-            Paths = new VirtualPathModule();
-            //Paths.Setup();
-            //Mimes = new MimeModule();
-            //Mimes.Setup();
+            Project = new ProjectModule();
+            Project.Setup();
+
 
         }
 
-
-
-
-
-
+        internal void Save()
+        {
+            if (Content.CanSaveWorkspace())
+            {
+                Content.SaveWorkspace();
+            }
+            if (Project.CanSaveWorkspace())
+            {
+                Project.SaveWorkspace();
+            }
+        }
     }
 }

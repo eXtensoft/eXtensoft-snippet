@@ -13,6 +13,7 @@ namespace Bitsmith.ViewModels
         public void Setup()
         {
             IsInitialized = LoadData();
+            var s = this.GetType().Name;
             Initialize();
 
         }

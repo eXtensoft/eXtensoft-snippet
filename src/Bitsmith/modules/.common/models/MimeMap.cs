@@ -15,6 +15,7 @@ namespace Bitsmith.Models
         public string Extension { get; set; }
         public string GroupName { get; set; } = "None";
         public string Image { get; set; } = "none";
+        public string View { get; set; }
         public List<Property> Properties { get; set; } = new List<Property>();
 
 

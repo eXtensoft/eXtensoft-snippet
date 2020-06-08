@@ -5,6 +5,8 @@ namespace Bitsmith.Models
 {
     public class ContentItem
     {
+        [XmlIgnore]
+        public bool IsRemove { get; set; }
         [XmlAttribute("id")]
         public string Id { get; set; }
         [XmlAttribute("display")]

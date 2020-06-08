@@ -23,7 +23,6 @@ namespace Bitsmith
         public PathsView()
         {
             InitializeComponent();
-            this.DataContext = Workspace.Instance.ViewModel.Paths;
         }
     }
 }

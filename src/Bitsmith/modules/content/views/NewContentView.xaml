@@ -7,11 +7,12 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
+        <local:TagConverter x:Key="cnvNewTags"/>
         <local:BooleanToIntConverter x:Key="cvtBool2Int"/>
         <local:BooleanToVisibilityConverter x:Key="cvtBool2Visibility"/>
         <local:BooleanToVisibilityConverter x:Key="cvtBool2VisibilityReverse" IsReverse="True"/>
     </UserControl.Resources>
-        <Grid Margin="10" >
+        <Grid Margin="10" DataContext="{Binding Path=Content}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="5"/>
@@ -45,7 +46,7 @@
             <GroupBox Header="Type" >
                 <StackPanel>
                     <RadioButton Content="Link" IsChecked="{Binding Path=Input.IsLink, Mode=TwoWay}" GroupName="ContentType"/>
-                    <RadioButton Content="File" IsChecked="{Binding Path=Input.IsFile, Mode=TwoWay}" GroupName="ContentType"/>
+                    <RadioButton x:Name="rdoFile" Content="File" IsChecked="{Binding Path=Input.IsFile, Mode=TwoWay}" GroupName="ContentType"/>
                     <RadioButton x:Name="rdoText" Content="Text" IsChecked="{Binding Path=Input.IsText, Mode=TwoWay}" GroupName="ContentType"/>
                 </StackPanel>
             </GroupBox>            
@@ -98,7 +99,7 @@
 
         <TextBox Grid.Column="2"  Grid.Row="2" 
                  Grid.ColumnSpan="{Binding ElementName=expTags, Path=IsExpanded, Converter={StaticResource cvtBool2Int}}"
-                 Text="{Binding Path=Input.Tags, Converter={StaticResource ResourceKey=TagConverter}}" />
+                 Text="{Binding Path=Input.Tags, Converter={StaticResource ResourceKey=cnvNewTags}}" />
         <TextBox Grid.Column="2"  Grid.Row="4"
                  Grid.ColumnSpan="{Binding ElementName=expTags, Path=IsExpanded, Converter={StaticResource cvtBool2Int}}"
                  Text="{Binding Path=Input.Display, UpdateSourceTrigger=PropertyChanged}" />
@@ -109,6 +110,10 @@
                  AcceptsReturn="True" TextWrapping="Wrap"
                  AcceptsTab="True" Text="{Binding Path=Input.Body, UpdateSourceTrigger=PropertyChanged}" VerticalScrollBarVisibility="Visible"/>
 
+        <Button Grid.Column="2" Grid.Row="8" Style="{StaticResource CommandButton}"
+                Command="{Binding Path=SelectFileCommand}"
+                Visibility="{Binding ElementName=rdoFile, Path=IsChecked, Converter={StaticResource cvtBool2Visibility}}"
+                Content="Select File"/>
         <Label Grid.Column="0" Grid.Row="10" Content="Path" HorizontalAlignment="Right"/>
         <TextBox Grid.Column="2" Grid.Row="10" Text="{Binding Path=Input.Path}" Background="Transparent"/>
     </Grid>

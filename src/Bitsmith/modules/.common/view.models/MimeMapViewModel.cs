@@ -102,6 +102,20 @@ namespace Bitsmith.ViewModels
 			}
 		}
 
+		public string View
+		{
+			get
+			{
+				return Model.View;
+			}
+			set
+			{
+				Model.View = value;
+				OnPropertyChanged("View");
+			}
+		}
+
+
 		public MimeMapViewModel(MimeMap model)
         {
             Model = model;

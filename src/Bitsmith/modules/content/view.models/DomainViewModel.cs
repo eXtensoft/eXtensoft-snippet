@@ -5,6 +5,8 @@ namespace Bitsmith.ViewModels
 {
 	public class DomainViewModel : ViewModel<Domain>
     {
+		public DomainPathMapViewModel Item { get; set; }
+
 
 		public string Id
 		{
@@ -58,10 +60,16 @@ namespace Bitsmith.ViewModels
 			}
 		}
 
-		public DomainViewModel(Domain model)
+        public DomainPathMapViewModel Paths { get; internal set; }
+
+        public DomainViewModel(Domain model)
 		{
 			Model = model;
 		}
 
+		public DomainViewModel(Domain model, DomainPathMapViewModel item) : this(model)
+		{
+			Item = item;
+		}
 	}
 }

@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="260">
     <UserControl.Resources>
-        <local:BooleanToStringConverter x:Key="cvtSearchType" TrueText="true" FalseText="false"/>
+        <local:BooleanToStringConverter x:Key="cvtSearchType" TrueText="Tag Search" FalseText="Full Text Search"/>
     </UserControl.Resources>
 
     <TabControl Grid.Column="0" Grid.Row="0" Style="{StaticResource ResourceKey=viewTab}" >
@@ -17,17 +17,17 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <GroupBox Grid.Row="0">
+                <GroupBox Grid.Row="0" DataContext="{Binding Path=Content}">
                     <GroupBox.Header>
                         <StackPanel Orientation="Horizontal">
-                        <ToggleButton IsChecked="{Binding Path=IsTagSearch}" 
-                                          Content="{Binding Path=IsTagSearch, Converter={StaticResource cvtSearchType}}" Style="{StaticResource CommandToggleButton}" />
-                            <Label Content="{Binding Path=SelectedDomain.Name}"/>
                             <Button Style="{StaticResource DetailsCommandButton}" Command="{Binding Path=ViewDomainsCommand}"/>
+                            <Label Content="{Binding Path=SelectedDomain.Name}"/>
+                            <ToggleButton IsChecked="{Binding Path=IsTagSearch}" 
+                                          Content="{Binding Path=IsTagSearch, Converter={StaticResource cvtSearchType}}" Style="{StaticResource CommandToggleButton}" />                            
                         </StackPanel>
                     </GroupBox.Header>
                     <StackPanel>
-                        <TextBox x:Name="txbSearch" Margin="2" TextWrapping="Wrap" Height="100"/>
+                        <TextBox Margin="2" TextWrapping="Wrap" Height="100" Text="{Binding Path=QueryText, UpdateSourceTrigger=PropertyChanged}"/>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*"></ColumnDefinition>
@@ -36,8 +36,8 @@
                             </Grid.ColumnDefinitions>
                             <Button Grid.Column="0" HorizontalAlignment="Left" 
                                     TabIndex="-1" Content="Save"  Style="{StaticResource CommandButton}" Command="{Binding Path=SaveWorkspaceCommand}"/>
-                            <Button Grid.Column="1" HorizontalAlignment="Center" TabIndex="-1" Content="Clear"  Style="{DynamicResource ResourceKey=CommandButton}"/>
-                            <Button Grid.Column="2" HorizontalAlignment="Right" IsDefault="True" Content="Search"  Style="{StaticResource ResourceKey=CommandButton}"/>
+                            <Button Grid.Column="1" HorizontalAlignment="Center" TabIndex="-1" Content="Clear"  Style="{DynamicResource ResourceKey=CommandButton}" Command="{Binding Path=ClearQueryCommand}"/>
+                            <Button Grid.Column="2" HorizontalAlignment="Right" IsDefault="True" Content="Search"  Style="{StaticResource ResourceKey=CommandButton}" Command="{Binding Path=ExecuteQueryCommand}"/>
                         </Grid>
 
                     </StackPanel>
@@ -86,9 +86,9 @@
         </TabItem>
         <TabItem Header="Tags" Style="{StaticResource ResourceKey=viewTabItem}">
             <Grid Background="LightGray">
-                <GroupBox Header="Tags">
-                    <ListBox Margin="10" BorderThickness="0" Background="LightGray" 
-                                 ItemsSource="{Binding Path=TagMaps}" AlternationCount="2">
+                <GroupBox Header="Tags" DataContext="{Binding Path=Content}">
+                    <ListBox Margin="10" BorderThickness="0" Background="LightGray" SelectedItem="{Binding Path=SelectedTag}" 
+                                 ItemsSource="{Binding Path=Resolver.Items}" AlternationCount="2">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">

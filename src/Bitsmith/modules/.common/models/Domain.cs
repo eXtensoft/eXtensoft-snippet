@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bitsmith.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,7 @@ namespace Bitsmith.Models
 {
     public class Domain
     {
+
         [XmlAttribute("id")]
         public string Id { get; set; }
 
@@ -20,5 +22,7 @@ namespace Bitsmith.Models
 
         [XmlAttribute("createdOn")]
         public DateTime CreatedOn { get; set; }
+
+        public List<Property> Lists { get; set; }
     }
 }

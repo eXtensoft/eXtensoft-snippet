@@ -5,11 +5,41 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows.Documents;
+using System.Windows.Media;
 
 namespace Bitsmith
 {
     public static class AppExtensions
     {
+        public static FlowDocument ToFlowDocument(this string text, string term, Brush background, bool IsCaseSensitive = false)
+        {
+            StringComparison comparison = IsCaseSensitive ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
+            FlowDocument doc = new FlowDocument();
+            Paragraph p = new Paragraph();
+            string body = text;
+            int pos = body.IndexOf(term,comparison);
+            int len = term.Length;
+            do
+            {
+                if (pos == 0)
+                {
+                    p.Inlines.Add(new Run(body.Substring(0, len)) { Background = background });
+                    body = body.Substring(len);
+                }
+                else if (pos > 0)
+                {
+                    p.Inlines.Add(new Run(body.Substring(0, pos)));
+                    body = body.Substring(pos);
+                }
+                pos = body.IndexOf(term, comparison);
+            } while (pos > -1);
+            p.Inlines.Add(new Run(body));
+            doc.Blocks.Add(p);
+
+            return doc;
+        }
+
         public static string ToText(this TimeSpan timespan, string format = @"dd\:hh\:mm")
         {
 

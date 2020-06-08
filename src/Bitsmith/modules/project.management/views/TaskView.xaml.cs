@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Bitsmith
 {
     /// <summary>
-    /// Interaction logic for SearchResultsView.xaml
+    /// Interaction logic for TaskView.xaml
     /// </summary>
-    public partial class SearchResultsView : UserControl
+    public partial class TaskView : UserControl
     {
-        public SearchResultsView()
+        public TaskView()
         {
             InitializeComponent();
         }

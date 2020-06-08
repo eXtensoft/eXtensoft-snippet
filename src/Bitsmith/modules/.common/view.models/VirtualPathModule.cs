@@ -5,12 +5,43 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Bitsmith.ViewModels
 {
 	public class VirtualPathModule : Module<DomainPathMap>
     {
+
+		private ICommand _ViewPathDomainsCommand;
+		public ICommand ViewPathDomainsCommand
+		{
+			get
+			{
+				if (_ViewPathDomainsCommand == null)
+				{
+					_ViewPathDomainsCommand = new RelayCommand(
+					param => ViewPathDomains(),
+					param => CanViewPathDomains());
+				}
+				return _ViewPathDomainsCommand;
+			}
+		}
+		private bool CanViewPathDomains()
+		{
+			return true;
+		}
+		private void ViewPathDomains()
+		{
+			Control ctl = new PathsView();
+			ctl.DataContext = this;
+			dynamic param = new System.Dynamic.ExpandoObject();
+			param.Title = "Content Domains";
+			param.Control = ctl;
+			Workspace.Instance.ViewModel.Overlay.SetOverlay(AppConstants.OverlayContent, param);
+		}
+
+
 
 		public string SelectedDomainId
 		{
@@ -109,11 +140,9 @@ namespace Bitsmith.ViewModels
 
         public override void Initialize()
         {
-
-			//var domainMapPath = new DomainPathMap() { Id = Guid.NewGuid().ToString(), Slug = "slug", Display = "Display", Path = "slug" };
-			//Models.Add(domainMapPath);
             Items = new ObservableCollection<DomainPathMapViewModel>( from x in Models select new DomainPathMapViewModel(x));
 			Items.CollectionChanged += Items_CollectionChanged;
+			SelectedDomain = Items[0];
 		}
 
 		private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

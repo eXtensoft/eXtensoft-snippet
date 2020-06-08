@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Bitsmith"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid DataContext="{Binding Path=Content}">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250" MaxWidth="300"></ColumnDefinition>
             <ColumnDefinition Width="5"></ColumnDefinition>
@@ -16,10 +16,11 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <local:ContentSearchView Grid.Column="0"/>
-        <TabControl Grid.Column="2" Grid.Row="1" x:Name="tabContent"  
-                                  Style="{StaticResource ResourceKey=viewTab}">
+        <TabControl Grid.Column="2" Grid.Row="1" x:Name="tabContent" 
+                    SelectedIndex="{Binding Path=Content.SelectedIndex}" 
+                    Style="{StaticResource ResourceKey=viewTab}">
             <TabItem Header="Results" Style="{StaticResource ResourceKey=viewTabItem}" >
-
+                <local:ContentSearchResultsView/>
             </TabItem>
             <TabItem Header="*" Style="{StaticResource ResourceKey=viewTabItem}" IsSelected="True" >
                 <local:NewContentView/>

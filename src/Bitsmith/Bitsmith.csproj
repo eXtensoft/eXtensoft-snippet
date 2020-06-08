@@ -60,11 +60,109 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="OverlayView.xaml.cs">
+    <Compile Include="modules\project.management\ProjectManagementExtensions.cs" />
+    <Compile Include="modules\project.management\views\DashboardView.xaml.cs">
+      <DependentUpon>DashboardView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\.common\models\ListItem.cs" />
+    <Compile Include="modules\.common\models\Note.cs" />
+    <Compile Include="modules\.common\models\TagIdentifier.cs" />
+    <Compile Include="modules\.common\view.models\shared\lists\ListItemViewModel.cs" />
+    <Compile Include="modules\.common\view.models\UserSettingsModule.cs" />
+    <Compile Include="modules\project.management\models\FileTypeOption.cs" />
+    <Compile Include="modules\project.management\models\Link.cs" />
+    <Compile Include="modules\project.management\models\LinkTypeOption.cs" />
+    <Compile Include="modules\project.management\models\Project.cs" />
+    <Compile Include="modules\project.management\models\Disposition.cs" />
+    <Compile Include="modules\project.management\models\TaskItem.cs" />
+    <Compile Include="modules\project.management\view.models\NewTaskViewModel.cs" />
+    <Compile Include="modules\project.management\view.models\ProjectModule.cs" />
+    <Compile Include="modules\project.management\view.models\TaskItemViewModel.cs" />
+    <Compile Include="modules\project.management\views\ProjectsView.xaml.cs">
+      <DependentUpon>ProjectsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\project.management\views\TasksListView.xaml.cs">
+      <DependentUpon>TasksListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\project.management\views\TaskView.xaml.cs">
+      <DependentUpon>TaskView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="view\state.management\ErrorView.xaml.cs">
+      <DependentUpon>ErrorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="view\state.management\AuthenticationView.xaml.cs">
+      <DependentUpon>AuthenticationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="code\converters\DateTimeConverter.cs" />
+    <Compile Include="code\converters\TruncateStringConverter.cs" />
+    <Compile Include="code\converters\UriToBitmapConverter.cs" />
+    <Compile Include="code\converters\UrlConverter.cs" />
+    <Compile Include="code\finite.state.machine\ActivityStateOption.cs" />
+    <Compile Include="code\finite.state.machine\EndpointAction.cs" />
+    <Compile Include="code\finite.state.machine\EndpointOption.cs" />
+    <Compile Include="code\finite.state.machine\IEndpointAction.cs" />
+    <Compile Include="code\finite.state.machine\ITransitionCondition.cs" />
+    <Compile Include="code\finite.state.machine\State.cs" />
+    <Compile Include="code\finite.state.machine\StateMachine.cs" />
+    <Compile Include="code\finite.state.machine\StateManager.cs" />
+    <Compile Include="code\finite.state.machine\Transition.cs" />
+    <Compile Include="code\finite.state.machine\TransitionCondition.cs" />
+    <Compile Include="code\finite.state.machine\TransitionTypeOption.cs" />
+    <Compile Include="code\TagsConverter.cs" />
+    <Compile Include="code\text-search\FullTextExtensions.cs" />
+    <Compile Include="code\text-search\TextIndex.cs" />
+    <Compile Include="code\text-search\TextIndexer.cs" />
+    <Compile Include="code\text-search\TextIndexes.cs" />
+    <Compile Include="code\text-search\TextIndexLoader.cs" />
+    <Compile Include="code\text-search\Token.cs" />
+    <Compile Include="code\text-search\TokenCollection.cs" />
+    <Compile Include="code\text-search\TokenLocation.cs" />
+    <Compile Include="code\text-search\TokenLocations.cs" />
+    <Compile Include="code\text-search\TokenPosition.cs" />
+    <Compile Include="view\state.management\LogoffView.xaml.cs">
+      <DependentUpon>LogoffView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\content\code\QueryExpression.cs" />
+    <Compile Include="modules\content\view.models\TagMapViewModel.cs" />
+    <Compile Include="modules\content\views\content-views\ContentItemView.xaml.cs">
+      <DependentUpon>ContentItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\content\views\ContentSearchResultsView.xaml.cs">
+      <DependentUpon>ContentSearchResultsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\content\views\content-views\ContentItemFileView.xaml.cs">
+      <DependentUpon>ContentItemFileView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\content\views\content-views\ContentItemImageView.xaml.cs">
+      <DependentUpon>ContentItemImageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\content\views\content-views\ContentItemJsonView.xaml.cs">
+      <DependentUpon>ContentItemJsonView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\content\views\content-views\ContentItemTextfileView.xaml.cs">
+      <DependentUpon>ContentItemTextfileView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\content\views\content-views\ContentItemTextView.xaml.cs">
+      <DependentUpon>ContentItemTextView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\content\views\content-views\ContentItemUrlView.xaml.cs">
+      <DependentUpon>ContentItemUrlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\content\code\ContentManager.cs" />
+    <Compile Include="modules\content\view.models\ContentItemViewModel.cs" />
+    <Compile Include="view\OverlayView.xaml.cs">
       <DependentUpon>OverlayView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Shell.xaml.cs">
       <DependentUpon>Shell.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="view\state.management\UnauthorizedView.xaml.cs">
+      <DependentUpon>UnauthorizedView.xaml</DependentUpon>
     </Compile>
     <Compile Include="view\controls\RoundedBox.xaml.cs">
       <DependentUpon>RoundedBox.xaml</DependentUpon>
@@ -145,7 +243,7 @@
     <Compile Include="modules\content\models\Content.cs" />
     <Compile Include="modules\content\models\ContentItem.cs" />
     <Compile Include="modules\content\models\ContentTypeOption.cs" />
-    <Compile Include="modules\content\models\Domain.cs" />
+    <Compile Include="modules\.common\models\Domain.cs" />
     <Compile Include="modules\content\view.models\DomainViewModel.cs" />
     <Compile Include="modules\content\view.models\NewContentViewModel.cs" />
     <Compile Include="modules\content\views\ContentPathsView.xaml.cs">
@@ -162,9 +260,6 @@
     </Compile>
     <Compile Include="modules\content\views\NewContentView.xaml.cs">
       <DependentUpon>NewContentView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="modules\content\views\SearchResultsView.xaml.cs">
-      <DependentUpon>SearchResultsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -183,6 +278,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -195,6 +294,66 @@
     <Resource Include="data\statemachine.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="modules\project.management\views\DashboardView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\project.management\views\ProjectsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\project.management\views\TasksListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\project.management\views\TaskView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="view\state.management\ErrorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="view\state.management\AuthenticationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="view\state.management\LogoffView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\content\views\content-views\ContentItemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\content\views\ContentSearchResultsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\content\views\content-views\ContentItemFileView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\content\views\content-views\ContentItemImageView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\content\views\content-views\ContentItemJsonView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\content\views\content-views\ContentItemTextfileView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\content\views\content-views\ContentItemTextView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\content\views\content-views\ContentItemUrlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="modules\.common\views\FilesView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -235,11 +394,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="modules\content\views\SearchResultsView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="OverlayView.xaml">
+    <Page Include="view\OverlayView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -295,17 +450,54 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="view\state.management\UnauthorizedView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="view\controls\RoundedBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="code\state\" />
     <Folder Include="model\" />
-    <Folder Include="modules\.common\view.models\shared\" />
-    <Folder Include="modules\project.management\models\" />
-    <Folder Include="modules\project.management\view.models\" />
-    <Folder Include="modules\project.management\views\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\circle.black.png" />
+    <Resource Include="images\circle.blue.png" />
+    <Resource Include="images\circle.brown.png" />
+    <Resource Include="images\circle.cyan.png" />
+    <Resource Include="images\circle.gray.png" />
+    <Resource Include="images\circle.green.png" />
+    <Resource Include="images\circle.orange.png" />
+    <Resource Include="images\circle.red.png" />
+    <Resource Include="images\command.add.png" />
+    <Resource Include="images\content.help.PNG" />
+    <Resource Include="images\content.image.png" />
+    <Resource Include="images\content.list.png" />
+    <Resource Include="images\content.msexcel.png" />
+    <Resource Include="images\content.msword.png" />
+    <Resource Include="images\content.pdf.png" />
+    <Resource Include="images\content.powerpoint.png" />
+    <Resource Include="images\content.snippet.png" />
+    <Resource Include="images\content.text.png" />
+    <Resource Include="images\content.textfile.png" />
+    <Resource Include="images\content.url.png" />
+    <Resource Include="images\content.visio.png" />
+    <Resource Include="images\content.xml.png" />
+    <Resource Include="images\folder.blue.png" />
+    <Resource Include="images\shadow_b.png" />
+    <Resource Include="images\shadow_bl.png" />
+    <Resource Include="images\shadow_br.png" />
+    <Resource Include="images\shadow_l.png" />
+    <Resource Include="images\shadow_r.png" />
+    <Resource Include="images\shadow_t.png" />
+    <Resource Include="images\shadow_tl.png" />
+    <Resource Include="images\shadow_tr.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="modules\project.management\models\design.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

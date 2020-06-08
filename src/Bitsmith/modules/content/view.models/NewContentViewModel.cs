@@ -2,11 +2,39 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 
 namespace Bitsmith.ViewModels
 {
     public class NewContentViewModel : INotifyPropertyChanged
     {
+        public bool HasFile
+        {
+            get
+            {
+                return !String.IsNullOrWhiteSpace(_Filepath) && File.Exists(_Filepath);
+            }
+            set
+            {
+
+            }
+        }
+
+        private string _Filepath;
+        public string Filepath
+        {
+            get
+            {
+                return _Filepath;
+            }
+            set
+            {
+                _Filepath = value;
+                OnPropertyChanged("Filepath");
+                OnPropertyChanged("HasFile");
+            }
+        }
+
 
         private string _Display = "display";
         public string Display
@@ -103,6 +131,7 @@ namespace Bitsmith.ViewModels
                 if (value)
                 {
                     _ContentType = ContentTypeOption.Link;
+                    _Mime = "url";
                 }
             }
         }
@@ -146,6 +175,14 @@ namespace Bitsmith.ViewModels
             b = b ? !string.IsNullOrWhiteSpace(Mime) : b;
 
             return b;
+        }
+
+        public void SetFile(FileInfo info)
+        {
+            Filepath = info.FullName;
+            Display = info.Name;
+            Mime = "file";
+            Body = info.Name;
         }
 
         #region INotifyPropertyChanged Members

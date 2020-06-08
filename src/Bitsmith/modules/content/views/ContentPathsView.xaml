@@ -6,14 +6,15 @@
              xmlns:local="clr-namespace:Bitsmith"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="250">
-    <GroupBox>
+    <GroupBox DataContext="{Binding Path=Content}">
         <GroupBox.Header>
             <StackPanel Orientation="Horizontal">
-                <Label Content="{Binding Path=SelectedDomain.Display}"/>
+                <Label Content="{Binding Path=SelectedDomain.Name}"/>
+                <Button Style="{StaticResource DetailsCommandButton}" Command="{Binding Path=ViewPathDomainsCommand}"/>
             </StackPanel>
         </GroupBox.Header>
         <GroupBox.Content>
-            <TreeView ItemsSource="{Binding Path=SelectedDomain.Items}"/>
+            <TreeView ItemsSource="{Binding Path=SelectedDomain.Item.Items}"/>
         </GroupBox.Content>
     </GroupBox>
 </UserControl>

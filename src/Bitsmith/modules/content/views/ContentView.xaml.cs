@@ -23,8 +23,6 @@ namespace Bitsmith
         public ContentView()
         {
             InitializeComponent();
-            Workspace.Instance.ViewModel.Content.Setup();
-            Workspace.Instance.ViewModel.Paths.Setup();
         }
     }
 }

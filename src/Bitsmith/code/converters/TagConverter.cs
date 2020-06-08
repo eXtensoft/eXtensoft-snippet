@@ -14,6 +14,11 @@ namespace Bitsmith
         {
             string s = String.Empty;
             List<string> list = value as List<string>;
+            if (value != null)
+            {
+                string t = value.GetType().Name;
+
+            }
             if (list != null && list.Count > 1)
             {
                 StringBuilder sb = new StringBuilder();
