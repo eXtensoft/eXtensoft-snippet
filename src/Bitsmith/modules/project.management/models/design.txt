@@ -39,5 +39,38 @@ StateMachine: Flow
         Terminal
             Begin[]
             End[]
+
+
+states
+	Created
+	Analysis
+	InProgress
+	Blocked
+	Testing
+	Done
+	Archived
+	Closed
+terminal
+	start:	Created
+	end:	Closed Done Archived
+transitions
+	Created -> Analysis
+	Analysis -> Blocked
+	Blocked -> Analysis
+	Analysis -> InProgress
+	Created -> InProgress
+	InProgress -> Blocked
+	Blocked -> InProgress
+	InProgress -> Testing
+	Testing -> Done
+	InProgress -> Done
+	Done -> Closed
+	Done -> Archived
+	InProgress -> Archived
+	Blocked -> Archived
+	Analysis -> Archived 
+workflow
+	id:		
+	name:	
 	
 	

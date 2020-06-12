@@ -8,21 +8,16 @@ namespace Bitsmith
     [Serializable]
     public class StateMachine
     {
+        [XmlAttribute("display")]
+        public string Display { get; set; }
+
         [XmlAttribute("beginState")]
         public string BeginState { get; set; }
 
-        [XmlAttribute("endState")]
-        public string EndState { get; set; }
-        public List<string> EndStates { get; set; }
+        public List<string> EndStates { get; set; } = new List<string>();
 
         [XmlIgnore]
         public string CurrentState { get; set; }
-
-        [XmlIgnore]
-        public Transition EndingTransition
-        {
-            get { return GetTransitionToEndState(); }
-        }
 
         #region States (List<State>)
 
@@ -77,7 +72,8 @@ namespace Bitsmith
         public StateMachine(System.Xml.Linq.XDocument document)
         {
             BeginState = document.Root.Attribute("beginState").Value;
-            EndState = document.Root.Attribute("endState").Value;
+            string endState = document.Root.Attribute("endState").Value;
+            EndStates.Add(endState);
             States = (from x in document.Descendants("State")
                        select new State() { Name = x.Attribute("name").Value, Display = x.Attribute("display").Value }).ToList();
 
@@ -91,17 +87,9 @@ namespace Bitsmith
         }
 
 
-
         #endregion
 
         #region instance methods
-
-        public Transition GetTransitionToEndState()
-        {
-            State current = GetCurrentState();
-            Transition end = Transitions.FirstOrDefault(x => x.OriginState.Equals(current.Name) & x.DestinationState.Equals(EndState, StringComparison.OrdinalIgnoreCase));
-            return end;
-        }
 
         public State GetCurrentState()
         {
@@ -121,7 +109,9 @@ namespace Bitsmith
         public List<Transition> GetTransitions()
         {
             State current = GetCurrentState();
-            return Transitions.Where(x => x.OriginState.Equals(current.Name) & !x.DestinationState.Equals(EndState, StringComparison.OrdinalIgnoreCase)).OrderBy(y => y.SortOrder).ToList();
+            //return Transitions.Where(x => x.OriginState.Equals(current.Name) && 
+            //    !EndStates.Contains(x.DestinationState,StringComparer.OrdinalIgnoreCase)).OrderBy(y => y.SortOrder).ToList();
+            return Transitions.Where(x => x.OriginState.Equals(current.Name)).OrderBy(y => y.SortOrder).ToList();
         }
 
         public void ExecuteAvailableTransition(string transitionName)

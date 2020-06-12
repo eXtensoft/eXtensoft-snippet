@@ -386,6 +386,13 @@ namespace Bitsmith.ViewModels
             SearchResults = Search(_SearchTerms);
 
         }
+
+        public List<ContentItemViewModel> ExecuteTaskSearch(string taskId)
+        {
+            return Search(new List<string> { $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Task}:{taskId}" });
+        }
+
+
         private void ExecuteQuery(string tag)
         {
             SearchResults = Search(new List<string>() { tag });
@@ -639,8 +646,13 @@ namespace Bitsmith.ViewModels
                 _ContentManager, 
                 out ContentItem newContent))
             {
-                model.Items.Add(newContent);
+                AddContent(newContent);
             }
+        }
+
+        public void AddContent(ContentItem item)
+        {
+            model.Items.Add(item);
         }
 
 

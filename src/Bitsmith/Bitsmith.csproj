@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
@@ -60,6 +63,14 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="modules\.common\view.models\NoteViewModel.cs" />
+    <Compile Include="modules\.common\view.models\settings\Settings.cs" />
+    <Compile Include="modules\.common\view.models\settings\SettingsExtensions.cs" />
+    <Compile Include="modules\.common\view.models\workflow\WorkflowCollection.cs" />
+    <Compile Include="modules\.common\view.models\settings\SettingsModule.cs" />
+    <Compile Include="modules\.common\view.models\workflow\WorkflowExtensions.cs" />
+    <Compile Include="modules\.common\view.models\workflow\WorkflowStep.cs" />
+    <Compile Include="modules\.common\view.models\workflow\WorkflowViewModel.cs" />
     <Compile Include="modules\project.management\ProjectManagementExtensions.cs" />
     <Compile Include="modules\project.management\views\DashboardView.xaml.cs">
       <DependentUpon>DashboardView.xaml</DependentUpon>
@@ -86,6 +97,19 @@
     </Compile>
     <Compile Include="modules\project.management\views\TaskView.xaml.cs">
       <DependentUpon>TaskView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\workflow\models\Builder.cs" />
+    <Compile Include="modules\.common\view.models\workflow\Workflow.cs" />
+    <Compile Include="modules\workflow\view.models\StateViewModel.cs" />
+    <Compile Include="modules\workflow\view.models\TransitionViewModel.cs" />
+    <Compile Include="modules\workflow\view.models\WorkflowModule.cs" />
+    <Compile Include="modules\workflow\view.models\BuilderViewModel.cs" />
+    <Compile Include="modules\workflow\WorkflowExtensions.cs" />
+    <Compile Include="modules\.common\views\SettingsView.xaml.cs">
+      <DependentUpon>SettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\project.management\views\TaskItemView.xaml.cs">
+      <DependentUpon>TaskItemView.xaml</DependentUpon>
     </Compile>
     <Compile Include="view\state.management\ErrorView.xaml.cs">
       <DependentUpon>ErrorView.xaml</DependentUpon>
@@ -171,6 +195,12 @@
     <Compile Include="window\WindowCommands.cs" />
     <Compile Include="window\XSButton.cs" />
     <Compile Include="window\XSButtonConverters.cs" />
+    <Compile Include="modules\workflow\views\WorkflowView.xaml.cs">
+      <DependentUpon>WorkflowView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\workflow\views\WorkflowBuilderView.xaml.cs">
+      <DependentUpon>WorkflowBuilderView.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="code\AppConstants.cs" />
@@ -191,7 +221,7 @@
     <Compile Include="code\UserSettings.cs" />
     <Compile Include="code\Workspace.cs" />
     <Compile Include="modules\.common\code\PathProvider.cs" />
-    <Compile Include="modules\.common\ContentTag.cs" />
+    <Compile Include="modules\.common\Property.cs" />
     <Compile Include="modules\.common\models\DomainPathMap.cs" />
     <Compile Include="modules\.common\models\enums\FileTypeOption.cs" />
     <Compile Include="modules\.common\models\enums\LinkTypeOption.cs" />
@@ -282,6 +312,7 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -307,6 +338,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="modules\project.management\views\TaskView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\.common\views\SettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\project.management\views\TaskItemView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -457,6 +496,14 @@
     <Page Include="view\controls\RoundedBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="modules\workflow\views\WorkflowView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\workflow\views\WorkflowBuilderView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

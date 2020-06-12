@@ -44,7 +44,7 @@ namespace Bitsmith.ViewModels
 
         #region validation methods
 
-        public bool Validate()
+        public virtual bool Validate()
         {
             bool b = true;
             if (_Validators != null && _Validators.Count > 0)
@@ -60,6 +60,8 @@ namespace Bitsmith.ViewModels
 
             return b;
         }
+
+        
         public string GetValidationError(string propertyName)
         {
             string error = null;

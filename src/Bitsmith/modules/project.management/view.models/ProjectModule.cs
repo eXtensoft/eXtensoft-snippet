@@ -20,6 +20,7 @@ namespace Bitsmith.ViewModels
         public ObservableCollection<TaskItemViewModel> Items { get; set; }
         public ObservableCollection<DomainViewModel> Domains { get; set; }
 
+
         private DomainViewModel _SelectedDomain;
         public DomainViewModel SelectedDomain
         {
@@ -98,11 +99,7 @@ namespace Bitsmith.ViewModels
         {
             var model = new TaskItem().Default(SelectedDomain.Model);
             var vm = new TaskItemViewModel(model);
-            vm.UrgencySelections = Enum.GetNames(typeof(ScaleOption)).ToDispositions("urgency");
-            vm.ImportanceSelections = Enum.GetNames(typeof(ScaleOption)).ToDispositions("importance");
-            vm.StatusSelections = Enum.GetNames(typeof(ScaleOption)).ToDispositions("status");
             Items.Add(vm);
-
         }
 
 
@@ -158,6 +155,32 @@ namespace Bitsmith.ViewModels
 
         protected override bool SaveData()
         {
+            bool b = true;
+            var filepath = FileSystemDataProvider.Filepath<TaskItem>("archive");
+            var removals = (from x in Items where x.Status.Token.Equals("archived") select x.Model.Id).ToList();
+            
+            if (removals.Count > 0)
+            {
+                var toArchive = model.Items.Where(x => removals.Contains(x.Id)).ToList();
+                if (FileSystemDataProvider.TryRead<TaskItem>(filepath,out List<TaskItem> previouslyArchived, out string message))
+                {
+                    toArchive.AddRange(previouslyArchived);
+                }
+                if (!FileSystemDataProvider.TryWrite<TaskItem>(toArchive, out string error, filepath))
+                {
+                    b = false;
+                }
+                else
+                {
+                    foreach (var id in removals)
+                    {
+                        var found = Items.First(x => x.Model.Id.Equals(id));
+                        Items.Remove(found);
+                    }
+                }
+
+            }
+
             if (model != null)
             {
                 if (!FileSystemDataProvider.TryWrite<Project>(model, out string message))
@@ -178,6 +201,7 @@ namespace Bitsmith.ViewModels
                 SelectedDomain = Domains.FirstOrDefault();
                 Items = new ObservableCollection<TaskItemViewModel>(from x in model.Items select new TaskItemViewModel(x));
                 Items.CollectionChanged += Items_CollectionChanged;
+
             }
         }
 

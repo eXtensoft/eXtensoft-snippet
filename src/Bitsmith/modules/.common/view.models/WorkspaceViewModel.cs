@@ -11,11 +11,14 @@ namespace Bitsmith.ViewModels
     public class WorkspaceViewModel
     {
         public Grid Root { get; set; }
+
+        public SettingsModule Settings { get; set; }
         public ContentModule Content { get; set; }
 
         public ProjectModule Project { get; set; }
 
         //public Data Data { get; set; }
+        public WorkflowModule Workflow { get; set; }
 
         public VirtualPathModule Paths { get; set; }
 
@@ -55,7 +58,10 @@ namespace Bitsmith.ViewModels
             Project = new ProjectModule();
             Project.Setup();
 
+            Workflow = new WorkflowModule();
 
+            Settings = new SettingsModule();
+            Settings.Setup();
         }
 
         internal void Save()

@@ -16,6 +16,11 @@ namespace Bitsmith
         public const string LastOpenedFileDialogFolderpath = "openfile.dialog.folderpath";
         public const string StateMachine = "state-machine";
 
+        public static class Defaults
+        {
+            public const string WorkflowId = "05cfd309-c090-43b4-958f-96d3652cd797";
+        }
+
         public static class Tags
         {
             public const string Prefix = "x";
@@ -25,6 +30,7 @@ namespace Bitsmith
             public const string ModifiedAt = "modified-at";
             public const string ViewedAt = "viewed-at";
             public const string Extension = "file-extension";
+            public const string Task = "task";
         }
     }
 }

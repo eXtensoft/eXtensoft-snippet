@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
@@ -22,10 +23,10 @@ namespace Bitsmith
 
         [XmlAttribute("order")]
         public int SortOrder { get; set; }
-
+        [JsonIgnore]
         [XmlIgnore]
         public Func<bool> CanTransition { get; set; }
-
+        [JsonIgnore]
         [XmlIgnore]
         public List<IEndpointAction> EndpointActions { get; set; }
 

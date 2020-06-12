@@ -52,7 +52,7 @@ namespace Bitsmith.ProjectManagement
             list.Add(new Disposition()
             {
                 Key = "status",
-                Token = StatusOption.None.ToString(),
+                Token = StatusOption.None.ToString().ToLower(),
                 Display = StatusOption.None.ToString(),
                 StartedAt = target
             });

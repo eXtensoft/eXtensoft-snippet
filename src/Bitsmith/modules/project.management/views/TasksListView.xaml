@@ -43,54 +43,7 @@
                         <TextBlock Text="{Binding Path=Identifier}"/>
                     </Expander.Header>
                     <Expander.Content>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="10"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="2"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="2"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="2"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="2"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="2"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="2"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="2"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="2"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                            <Label Grid.Column="0" Grid.Row="0" Content="Id"/>
-                            <Label Grid.Column="0" Grid.Row="2" Content="Created On"/>
-                            <Label Grid.Column="0" Grid.Row="4" Content="Due On"/>
-                            <Label Grid.Column="0" Grid.Row="6" Content="Urgency"/>
-                            <Label Grid.Column="0" Grid.Row="8" Content="Importance"/>
-                            <Label Grid.Column="0" Grid.Row="10" Content="Status"/>
-                            <Label Grid.Column="0" Grid.Row="12" Content="Identifier"/>
-                            <Label Grid.Column="0" Grid.Row="14" Content="Display"/>
-                            <Label Grid.Column="0" Grid.Row="13" Content="Description"/>
-
-                            <TextBlock Grid.Column="2" Grid.Row="0" Text="{Binding Path=Id}"/>
-                            <TextBlock Grid.Column="2" Grid.Row="2" Text="{Binding Path=CreatedOn}"/>
-                            <DatePicker Grid.Column="2" Grid.Row="4" SelectedDate="{Binding Path=DueOn}"/>
-                            <ComboBox Grid.Column="2" Grid.Row="6" SelectedItem="{Binding Path=Urgency,Mode=TwoWay}" 
-                                      ItemsSource="{Binding Path=UrgencySelections}" DisplayMemberPath="Display"/>
-                            <ComboBox Grid.Column="2" Grid.Row="8" SelectedItem="{Binding Path=Importance, Mode=TwoWay}" 
-                                      ItemsSource="{Binding Path=ImportanceSelections}" DisplayMemberPath="Display"/>
-                            <ComboBox Grid.Column="2" Grid.Row="10" SelectedItem="{Binding Path=Status, Mode=TwoWay}" 
-                                      ItemsSource="{Binding Path=StatusSelections}" DisplayMemberPath="Display"/>
-                            <TextBox Grid.Column="2" Grid.Row="12" Text="{Binding Path=Display}"/>
-                            <TextBox Grid.Column="2" Grid.Row="14" Text="{Binding Path=Description}" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap"/>
-                        </Grid>
+                        <local:TaskItemView/>
                     </Expander.Content>
                 </Expander>
                 <ListBox ItemsSource="{Binding Path=Items}" SelectedItem="{Binding Path=SelectedItem}">

@@ -186,12 +186,16 @@ namespace Bitsmith.Models
 
         public static void DefaultTags(this List<Property> properties, Domain domain)
         {
+            properties.DefaultTags();
+            properties.Add(new Property() { Name = $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Domain}", Value = domain.Id });
+        }
+        public static void DefaultTags(this List<Property> properties)
+        {
             DateTime now = DateTime.Now;
             properties.Add(new Property() { Name = $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.CreatedAt}", Value = now });
             properties.Add(new Property() { Name = $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.ModifiedAt}", Value = now });
             properties.Add(new Property() { Name = $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.ViewedAt}", Value = now });
             properties.Add(new Property() { Name = $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.CreatedBy}", Value = Environment.UserName });
-            properties.Add(new Property() { Name = $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Domain}", Value = domain.Id });
         }
 
         private static List<string> ExcludedTags = new List<string>() {
@@ -200,7 +204,8 @@ namespace Bitsmith.Models
             $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.ViewedAt}",
             $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.CreatedBy}",
             $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Domain}",
-            $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Extension}"
+            $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Extension}",
+            $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Task}",
         };
 
         private static Dictionary<string, string> _Replacements = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)

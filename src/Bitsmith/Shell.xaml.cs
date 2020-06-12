@@ -47,6 +47,36 @@ namespace Bitsmith
             }
         }
 
+        private WorkflowView _Workflow;
+        public WorkflowView Workflow
+        {
+            get
+            {
+                if (_Workflow == null)
+                {
+                    _Workflow = new WorkflowView();
+                }
+                return _Workflow;
+            }
+        }
+
+        private ICommand _ToggleListsCommand;
+        public ICommand ToggleListsCommand
+        {
+            get
+            {
+                if (_ToggleListsCommand == null)
+                {
+                    _ToggleListsCommand = new RelayCommand(
+                    param => ToggleLists());
+                }
+                return _ToggleListsCommand;
+            }
+        }
+
+
+
+
         private ICommand _ToggleProjectsCommand;
         public ICommand ToggleProjectsCommand
         {
@@ -99,7 +129,7 @@ namespace Bitsmith
             mgr.RegisterEndpointAction(ActivityStateOption.Unauthorized.ToString(), EndpointOption.Arrival, OnUnauthorized);
             mgr.RegisterEndpointAction(ActivityStateOption.Error.ToString(), EndpointOption.Arrival, OnError);
             //mgr.RegisterEndpointAction(ActivityStateOption.Administration.ToString(), EndpointOption.Arrival, OnToggleAdmin);
-            //mgr.RegisterEndpointAction(ActivityStateOption.Lists.ToString(), EndpointOption.Arrival, OnToggleLists);
+            mgr.RegisterEndpointAction(ActivityStateOption.Lists.ToString(), EndpointOption.Arrival, OnToggleLists);
             //mgr.RegisterEndpointAction(ActivityStateOption.Contacts.ToString(), EndpointOption.Arrival, OnToggleContacts);
             //mgr.RegisterEndpointAction(ActivityStateOption.Credentials.ToString(), EndpointOption.Arrival, OnToggleCredentials);
             //mgr.RegisterEndpointAction(ActivityStateOption.Security.ToString(), EndpointOption.Arrival, OnToggleSecurity);
@@ -115,8 +145,10 @@ namespace Bitsmith
             //KeyGesture toggleProjects = new KeyGesture(Key.T, ModifierKeys.Control);
             //KeyBinding toggleProjectsBinding = new KeyBinding(ToggleProjectsCommand, toggleProjects);
             //this.InputBindings.Add(toggleProjectsBinding);
+            this.InputBindings.Add(new KeyBinding(ToggleListsCommand, new KeyGesture(Key.L, ModifierKeys.Control)));
             this.InputBindings.Add(new KeyBinding(ToggleProjectsCommand, new KeyGesture(Key.T, ModifierKeys.Control)));
             this.InputBindings.Add(new KeyBinding(ExitAppCommand, new KeyGesture(Key.X, ModifierKeys.Control)));
+
         }
 
         private void WindowBase_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -178,6 +210,17 @@ namespace Bitsmith
         private void ToggleProjects()
         {
             Workspace.Instance.State.Machine.ExecuteTransition(TransitionTypeOption.ToggleProjects.ToString());
+        }
+
+        private void OnToggleLists()
+        {
+            grdRoot.Children.Clear();
+            grdRoot.Children.Add(Workflow);
+        }
+
+        private void ToggleLists()
+        {
+            Workspace.Instance.State.Machine.ExecuteTransition(TransitionTypeOption.ToggleLists.ToString());
         }
 
     }

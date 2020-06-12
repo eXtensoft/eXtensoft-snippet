@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<StateMachine xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" display="Demo StateMachine" beginState="ready">
+ <EndStates>
+  <string>done</string>
+  <string>abandoned</string>
+ </EndStates>
+ <State name="ready" display="Ready" />
+ <State name="analysis" display="Analysis" />
+ <State name="in-progress" display="In Progress" />
+ <State name="blocked" display="Blocked" />
+ <State name="on-hold" display="On Hold" />
+ <State name="done" display="Done" />
+ <State name="abandoned" display="Abandoned" />
+ <Transition name="analysis" Display="Analyse" origin="ready" destination="analysis" order="0" />
+ <Transition name="in-progress" Display="Work" origin="analysis" destination="in-progress" order="0" />
+ <Transition name="blocked" Display="Block" origin="in-progress" destination="blocked" order="0" />
+ <Transition name="in-progress" Display="Unblock" origin="blocked" destination="in-progress" order="0" />
+ <Transition name="on-hold" Display="On Hold" origin="in-progress" destination="on-hold" order="0" />
+ <Transition name="in-progress" Display="Back to work" origin="on-hold" destination="in-progress" order="0" />
+ <Transition name="done" Display="All done" origin="in-progress" destination="done" order="0" />
+ <Transition name="abandoned" Display="Give up" origin="in-progress" destination="abandoned" order="0" />
+</StateMachine>

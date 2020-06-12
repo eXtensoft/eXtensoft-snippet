@@ -1,0 +1,103 @@
+{
+  "BeginState": "ready",
+  "EndStates": [
+    "done",
+    "abandoned"
+  ],
+  "CurrentState": null,
+  "States": [
+    {
+      "Name": "ready",
+      "Display": "Ready",
+      "EndpointActions": null
+    },
+    {
+      "Name": "analysis",
+      "Display": "Analysis",
+      "EndpointActions": null
+    },
+    {
+      "Name": "in-progress",
+      "Display": "In Progress",
+      "EndpointActions": null
+    },
+    {
+      "Name": "blocked",
+      "Display": "Blocked",
+      "EndpointActions": null
+    },
+    {
+      "Name": "on-hold",
+      "Display": "On Hold",
+      "EndpointActions": null
+    },
+    {
+      "Name": "done",
+      "Display": "Done",
+      "EndpointActions": null
+    },
+    {
+      "Name": "abandoned",
+      "Display": "Abandoned",
+      "EndpointActions": null
+    }
+  ],
+  "Transitions": [
+    {
+      "Name": "analysis",
+      "Display": "Analyse",
+      "OriginState": "ready",
+      "DestinationState": "analysis",
+      "SortOrder": 0
+    },
+    {
+      "Name": "in-progress",
+      "Display": "Work",
+      "OriginState": "analysis",
+      "DestinationState": "in-progress",
+      "SortOrder": 0
+    },
+    {
+      "Name": "blocked",
+      "Display": "Block",
+      "OriginState": "in-progress",
+      "DestinationState": "blocked",
+      "SortOrder": 0
+    },
+    {
+      "Name": "in-progress",
+      "Display": "Unblock",
+      "OriginState": "blocked",
+      "DestinationState": "in-progress",
+      "SortOrder": 0
+    },
+    {
+      "Name": "on-hold",
+      "Display": "On Hold",
+      "OriginState": "in-progress",
+      "DestinationState": "on-hold",
+      "SortOrder": 0
+    },
+    {
+      "Name": "in-progress",
+      "Display": "Back to work",
+      "OriginState": "on-hold",
+      "DestinationState": "in-progress",
+      "SortOrder": 0
+    },
+    {
+      "Name": "done",
+      "Display": "All done",
+      "OriginState": "in-progress",
+      "DestinationState": "done",
+      "SortOrder": 0
+    },
+    {
+      "Name": "abandoned",
+      "Display": "Give up",
+      "OriginState": "in-progress",
+      "DestinationState": "abandoned",
+      "SortOrder": 0
+    }
+  ]
+}

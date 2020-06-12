@@ -7,6 +7,7 @@ using System.Xml.Serialization;
 
 namespace Bitsmith.ProjectManagement
 {
+    [Serializable]
     public class Disposition
     {
         [XmlAttribute("id")]
