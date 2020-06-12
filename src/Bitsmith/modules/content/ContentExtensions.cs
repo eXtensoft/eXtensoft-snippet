@@ -181,7 +181,19 @@ namespace Bitsmith.Models
 
         public static void Coalesce(this List<Property> existing, List<Property> toCoalesce)
         {
-
+            List<Property> list = new List<Property>();
+            var modified = $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.ModifiedAt}";
+            foreach (var exclusion in existing.Where(x=> x.Name.StartsWith(AppConstants.Tags.Prefix)))
+            {
+                if (exclusion.Name.Equals(modified))
+                {
+                    exclusion.Value = DateTime.Now;
+                }
+                list.Add(exclusion);
+            }
+            list.AddRange(toCoalesce);
+            existing.Clear();
+            existing.AddRange(list);
         }
 
         public static void DefaultTags(this List<Property> properties, Domain domain)

@@ -132,7 +132,7 @@
     <Compile Include="code\finite.state.machine\Transition.cs" />
     <Compile Include="code\finite.state.machine\TransitionCondition.cs" />
     <Compile Include="code\finite.state.machine\TransitionTypeOption.cs" />
-    <Compile Include="code\TagsConverter.cs" />
+    <Compile Include="code\converters\TagsConverter.cs" />
     <Compile Include="code\text-search\FullTextExtensions.cs" />
     <Compile Include="code\text-search\TextIndex.cs" />
     <Compile Include="code\text-search\TextIndexer.cs" />
