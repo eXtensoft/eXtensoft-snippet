@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -21,7 +22,7 @@ namespace Bitsmith.ViewModels
 
         public TextIndexer Indexer { get; set; } = new TextIndexer();
 
-        private ContentManager _ContentManager;
+        internal ContentManager ContentManager { get; set; }
         public ObservableCollection<MimeMapViewModel> Mimes { get; set; }
 
         private int _SelectedIndex = 1;
@@ -255,7 +256,7 @@ namespace Bitsmith.ViewModels
                         if (info.Exists)
                         {
                             foundfiles++;
-                            if (_ContentManager.TryInload(info, out string filename))
+                            if (ContentManager.TryInload(info, out string filename))
                             {
                                 var found = Mimes.FirstOrDefault(x => x.Extension.Equals(info.Extension, StringComparison.OrdinalIgnoreCase));
                                 if (found != null)
@@ -643,7 +644,7 @@ namespace Bitsmith.ViewModels
         {
             if (Input.TryBuild(Resolver, 
                 SelectedDomain.Model, Mimes, 
-                _ContentManager, 
+                ContentManager, 
                 out ContentItem newContent))
             {
                 AddContent(newContent);
@@ -677,10 +678,6 @@ namespace Bitsmith.ViewModels
                 OnPropertyChanged("Content");
             }
         }
-
-        public override string Filepath => FileSystemDataProvider.Filepath<Content>();
-
-
 
 
 
@@ -771,9 +768,8 @@ namespace Bitsmith.ViewModels
 
         public ContentModule()
         {
-            var contentdirectory = "content-files";
-            Application.Current.Properties[AppConstants.ContentDirectory] = contentdirectory;
-            _ContentManager = new ContentManager(contentdirectory);
+            ContentManager = new ContentManager(Path.Combine(AppConstants.ContentDirectory, AppConstants.ContentFiles));
+            Filepath = Path.Combine(AppConstants.ContentDirectory, FileSystemDataProvider.Filepath<Content>());
         }
 
         protected override bool SaveData()
@@ -783,12 +779,13 @@ namespace Bitsmith.ViewModels
                 var removals = model.Items.Where(x => x.IsRemove).ToList();
                 if (removals.Count > 0)
                 {
-                    string directory = Application.Current.Properties[AppConstants.ContentDirectory] as string;
+                    string directory = Path.Combine(AppConstants.ContentDirectory,AppConstants.ContentFiles);
                     foreach (var removal in removals)
                     {
                         if (!removal.Mime.Equals("text") && 
                             !String.IsNullOrWhiteSpace(removal.Mime) && 
-                            !removal.Mime.Equals("url"))
+                            !removal.Mime.Equals("url") && 
+                            !removal.Mime.Equals("text/credential"))
                         {
                             string filepath = System.IO.Path.Combine(directory, removal.Body);
                             if (System.IO.File.Exists(filepath))

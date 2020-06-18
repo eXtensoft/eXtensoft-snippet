@@ -47,6 +47,19 @@ namespace Bitsmith
             }
         }
 
+        private CredentialsView _Credentials;
+        public CredentialsView Credentials
+        {
+            get
+            {
+                if (_Credentials == null)
+                {
+                    _Credentials = new CredentialsView();
+                }
+                return _Credentials;
+            }
+        }
+
         private WorkflowView _Workflow;
         public WorkflowView Workflow
         {
@@ -91,6 +104,20 @@ namespace Bitsmith
             }
         }
 
+        private ICommand _ToggleCredentialsCommand;
+        public ICommand ToggleCredentialsCommand
+        {
+            get
+            {
+                if (_ToggleCredentialsCommand == null)
+                {
+                    _ToggleCredentialsCommand = new RelayCommand(
+                        param => ToggleCredentials());
+                }
+                return _ToggleCredentialsCommand;
+            }
+        }
+
         private ICommand _ExitAppCommand;
         public ICommand ExitAppCommand
         {
@@ -128,13 +155,8 @@ namespace Bitsmith
             mgr.RegisterEndpointAction(ActivityStateOption.LoggedOff.ToString(), EndpointOption.Arrival, OnLoggedOff);
             mgr.RegisterEndpointAction(ActivityStateOption.Unauthorized.ToString(), EndpointOption.Arrival, OnUnauthorized);
             mgr.RegisterEndpointAction(ActivityStateOption.Error.ToString(), EndpointOption.Arrival, OnError);
-            //mgr.RegisterEndpointAction(ActivityStateOption.Administration.ToString(), EndpointOption.Arrival, OnToggleAdmin);
             mgr.RegisterEndpointAction(ActivityStateOption.Lists.ToString(), EndpointOption.Arrival, OnToggleLists);
-            //mgr.RegisterEndpointAction(ActivityStateOption.Contacts.ToString(), EndpointOption.Arrival, OnToggleContacts);
-            //mgr.RegisterEndpointAction(ActivityStateOption.Credentials.ToString(), EndpointOption.Arrival, OnToggleCredentials);
-            //mgr.RegisterEndpointAction(ActivityStateOption.Security.ToString(), EndpointOption.Arrival, OnToggleSecurity);
-            //mgr.RegisterEndpointAction(ActivityStateOption.Todos.ToString(), EndpointOption.Arrival, OnToggleTodos);
-            //mgr.RegisterEndpointAction(ActivityStateOption.Remote.ToString(), EndpointOption.Arrival, OnToggleRemote);
+            mgr.RegisterEndpointAction(ActivityStateOption.Credentials.ToString(), EndpointOption.Arrival, OnToggleCredentials);
             mgr.RegisterEndpointAction(ActivityStateOption.Projects.ToString(), EndpointOption.Arrival, OnToggleProjects);
 
             AddToggleCommands();
@@ -142,13 +164,10 @@ namespace Bitsmith
 
         private void AddToggleCommands()
         {
-            //KeyGesture toggleProjects = new KeyGesture(Key.T, ModifierKeys.Control);
-            //KeyBinding toggleProjectsBinding = new KeyBinding(ToggleProjectsCommand, toggleProjects);
-            //this.InputBindings.Add(toggleProjectsBinding);
             this.InputBindings.Add(new KeyBinding(ToggleListsCommand, new KeyGesture(Key.L, ModifierKeys.Control)));
             this.InputBindings.Add(new KeyBinding(ToggleProjectsCommand, new KeyGesture(Key.T, ModifierKeys.Control)));
             this.InputBindings.Add(new KeyBinding(ExitAppCommand, new KeyGesture(Key.X, ModifierKeys.Control)));
-
+            this.InputBindings.Add(new KeyBinding(ToggleCredentialsCommand, new KeyGesture(Key.P, ModifierKeys.Control)));
         }
 
         private void WindowBase_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -163,10 +182,6 @@ namespace Bitsmith
 
         private void OnLoggedOff()
         {
-            //Application.Current.Shutdown();
-            //HtmlPage.Window.Navigate(new Uri("http://www.google.com",UriKind.RelativeOrAbsolute));
-            // navigate to a configurable web page
-            //HtmlPage.Window.Invoke("close");
             grdRoot.Children.Clear();
             grdRoot.Children.Add(new LogoffView());
         }
@@ -207,11 +222,21 @@ namespace Bitsmith
             grdRoot.Children.Clear();
             grdRoot.Children.Add(Projects);
         }
+
+        private void OnToggleCredentials()
+        {
+            grdRoot.Children.Clear();
+            grdRoot.Children.Add(Credentials);
+        }
         private void ToggleProjects()
         {
             Workspace.Instance.State.Machine.ExecuteTransition(TransitionTypeOption.ToggleProjects.ToString());
         }
 
+        private void ToggleCredentials()
+        {
+            Workspace.Instance.State.Machine.ExecuteTransition(TransitionTypeOption.ToggleCredentials.ToString());
+        }
         private void OnToggleLists()
         {
             grdRoot.Children.Clear();

@@ -126,7 +126,7 @@ namespace Bitsmith.Models
             return b;
         }
 
-        private static string Resolve(this IEnumerable<MimeMapViewModel> mimes, FileInfo info)
+        public static string Resolve(this IEnumerable<MimeMapViewModel> mimes, FileInfo info)
         {
             var found = mimes.FirstOrDefault(x => x.Extension.Equals(info.Extension,StringComparison.OrdinalIgnoreCase));
             if (found != null)

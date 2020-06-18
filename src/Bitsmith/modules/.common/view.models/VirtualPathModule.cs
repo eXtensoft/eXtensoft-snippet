@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -13,7 +14,7 @@ namespace Bitsmith.ViewModels
 	public class VirtualPathModule : Module<DomainPathMap>
     {
 
-		private ICommand _ViewPathDomainsCommand;
+        private ICommand _ViewPathDomainsCommand;
 		public ICommand ViewPathDomainsCommand
 		{
 			get
@@ -126,10 +127,15 @@ namespace Bitsmith.ViewModels
 
 		}
 
+        public VirtualPathModule()
+        {
+			Filepath = Path.Combine(AppConstants.SettingsDirectory, base.Filepath);
+        }
+
 
 		protected override bool LoadData()
         {
-            if (!File.Exists(Filepath))
+			if (!File.Exists(Filepath))
             {
                 List<DomainPathMap> list = new List<DomainPathMap>().Default();
                 FileSystemDataProvider.TryWrite<DomainPathMap>(list, out string message, Filepath);

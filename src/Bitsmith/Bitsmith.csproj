@@ -63,6 +63,14 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="code\Encryptor.cs" />
+    <Compile Include="modules\credentials\views\CredentialView.xaml.cs">
+      <DependentUpon>CredentialView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\credentials\view.models\CredentialViewModel.cs" />
+    <Compile Include="modules\credentials\views\CredentialsView.xaml.cs">
+      <DependentUpon>CredentialsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="modules\.common\view.models\NoteViewModel.cs" />
     <Compile Include="modules\.common\view.models\settings\Settings.cs" />
     <Compile Include="modules\.common\view.models\settings\SettingsExtensions.cs" />
@@ -71,6 +79,7 @@
     <Compile Include="modules\.common\view.models\workflow\WorkflowExtensions.cs" />
     <Compile Include="modules\.common\view.models\workflow\WorkflowStep.cs" />
     <Compile Include="modules\.common\view.models\workflow\WorkflowViewModel.cs" />
+    <Compile Include="modules\credentials\view.models\CredentialsModule.cs" />
     <Compile Include="modules\project.management\ProjectManagementExtensions.cs" />
     <Compile Include="modules\project.management\views\DashboardView.xaml.cs">
       <DependentUpon>DashboardView.xaml</DependentUpon>
@@ -312,6 +321,14 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="data\vs-code-snippets\vmb.snippet" />
+    <None Include="data\vs-code-snippets\vmc.snippet" />
+    <None Include="data\vs-code-snippets\vmcc.snippet" />
+    <None Include="data\vs-code-snippets\vmcg.snippet" />
+    <None Include="data\vs-code-snippets\vmd.snippet" />
+    <None Include="data\vs-code-snippets\vmi.snippet" />
+    <None Include="data\vs-code-snippets\vmp.snippet" />
+    <None Include="data\vs-code-snippets\vms.snippet" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -325,6 +342,14 @@
     <Resource Include="data\statemachine.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="modules\credentials\views\CredentialView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\credentials\views\CredentialsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="modules\project.management\views\DashboardView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -16,7 +16,7 @@ namespace Bitsmith
 
         object IValueConverter.Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            string foldername = Application.Current.Properties[AppConstants.ContentDirectory] as string;
+            string foldername = Path.Combine(AppConstants.ContentDirectory,AppConstants.ContentFiles) as string;
             if (!String.IsNullOrEmpty(foldername))
             {
                 DirectoryInfo directory = new DirectoryInfo(foldername);

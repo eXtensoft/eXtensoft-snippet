@@ -31,15 +31,18 @@ namespace Bitsmith
             ContentItemViewModel viewmodel = DataContext as ContentItemViewModel;
             if (viewmodel != null)
             {
-                try
+                if (!string.IsNullOrWhiteSpace(viewmodel.Body))
                 {
-                    System.Diagnostics.Process.Start(viewmodel.Body);
-                    //webContent.Navigate(viewmodel.Body);
+                    try
+                    {
+                        System.Diagnostics.Process.Start(viewmodel.Body);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
+
 
             }
         }

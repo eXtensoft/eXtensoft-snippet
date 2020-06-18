@@ -14,17 +14,13 @@
 
 
     <Grid DataContext="{Binding Path=Project.SelectedItem}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="10"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0" Orientation="Horizontal">
+        <!--<StackPanel Grid.Column="0" Orientation="Horizontal">
             <Button Command="{Binding Path=AddNoteCommand}" Style="{StaticResource AddCommandButton}"/>
             <Label Content="Note"/>            
         </StackPanel>
@@ -35,11 +31,20 @@
         <StackPanel Grid.Column="2" Orientation="Horizontal">
             <Button Command="{Binding Path=AddLinkCommand}" Style="{StaticResource AddCommandButton}"/>
             <Label Content="Link"/>
+        </StackPanel>-->
+        <StackPanel Grid.Column="0">
+            <Button Command="{Binding Path=AddContentCommand}"  Style="{StaticResource ResourceKey=AddCommandButton}" HorizontalAlignment="Center" />
+
+            <GroupBox Header="Type" >
+                <StackPanel>
+                    <RadioButton Content="Link" IsChecked="{Binding Path=IsLink, Mode=TwoWay}" GroupName="ContentType"/>
+                    <RadioButton x:Name="rdoFile" Content="File" IsChecked="{Binding Path=IsFile, Mode=TwoWay}" GroupName="ContentType"/>
+                    <RadioButton x:Name="rdoText" Content="Text" IsChecked="{Binding Path=IsText, Mode=TwoWay}" GroupName="ContentType"/>
+                </StackPanel>
+            </GroupBox>
         </StackPanel>
-        <ListBox Grid.ColumnSpan="3" Grid.Row="2" Margin="20" ItemsSource="{Binding Path=Items}"></ListBox>
 
-
-        <ListBox x:Name="lsbResults" BorderThickness="0"  Grid.ColumnSpan="3" Grid.Row="2" Margin="20" ItemsSource="{Binding Path=Items}" 
+        <ListBox x:Name="lsbResults" BorderThickness="0"  Grid.Column="2" ItemsSource="{Binding Path=Items}" 
                      SelectedItem="{Binding Path=SelectedItem}"
             Background="LightGray" AlternationCount="2">
             <ListBox.GroupStyle>

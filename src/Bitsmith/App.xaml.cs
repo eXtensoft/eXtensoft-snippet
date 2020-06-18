@@ -18,6 +18,7 @@ namespace Bitsmith
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+            Bootstrapper.Start();
             Application.Current.ShutdownMode = System.Windows.ShutdownMode.OnExplicitShutdown;
 
         }

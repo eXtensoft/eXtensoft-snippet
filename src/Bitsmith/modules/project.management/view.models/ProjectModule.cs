@@ -128,10 +128,6 @@ namespace Bitsmith.ViewModels
 
 
 
-
-
-        public override string Filepath => FileSystemDataProvider.Filepath<Project>();
-
         protected override bool LoadData()
         {
             string filepath = Filepath;
@@ -183,7 +179,7 @@ namespace Bitsmith.ViewModels
 
             if (model != null)
             {
-                if (!FileSystemDataProvider.TryWrite<Project>(model, out string message))
+                if (!FileSystemDataProvider.TryWrite<Project>(model, out string message,Filepath))
                 {
                     OnFailure(message);
                     return false;
@@ -258,9 +254,7 @@ namespace Bitsmith.ViewModels
 
         public ProjectModule()
         {
-            var projectdirectory = "project-files";
-            Application.Current.Properties[AppConstants.ProjectDirectory] = projectdirectory;
-            
+            Filepath = Path.Combine(AppConstants.ProjectDirectory, FileSystemDataProvider.Filepath<Project>());
         }
 
     }

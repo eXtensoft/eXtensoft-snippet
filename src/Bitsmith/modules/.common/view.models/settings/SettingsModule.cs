@@ -26,7 +26,7 @@ namespace Bitsmith.ViewModels
 
         public SettingsModule()
         {
-
+            Filepath = Path.Combine(AppConstants.SettingsDirectory, base.Filepath);
         }
 
 

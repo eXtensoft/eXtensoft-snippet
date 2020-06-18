@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>vmc</Title>
+			<Shortcut>vmc</Shortcut>
+			<Description>Code snippet for an eXtensoft ViewModel ICommand command</Description>
+			<Author>robertknelson@gmail.com</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+				<Literal>
+					<ID>command</ID>
+					<ToolTip>command name</ToolTip>
+					<Default>MyCommand</Default>
+				</Literal>
+			</Declarations>
+			<Code Language="csharp"><![CDATA[private ICommand _$command$Command;
+			public ICommand $command$Command
+			{
+				get
+				{
+					if(_$command$Command == null)
+					{
+						_$command$Command = new RelayCommand(
+						param => $command$(),
+						param => Can$command$());							
+					}
+					return _$command$Command;
+				}
+			}	
+			private bool Can$command$()
+			{
+				return true;
+			}
+			private void $command$()
+			{
+			
+			}			
+			$end$]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

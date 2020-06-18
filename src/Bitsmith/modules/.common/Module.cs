@@ -7,7 +7,7 @@ namespace Bitsmith.ViewModels
     {
 
 
-        public virtual string Filepath => "...";
+        public virtual string Filepath { get; set; }
         public bool IsInitialized { get; set; }
 
         public void Setup()

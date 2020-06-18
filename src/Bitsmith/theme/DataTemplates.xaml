@@ -23,6 +23,10 @@
             <Label Content="{Binding Path=Display}"/>
         </StackPanel>
     </HierarchicalDataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:CredentialViewModel}">
+        <local:CredentialView/>
+    </DataTemplate>
     <!--<DataTemplate DataType="{x:Type local:ContentItemViewModel}">
         <StackPanel Orientation="Horizontal">
             <Image Height="18" Width="18" Source="{Binding Path=Mime, Converter={StaticResource ResourceKey=ImageConverter},ConverterParameter=../}"/>

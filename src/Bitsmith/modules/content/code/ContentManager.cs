@@ -19,7 +19,7 @@ namespace Bitsmith.Models
             {
                 filename = info.Name;
               
-                if (File.Exists(Path.Combine(ContentDirectory.Name, filename)))
+                if (File.Exists(Path.Combine(ContentDirectory.FullName, filename)))
                 {
                     filename = $"{info.Name.Substring(0,info.Name.LastIndexOf('.'))}.{Guid.NewGuid().ToString().Substring(0,4)}{info.Extension}".Scrub();
                 }
@@ -27,7 +27,7 @@ namespace Bitsmith.Models
                 {
                     filename = filename.Scrub();
                 }
-                string fullFilepath = Path.Combine(ContentDirectory.Name, filename);
+                string fullFilepath = Path.Combine(ContentDirectory.FullName, filename);
                 File.Copy(info.FullName, fullFilepath);
                 b = true;
             }

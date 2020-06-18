@@ -5,10 +5,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Dynamic;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using Bitsmith.Models;
 
 namespace Bitsmith.ViewModels
 {
@@ -329,24 +331,125 @@ namespace Bitsmith.ViewModels
 
 
 
-        private ICommand _AddNoteCommand;
-        public ICommand AddNoteCommand
+        private ICommand _AddContentCommand;
+        public ICommand AddContentCommand
         {
             get
             {
-                if (_AddNoteCommand == null)
+                if (_AddContentCommand == null)
                 {
-                    _AddNoteCommand = new RelayCommand(
-                    param => AddNote(),
-                    param => CanAddNote());
+                    _AddContentCommand = new RelayCommand(
+                    param => AddContent(),
+                    param => CanAddContent());
                 }
-                return _AddNoteCommand;
+                return _AddContentCommand;
             }
         }
-        private bool CanAddNote()
+        private bool CanAddContent()
         {
             return true;
         }
+        private void AddContent()
+        {
+            ContentItem item = new ContentItem()
+            {
+                Id = Guid.NewGuid().ToString().ToLower(),
+                Scope = ScopeOption.Private,
+            };
+            item.Properties.DefaultTags();
+            item.Properties.Add(new Property() 
+            { 
+                Name = $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Task}", 
+                Value = Model.Id 
+            });
+
+            bool b = true;
+            switch (_ContentType)
+            {
+                case ContentTypeOption.None:
+                    break;
+                case ContentTypeOption.File:
+                    var content = Workspace.Instance.ViewModel.Content;
+                    if (TryLocateFile(out FileInfo info) && 
+                        content.ContentManager.TryInload(info, out string filename))
+                    {
+                        item.Display = info.Name;
+                        item.Mime = content.Mimes.Resolve(info);
+                        item.Body = filename;
+                        item.Properties.Add(new Property()
+                        {
+                            Name = $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Extension}",
+                            Value = item.Mime
+                        });
+                    }
+                    else
+                    {
+                        b = false;
+                    }
+                    break;
+                case ContentTypeOption.Link:
+                    item.Mime = "url";
+                    break;
+                case ContentTypeOption.Text:
+                    item.Display = "new note";
+                    item.Mime = "text";
+                    break;
+                default:
+                    break;
+            }
+            if (b)
+            {
+                Workspace.Instance.ViewModel.Content.AddContent(item);
+                RefreshContent();
+            }
+        }
+
+        private bool TryLocateFile(out FileInfo info)
+        {
+            bool b = false;
+            info = null;
+
+            string candidate = String.Empty;
+            Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
+
+            string directory = Application.Current.Properties[AppConstants.LastOpenedFileDialogFolderpath] as string;
+            if (!String.IsNullOrEmpty(directory))
+            {
+                try
+                {
+                    DirectoryInfo dir = new DirectoryInfo(directory);
+                    if (dir != null && dir.Exists)
+                    {
+                        directory = dir.FullName;
+                    }
+                    else
+                    {
+                        directory = String.Empty;
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    MessageBox.Show(ex.Message);
+                    directory = String.Empty;
+                }
+
+            }
+            dialog.InitialDirectory = ((!String.IsNullOrEmpty(directory) && Directory.Exists(directory))) ?
+                directory : AppDomain.CurrentDomain.BaseDirectory;
+
+            Nullable<bool> result = dialog.ShowDialog();
+            if (result == true)
+            {
+                info = new FileInfo(dialog.FileName);
+                Application.Current.Properties[AppConstants.LastOpenedFileDialogFolderpath] = info.Directory.FullName;
+                b = true;
+            }
+
+            return b;
+        }
+
+
         private void AddNote()
         {
             ContentItem item = new ContentItem()
@@ -363,51 +466,55 @@ namespace Bitsmith.ViewModels
             RefreshContent();
         }
 
-        private ICommand _AddFileCommand;
-        public ICommand AddFileCommand
+
+
+
+        private ContentTypeOption _ContentType = ContentTypeOption.Text;
+        public bool IsLink
         {
             get
             {
-                if (_AddFileCommand == null)
-                {
-                    _AddFileCommand = new RelayCommand(
-                    param => AddFile(),
-                    param => CanAddFile());
-                }
-                return _AddFileCommand;
+                return _ContentType == ContentTypeOption.Link;
             }
-        }
-        private bool CanAddFile()
-        {
-            return true;
-        }
-        private void AddFile()
-        {
-            MessageBox.Show("Add File");
+            set
+            {
+                if (value)
+                {
+                    _ContentType = ContentTypeOption.Link;
+                }
+            }
         }
 
-        private ICommand _AddLinkCommand;
-        public ICommand AddLinkCommand
+        public bool IsFile
         {
             get
             {
-                if (_AddLinkCommand == null)
+                return _ContentType == ContentTypeOption.File;
+            }
+            set
+            {
+                if (value)
                 {
-                    _AddLinkCommand = new RelayCommand(
-                    param => AddLink(),
-                    param => CanAddLink());
+                    _ContentType = ContentTypeOption.File;
                 }
-                return _AddLinkCommand;
             }
         }
-        private bool CanAddLink()
+
+        public bool IsText
         {
-            return true;
+            get
+            {
+                return _ContentType == ContentTypeOption.Text;
+            }
+            set
+            {
+                if (value)
+                {
+                    _ContentType = ContentTypeOption.Text;
+                }
+            }
         }
-        private void AddLink()
-        {
-            MessageBox.Show("Add Link");
-        }
+
 
         private ContentItemViewModel _SelectedItem;
         public ContentItemViewModel SelectedItem

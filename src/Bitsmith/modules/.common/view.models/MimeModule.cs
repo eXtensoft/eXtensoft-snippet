@@ -51,6 +51,10 @@ namespace Bitsmith.ViewModels
         }
 
 
+        public MimeModule()
+        {
+            Filepath = Path.Combine(AppConstants.SettingsDirectory, base.Filepath);
+        }
         protected override bool LoadData()
         {
             if (!File.Exists(Filepath))

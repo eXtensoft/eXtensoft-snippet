@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>vmcc</Title>
+			<Shortcut>vmcc</Shortcut>
+			<Description>Code snippet for an eXtensoft ViewModel CollectionChanged method</Description>
+			<Author>robertknelson@gmail.com</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+				<Literal>
+					<ID>name</ID>
+					<ToolTip>Collection Name (singular)</ToolTip>
+					<Default>Items</Default>
+				</Literal>
+			</Declarations>
+			<Code Language="csharp"><![CDATA[private void $name$s_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+				{
+					if(e.Action == NotifyCollectionChangedAction.Add)
+					{
+						foreach(var item in e.NewItems)
+						{
+							var vm = item as $name$ViewModel;
+							if(vm != null)
+							{
+								Model.$name$s.Add(vm.Model);
+							}
+						}
+					}
+					else if(e.Action == NotifyCollectionChangedAction.Remove)
+					{
+						foreach(var item in e.OldItems)
+						{
+							var vm = item as $name$ViewModel;
+							if(vm != null)
+							{
+								Model.$name$s.Remove(vm.Model);
+							}
+						}					
+					}
+				}
+			$end$]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

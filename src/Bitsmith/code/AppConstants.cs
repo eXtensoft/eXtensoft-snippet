@@ -10,8 +10,10 @@ namespace Bitsmith
     public static class AppConstants
     {
         public const string OverlayContent = "overlay.content";
-        public const string ContentDirectory = "content-directory";
-        public const string ProjectDirectory = "project-directory";
+        public const string ContentDirectory = "content";
+        public const string ContentFiles = "content-files";
+        public const string ProjectDirectory = "project";
+        public const string SettingsDirectory = "settings";
         public const string Default = "cb883c5d-3141-4a67-97d8-6475527f3179";
         public const string LastOpenedFileDialogFolderpath = "openfile.dialog.folderpath";
         public const string StateMachine = "state-machine";
@@ -31,6 +33,7 @@ namespace Bitsmith
             public const string ViewedAt = "viewed-at";
             public const string Extension = "file-extension";
             public const string Task = "task";
+            public const string Credentials = "credentials";
         }
     }
 }
