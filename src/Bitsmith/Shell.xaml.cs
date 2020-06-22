@@ -21,6 +21,19 @@ namespace Bitsmith
     public partial class Shell : WindowBase
     {
 
+        private ChronosView _Chronos;
+        public ChronosView Chronos
+        {
+            get
+            {
+                if (_Chronos == null)
+                {
+                    _Chronos = new ChronosView();
+                }
+                return _Chronos;
+            }
+        }
+
         private ContentView _ContentView;
         public ContentView ContentView
         {
@@ -118,6 +131,20 @@ namespace Bitsmith
             }
         }
 
+        private ICommand _ToggleTimeEntryCommand;
+        public ICommand ToggleTimeEntryCommand
+        {
+            get
+            {
+                if (_ToggleTimeEntryCommand == null)
+                {
+                    _ToggleTimeEntryCommand = new RelayCommand(
+                        param => ToggleTimeEntry());
+                }
+                return _ToggleTimeEntryCommand;
+            }
+        }
+
         private ICommand _ExitAppCommand;
         public ICommand ExitAppCommand
         {
@@ -158,6 +185,7 @@ namespace Bitsmith
             mgr.RegisterEndpointAction(ActivityStateOption.Lists.ToString(), EndpointOption.Arrival, OnToggleLists);
             mgr.RegisterEndpointAction(ActivityStateOption.Credentials.ToString(), EndpointOption.Arrival, OnToggleCredentials);
             mgr.RegisterEndpointAction(ActivityStateOption.Projects.ToString(), EndpointOption.Arrival, OnToggleProjects);
+            mgr.RegisterEndpointAction(ActivityStateOption.TimeEntry.ToString(), EndpointOption.Arrival, OnToggleTimeEntry);
 
             AddToggleCommands();
         }
@@ -168,6 +196,7 @@ namespace Bitsmith
             this.InputBindings.Add(new KeyBinding(ToggleProjectsCommand, new KeyGesture(Key.T, ModifierKeys.Control)));
             this.InputBindings.Add(new KeyBinding(ExitAppCommand, new KeyGesture(Key.X, ModifierKeys.Control)));
             this.InputBindings.Add(new KeyBinding(ToggleCredentialsCommand, new KeyGesture(Key.P, ModifierKeys.Control)));
+            this.InputBindings.Add(new KeyBinding(ToggleTimeEntryCommand, new KeyGesture(Key.E, ModifierKeys.Control)));
         }
 
         private void WindowBase_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -223,11 +252,23 @@ namespace Bitsmith
             grdRoot.Children.Add(Projects);
         }
 
+        private void OnToggleTimeEntry()
+        {
+            grdRoot.Children.Clear();
+            grdRoot.Children.Add(Chronos);
+        }
+
         private void OnToggleCredentials()
         {
             grdRoot.Children.Clear();
             grdRoot.Children.Add(Credentials);
         }
+
+        private void ToggleTimeEntry()
+        {
+            Workspace.Instance.State.Machine.ExecuteTransition(TransitionTypeOption.ToggleTimeEntry.ToString());
+        }
+
         private void ToggleProjects()
         {
             Workspace.Instance.State.Machine.ExecuteTransition(TransitionTypeOption.ToggleProjects.ToString());

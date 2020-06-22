@@ -14,6 +14,7 @@ namespace Bitsmith
         public const string ContentFiles = "content-files";
         public const string ProjectDirectory = "project";
         public const string SettingsDirectory = "settings";
+        public const string ChronosDirectory = "chronos";
         public const string Default = "cb883c5d-3141-4a67-97d8-6475527f3179";
         public const string LastOpenedFileDialogFolderpath = "openfile.dialog.folderpath";
         public const string StateMachine = "state-machine";

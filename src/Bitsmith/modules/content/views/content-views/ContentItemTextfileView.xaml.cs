@@ -34,28 +34,23 @@ namespace Bitsmith
             ContentItemViewModel viewmodel = DataContext as ContentItemViewModel;
             if (viewmodel != null)
             {
-                string directory = Application.Current.Properties[AppConstants.ContentDirectory] as string;
-                if (!String.IsNullOrEmpty(directory))
+
+                string filepath = System.IO.Path.Combine(AppConstants.ContentDirectory, AppConstants.ContentFiles, viewmodel.Body);
+                if (System.IO.File.Exists(filepath))
                 {
-                    string filepath = System.IO.Path.Combine(directory, viewmodel.Body);
-                    if (System.IO.File.Exists(filepath))
+                    using (System.IO.StreamReader reader = new System.IO.StreamReader(filepath))
                     {
-                        using (System.IO.StreamReader reader = new System.IO.StreamReader(filepath))
-                        {
-                            s = reader.ReadToEnd();
-                        }
-                    }
-                    //txbText.Text = s;
-                    if (String.IsNullOrWhiteSpace(viewmodel.SearchTerm))
-                    {
-                        txbBody.Text = s;
-                    }
-                    else
-                    {
-                        rtbBody.Document = s.ToFlowDocument(viewmodel.SearchTerm, Brushes.Yellow);
+                        s = reader.ReadToEnd();
                     }
                 }
-
+                if (String.IsNullOrWhiteSpace(viewmodel.SearchTerm))
+                {
+                    txbBody.Text = s;
+                }
+                else
+                {
+                    rtbBody.Document = s.ToFlowDocument(viewmodel.SearchTerm, Brushes.Yellow);
+                }
 
             }
         }
@@ -66,13 +61,9 @@ namespace Bitsmith
             ContentItemViewModel viewmodel = DataContext as ContentItemViewModel;
             if (viewmodel != null)
             {
-                string directory = Application.Current.Properties[AppConstants.ContentDirectory] as string;
-                
-                if (!String.IsNullOrEmpty(directory))
-                {
-                    DirectoryInfo info = new DirectoryInfo(directory);
-                    string filepath = System.IO.Path.Combine(info.FullName, viewmodel.Body);
-                    if (System.IO.File.Exists(filepath))
+
+                string filepath = System.IO.Path.Combine(AppConstants.ContentDirectory, AppConstants.ContentFiles, viewmodel.Body);
+                if (System.IO.File.Exists(filepath))
                     {
                         try
                         {
@@ -91,8 +82,6 @@ namespace Bitsmith
                         }
 
                     }
-                }
-
 
             }
         }

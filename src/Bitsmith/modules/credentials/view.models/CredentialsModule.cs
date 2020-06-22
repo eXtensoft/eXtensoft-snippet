@@ -12,7 +12,7 @@ namespace Bitsmith.ViewModels
 {
     public class CredentialsModule : Module
     {
-        public string Display => "Credentialz";
+        public string Display => "Credentials";
 
         private ICommand _AddCommand;
         public ICommand AddCommand

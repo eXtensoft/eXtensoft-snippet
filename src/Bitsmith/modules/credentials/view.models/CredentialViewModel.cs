@@ -22,6 +22,20 @@ namespace Bitsmith.ViewModels
             }
         }
 
+        public string Display
+        {
+            get
+            {
+                return Model.Display;
+            }
+            set
+            {
+                Model.Display = value;
+                OnPropertyChanged("Display");
+            }
+        }
+
+
         private string _Location;
         public string Location
         {

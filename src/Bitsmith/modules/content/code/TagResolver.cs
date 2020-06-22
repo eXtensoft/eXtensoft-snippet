@@ -24,6 +24,7 @@ namespace Bitsmith
             $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Domain}",
             $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.ModifiedAt}",
             $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.ViewedAt}",
+            $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Credentials}",
         };
 
         public List<Property> Resolve(string tags)

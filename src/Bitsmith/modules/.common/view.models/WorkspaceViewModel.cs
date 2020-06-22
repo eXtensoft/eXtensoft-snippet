@@ -12,6 +12,20 @@ namespace Bitsmith.ViewModels
     {
         public Grid Root { get; set; }
 
+        private ChronosModule _Chronos;
+        public ChronosModule Chronos
+        {
+            get
+            {
+                if (_Chronos == null)
+                {
+                    _Chronos = new ChronosModule();
+                    _Chronos.Setup();
+                }
+                return _Chronos;
+            }
+            
+        }
         public CredentialsModule Credentials { get; set; }
         public SettingsModule Settings { get; set; }
         public ContentModule Content { get; set; }

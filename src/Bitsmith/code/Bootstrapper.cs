@@ -34,6 +34,11 @@ namespace Bitsmith
             {
                 content.Create();
             }
+            DirectoryInfo chronos = new DirectoryInfo(AppConstants.ChronosDirectory);
+            if (!chronos.Exists)
+            {
+                chronos.Create();
+            }
         }
 
         public static Workspace Workspace()

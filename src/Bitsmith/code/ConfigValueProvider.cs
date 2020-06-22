@@ -12,7 +12,7 @@ namespace Bitsmith
 
         public static double ShellWidth { get { return GetConfigValueAs<double>("Shell.Width", 900); } }
 
-        public static string ShellTitle { get { return GetConfigValueAs<string>("Shell.Title", "Ming's Stuff"); } }
+        public static string ShellTitle { get { return GetConfigValueAs<string>("Shell.Title", "Bitsmith CMS"); } }
 
         private static T GetConfigValueAs<T>(string key, T defaultValue) where T : IConvertible
         {

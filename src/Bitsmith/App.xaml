@@ -30,11 +30,11 @@
                     <x:Type TypeName="model:StatusOption"/>
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
-            <!--<ObjectDataProvider x:Key="ChronosViews" MethodName="GetValues" ObjectType="{x:Type sys:Enum }">
+            <ObjectDataProvider x:Key="ChronosViews" MethodName="GetValues" ObjectType="{x:Type sys:Enum }">
                 <ObjectDataProvider.MethodParameters>
-                    <x:Type TypeName="local:ChronosViewTypeOptions"/>
+                    <x:Type TypeName="model:ChronosViewTypeOptions"/>
                 </ObjectDataProvider.MethodParameters>
-            </ObjectDataProvider>-->
+            </ObjectDataProvider>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

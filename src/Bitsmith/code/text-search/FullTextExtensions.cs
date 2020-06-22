@@ -14,7 +14,7 @@ namespace Bitsmith.FullText
     {
         public static ContentModule IndexContent(this ContentModule module)
         {
-            string directory = Application.Current.Properties[AppConstants.ContentDirectory] as string;
+            string directory = System.IO.Path.Combine(AppConstants.ContentDirectory, AppConstants.ContentFiles);
             TextIndexLoader.Load(module.Indexer, module.Content.Items, directory);
 
             return module;

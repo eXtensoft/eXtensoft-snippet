@@ -1,0 +1,43 @@
+﻿
+
+models
+	project
+	task
+	time-entry
+
+	work-effort-estimate
+		difficulty
+		uncertainty-confidence
+		likely-effort
+			minimum-effort
+			maximum-effort
+
+
+
+user-story
+	as a [persona], i want to [do-something], so that [reason-benefit]
+	use-case
+		specific-solution (web,mobile,desktop,etc)
+	personas
+
+
+requirements
+	functional
+
+	non-functional
+
+
+
+chronos
+	dashboard
+		x-axis	for a given set of time-groupings (day,week,month,etc) accross the top
+		y-axis	for a given work-effort-grouping (project,sprint, product)
+
+		several detail views
+			work-effort per time-grouping
+			estimate over/under with begin-completion
+			persona-resource usage
+			burndown
+
+
+

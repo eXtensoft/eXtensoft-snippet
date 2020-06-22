@@ -218,6 +218,7 @@ namespace Bitsmith.Models
             $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Domain}",
             $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Extension}",
             $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Task}",
+            $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Credentials}",
         };
 
         private static Dictionary<string, string> _Replacements = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)

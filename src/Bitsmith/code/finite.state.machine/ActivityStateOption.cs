@@ -20,5 +20,6 @@ namespace Bitsmith
         Todos,
         Remote,
         Projects,
+        TimeEntry,
     }
 }

@@ -63,7 +63,18 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="modules\chronos\views\ChronosView.xaml.cs">
+      <DependentUpon>ChronosView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="code\converters\TimeToMinutesConverter.cs" />
     <Compile Include="code\Encryptor.cs" />
+    <Compile Include="modules\chronos\ChronosExtensions.cs" />
+    <Compile Include="modules\chronos\models\Chronolog.cs" />
+    <Compile Include="modules\chronos\models\Chronos.cs" />
+    <Compile Include="modules\chronos\models\ChronosViewTypeOptions.cs" />
+    <Compile Include="modules\chronos\models\TimeEntry.cs" />
+    <Compile Include="modules\chronos\view.models\ChronosModule.cs" />
+    <Compile Include="modules\chronos\view.models\TimeEntryViewModel.cs" />
     <Compile Include="modules\credentials\views\CredentialView.xaml.cs">
       <DependentUpon>CredentialView.xaml</DependentUpon>
     </Compile>
@@ -119,6 +130,9 @@
     </Compile>
     <Compile Include="modules\project.management\views\TaskItemView.xaml.cs">
       <DependentUpon>TaskItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\chronos\views\NewTimeEntryView.xaml.cs">
+      <DependentUpon>NewTimeEntryView.xaml</DependentUpon>
     </Compile>
     <Compile Include="view\state.management\ErrorView.xaml.cs">
       <DependentUpon>ErrorView.xaml</DependentUpon>
@@ -342,6 +356,10 @@
     <Resource Include="data\statemachine.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="modules\chronos\views\ChronosView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="modules\credentials\views\CredentialView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -371,6 +389,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="modules\project.management\views\TaskItemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\chronos\views\NewTimeEntryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -570,6 +592,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="modules\project.management\models\design.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="modules\project.management\data\design.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

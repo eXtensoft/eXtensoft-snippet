@@ -8,10 +8,7 @@
         Title="{x:Static local:ConfigValueProvider.ShellTitle}"
         mc:Ignorable="d">
     <Grid x:Name="grdRoot">
-        <!--<local:ContentView/>-->
-        <!-- <local:MimeMapsView/>-->
-        <!--<local:ContentDomainsView/>-->
-        <!--<local:PathsView/>-->
+
     </Grid>
 </local:WindowBase>
     
@@ -21,3 +18,7 @@
         Height="{x:Static local:ConfigValueProvider.ShellHeight}"
         Width="{x:Static local:ConfigValueProvider.ShellWidth}"
         -->
+        <!--<local:ContentView/>-->
+        <!-- <local:MimeMapsView/>-->
+        <!--<local:ContentDomainsView/>-->
+        <!--<local:PathsView/>-->
