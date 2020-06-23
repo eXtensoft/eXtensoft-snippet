@@ -122,6 +122,7 @@ namespace Bitsmith.Models
                 vm.Display = string.Empty;
                 vm.Body = string.Empty;
                 vm.Tags = new List<string>();
+                vm.AddTag(vm.SelectedTag);
             }
             return b;
         }

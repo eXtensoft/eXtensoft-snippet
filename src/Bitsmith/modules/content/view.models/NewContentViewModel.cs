@@ -3,11 +3,63 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Windows.Input;
 
 namespace Bitsmith.ViewModels
 {
     public class NewContentViewModel : INotifyPropertyChanged
     {
+
+        private TagMapViewModel _SelectedTag;
+        public TagMapViewModel SelectedTag
+        {
+            get
+            {
+                return _SelectedTag;
+            }
+            set
+            {
+                _SelectedTag = value;
+                
+                OnPropertyChanged("SelectedTag");
+                AddTag(_SelectedTag);                
+            }
+        }
+
+        public void AddTag(TagMapViewModel vm)
+        {
+            if (vm != null && !Tags.Contains(vm.Key))
+            {
+                Tags.Add(vm.Key);
+                OnPropertyChanged("Tags");
+            }
+        }
+
+        private ICommand _ClearTagsCommand;
+        public ICommand ClearTagsCommand
+        {
+            get
+            {
+                if (_ClearTagsCommand == null)
+                {
+                    _ClearTagsCommand = new RelayCommand(
+                    param => ClearTags(),
+                    param => CanClearTags());
+                }
+                return _ClearTagsCommand;
+            }
+        }
+        private bool CanClearTags()
+        {
+            return Tags.Count > 0;
+        }
+        private void ClearTags()
+        {
+            Tags.Clear();
+            OnPropertyChanged("Tags");
+            SelectedTag = null;
+        }
+
         public bool HasFile
         {
             get
@@ -36,7 +88,7 @@ namespace Bitsmith.ViewModels
         }
 
 
-        private string _Display = "display";
+        private string _Display = string.Empty;
         public string Display
         {
             get
@@ -50,7 +102,7 @@ namespace Bitsmith.ViewModels
             }
         }
 
-        private string _Body = "body";
+        private string _Body = string.Empty;
         public string Body
         {
             get

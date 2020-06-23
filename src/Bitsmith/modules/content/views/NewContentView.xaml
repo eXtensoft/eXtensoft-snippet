@@ -38,7 +38,6 @@
                   SelectedItem="{Binding Path=SelectedDomain}" 
                   DisplayMemberPath="Name" SelectedValuePath="Id"/>-->
 
-
         <Button Grid.Column="0" Grid.Row="0" VerticalAlignment="Bottom" 
                 Command="{Binding Path=AddContentCommand}"  Style="{StaticResource ResourceKey=AddCommandButton}" HorizontalAlignment="Center" />
 
@@ -49,7 +48,7 @@
                     <RadioButton x:Name="rdoFile" Content="File" IsChecked="{Binding Path=Input.IsFile, Mode=TwoWay}" GroupName="ContentType"/>
                     <RadioButton x:Name="rdoText" Content="Text" IsChecked="{Binding Path=Input.IsText, Mode=TwoWay}" GroupName="ContentType"/>
                 </StackPanel>
-            </GroupBox>            
+            </GroupBox>
 
             <GroupBox Header="Mime" IsEnabled="{Binding ElementName=rdoText, Path=IsChecked}">
                 <StackPanel>
@@ -72,10 +71,8 @@
                     <RadioButton Content="Encrypt" GroupName="Scope"/>
                 </StackPanel>
             </GroupBox>-->
-            
+
         </StackPanel>
-
-
 
         <Label Grid.Column="0" Grid.Row="2" Content="Tags:" HorizontalAlignment="Right"/>
         <Label Grid.Column="0" Grid.Row="4" Content="Title:" HorizontalAlignment="Right"/>
@@ -89,20 +86,34 @@
                 </StackPanel>
             </Expander.Header>
             <Expander.Content>
-                <!--<WrapPanel Orientation="Horizontal" MinHeight="20">
-                    
-                </WrapPanel>-->
-                <Grid Background="Salmon"/>
+                <ListBox ItemsSource="{Binding Path=Resolver.Recent}" SelectedItem="{Binding Path=Input.SelectedTag}">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel MaxWidth="250"/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Key}"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
             </Expander.Content>
         </Expander>
 
 
-        <TextBox Grid.Column="2"  Grid.Row="2" 
+        <DockPanel Grid.Column="2" 
+                   Grid.Row="2" 
+                   Grid.ColumnSpan="{Binding ElementName=expTags, Path=IsExpanded, Converter={StaticResource cvtBool2Int}}" 
+                   LastChildFill="True" >
+            <Button Style="{StaticResource RemoveCommandButton}" DockPanel.Dock="Right" Command="{Binding Path=Input.ClearTagsCommand}"/>
+            <TextBox Grid.Column="2"  Grid.Row="2" 
                  Grid.ColumnSpan="{Binding ElementName=expTags, Path=IsExpanded, Converter={StaticResource cvtBool2Int}}"
-                 Text="{Binding Path=Input.Tags, Converter={StaticResource ResourceKey=cnvNewTags}}" />
-        <TextBox Grid.Column="2"  Grid.Row="4"
-                 Grid.ColumnSpan="{Binding ElementName=expTags, Path=IsExpanded, Converter={StaticResource cvtBool2Int}}"
-                 Text="{Binding Path=Input.Display, UpdateSourceTrigger=PropertyChanged}" />
+                 Text="{Binding Path=Input.Tags, Converter={StaticResource ResourceKey=cnvNewTags}}" />                      
+        </DockPanel>
+        <TextBox Grid.Column="2" Grid.Row="4" Text="{Binding Path=Input.Display, UpdateSourceTrigger=PropertyChanged}"
+                 Grid.ColumnSpan="{Binding ElementName=expTags, Path=IsExpanded, Converter={StaticResource cvtBool2Int}}" />
         <TextBox Grid.Column="2" Grid.ColumnSpan="2"  Grid.Row="6"  Text="{Binding Path=Input.Body, UpdateSourceTrigger=PropertyChanged}" 
                  Visibility="{Binding ElementName=rdoText, Path=IsChecked, Converter={StaticResource cvtBool2VisibilityReverse}}" />
         <TextBox Grid.Column="2" Grid.ColumnSpan="2"  Grid.Row="6"  Grid.RowSpan="3"

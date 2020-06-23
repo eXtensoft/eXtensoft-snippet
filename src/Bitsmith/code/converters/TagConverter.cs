@@ -45,7 +45,7 @@ namespace Bitsmith
                 string s = value.ToString().Trim().Trim(',');
                 if (!String.IsNullOrEmpty(s))
                 {
-                    string[] t = s.Split(',');
+                    string[] t = s.Split(new char[] { ',',' ',';' },StringSplitOptions.RemoveEmptyEntries);
                     foreach (var item in t)
                     {
                         list.Add(item.Trim());

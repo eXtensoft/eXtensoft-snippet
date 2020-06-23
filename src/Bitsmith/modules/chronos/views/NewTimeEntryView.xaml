@@ -20,7 +20,7 @@
             <RowDefinition Height="10"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <GroupBox Grid.Column="0" Grid.RowSpan="3" MinWidth="200" Header="{Binding Path=Project.Display}">
+        <GroupBox Grid.Column="0" Grid.RowSpan="5" MinWidth="200" Header="{Binding Path=Project.Display}">
             <ListBox x:Name="lsbTasks" ItemsSource="{Binding Path=Project.Items}" SelectedItem="{Binding Path=Chronos.SelectedTask}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
@@ -41,13 +41,14 @@
         </GroupBox>
         <GroupBox Grid.Column="2" Grid.Row="0" DataContext="{Binding Path=Chronos}">
             <GroupBox.Header>
-                <StackPanel Grid.Column="4" Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Center">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <Button Style="{StaticResource RefreshCommandButton}" Command="{Binding Path=RefreshItemCommand}" Margin="20,0,10,0"/>
                     <Button Style="{StaticResource AddCommandButton}" Command="{Binding Path=AddItemCommand}" Margin="10,0,20,0"/>
+                    <TextBlock Grid.Column="2" Grid.Row="2" HorizontalAlignment="Center" Text="{Binding Path=Message}"/>
                 </StackPanel>
             </GroupBox.Header>
             <GroupBox.Content>
-                <Grid Grid.Column="2" Grid.Row="0">
+                <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="10"/>
@@ -112,10 +113,8 @@
                     </GroupBox>
 
                 </Grid>
-
             </GroupBox.Content>
         </GroupBox>
-
         <GroupBox Grid.Column="2"  Grid.Row="2">
             <GroupBox.Header>
                 <ComboBox Grid.Column="4" Grid.Row="0" SelectedItem="{Binding Path=Importance}" ItemsSource="{Binding Source={StaticResource ChronosViews}}"/>

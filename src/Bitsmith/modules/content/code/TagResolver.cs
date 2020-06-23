@@ -13,6 +13,8 @@ namespace Bitsmith
         public ObservableCollection<TagMapViewModel> Items { get; set; } = new ObservableCollection<TagMapViewModel>();
         //public Dictionary<string,TagMap> TagMaps { get; set; } = new Dictionary<string,TagMap>(StringComparer.OrdinalIgnoreCase);
 
+        public ObservableCollection<TagMapViewModel> Recent { get; set; } = new ObservableCollection<TagMapViewModel>();
+
         public List<string> Exclusions { get; set; } = new List<string>() 
         { 
             "created-at",
@@ -33,6 +35,8 @@ namespace Bitsmith
             List<string> list = (from candidate in candidates select candidate.Trim()).ToList();
             return Resolve(list);
         }
+
+        private HashSet<string> recenttags = new HashSet<string>();
 
         public List<Property> Resolve(List<string> tags )
         {
@@ -60,10 +64,15 @@ namespace Bitsmith
                         }
                         else
                         {
+                            found = new TagMapViewModel(new TagMap() { Key = key, Count = 1 });
                             property.Name = key;
-                            Items.Add(new TagMapViewModel(new TagMap() { Key = key, Count = 1 }));
+                            Items.Add(found);
                         }
-
+                        if (recenttags.Add(found.Key))
+                        {
+                            Recent.Add(found);
+                        }
+                        
                         list.Add(property);
                     }
                 } 

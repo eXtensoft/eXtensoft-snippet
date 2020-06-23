@@ -33,6 +33,7 @@ namespace Bitsmith.ViewModels
             {
                 _SelectedTask = value;
                 OnPropertyChanged("SelectedTask");
+                Message = string.Empty;
             }
         }
 
@@ -44,6 +45,7 @@ namespace Bitsmith.ViewModels
             {
                 _SelectedActivity = value;
                 OnPropertyChanged("SelectedActivity");
+                Message = string.Empty;
             }
         }
 
@@ -74,13 +76,15 @@ namespace Bitsmith.ViewModels
         }
         private void AddItem()
         {
-            TimeEntry item = new TimeEntry().Default();
+            TimeEntry item = new TimeEntry().Default(Start);
             item.Task = new TagIdentifier() { Display = SelectedTask.Display, Id = SelectedTask.Model.Id, Token = SelectedTask.Model.Identifier.Token };
             item.Activity = new TagIdentifier() { Display = SelectedActivity.Display, Id = SelectedActivity.Id, Token = SelectedActivity.Token };
             item.Minutes = Minutes;
             item.Comment = Comment; 
             TimeEntryViewModel vm = new TimeEntryViewModel(item);
             TimeEntries.Add(vm);
+            RefreshItem();
+            Message = item.ToDisplay();
         }
 
         private ICommand _RefreshItemCommand;
@@ -103,7 +107,29 @@ namespace Bitsmith.ViewModels
         }
         private void RefreshItem()
         {
+            SelectedTask = null;
+            SelectedActivity = null;
+            Start = DateTime.Now;
+            Comment = string.Empty;
+            Minutes = 15;
+            Message = string.Empty;
+        }
 
+        private string _Message;
+        public string Message
+        {
+            get
+            {
+                return _Message;
+            }
+            set
+            {
+                if (_Message != value)
+                {
+                    _Message = value;
+                    OnPropertyChanged("Message");
+                }
+            }
         }
 
         private DateTime _Start = DateTime.Now;
@@ -117,6 +143,7 @@ namespace Bitsmith.ViewModels
             {
                 _Start = value;
                 OnPropertyChanged("Start");
+                Message = string.Empty;
             }
         }
 
@@ -128,6 +155,7 @@ namespace Bitsmith.ViewModels
             {
                 _Minutes = value;
                 OnPropertyChanged("Minutes");
+                Message = string.Empty;
             }
         }
 
@@ -142,6 +170,7 @@ namespace Bitsmith.ViewModels
             {
                 _Comment = value;
                 OnPropertyChanged("Comment");
+                Message = string.Empty;
             }
         }
 

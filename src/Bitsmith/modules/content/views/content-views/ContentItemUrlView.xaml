@@ -32,7 +32,7 @@
             <TextBlock Grid.Row="0" Grid.Column="0" Text="Title:" HorizontalAlignment="Right" />
             <TextBlock Grid.Row="2" Grid.Column="0" Text="Tags:" HorizontalAlignment="Right" />
             <TextBlock Grid.Row="4" Grid.Column="0" Text="Url:" HorizontalAlignment="Right" />
-            <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Path=Display}"/>
+            <TextBox Grid.Row="0" Grid.Column="2" Text="{Binding Path=Display}"/>
             <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding Path=Tags, Converter={StaticResource ResourceKey=cvtTags}}"/>
             <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding Path=Body}"/>
         </Grid>

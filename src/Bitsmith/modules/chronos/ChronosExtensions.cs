@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bitsmith.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -29,14 +30,21 @@ namespace Bitsmith.Models
             return list;
         }
 
+        public static TimeEntry Default(this TimeEntry model, DateTime started)
+        {
+            model = model.Default();
+            model.Started = started;
+            return model;
+        }
+
         public static TimeEntry Default(this TimeEntry model)
         {
             model.Id = Guid.NewGuid().ToString().ToLower();
             model.CreatedAt = DateTime.Now;
             var user = Environment.UserName;
-            model.Actor = new TagIdentifier() { Display = user, Token = user.ToLower()};
+            model.Actor = new TagIdentifier() { Display = user, Token = user.ToLower() };
             model.Role = new TagIdentifier() { Display = "Software Engineer", Token = "Software Engineer".ToToken() };
-            model.Started = DateTime.Now.Date;           
+            model.Started = DateTime.Now.Date;
             return model;
         }
 
@@ -85,6 +93,11 @@ namespace Bitsmith.Models
                 }
             }
             return info;
+        }
+
+        public static string ToDisplay(this TimeEntry model)
+        {
+            return $"{model.Minutes} min logged for {model.Task.Display}.";
         }
 
         private static string Filename(this TimeEntry model)
