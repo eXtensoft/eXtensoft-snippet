@@ -5,8 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Bitsmith" DataContextChanged="UserControl_DataContextChanged"
              mc:Ignorable="d" 
-             d:DesignHeight="200" d:DesignWidth="200">
-    <Grid>
+             d:DesignHeight="200" d:DesignWidth="300">
+    <Grid MaxWidth="300">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="20"/>
@@ -57,7 +57,8 @@
         <TextBox Grid.Column="2" Grid.Row="12" Text="{Binding Path=Identifier}"/>
         <TextBox Grid.Column="2" Grid.Row="14" Text="{Binding Path=Display}"/>
         <TextBox Grid.Column="2" Grid.Row="16" Text="{Binding Path=Description}" 
-                 AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Visible"/>
+                 AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap" 
+                 HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Visible"/>
 
         <Button Style="{StaticResource SaveCommandButton}"
                     Command="{Binding Path=UpdateBodyCommand, 

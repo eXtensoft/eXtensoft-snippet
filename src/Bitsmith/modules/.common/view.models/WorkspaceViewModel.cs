@@ -80,6 +80,7 @@ namespace Bitsmith.ViewModels
 
             Settings = new SettingsModule();
             Settings.Setup();
+
         }
 
         internal void Save()
@@ -91,6 +92,10 @@ namespace Bitsmith.ViewModels
             if (Project.CanSaveWorkspace())
             {
                 Project.SaveWorkspace();
+            }
+            if (Chronos != null && Chronos.CanSaveWorkspace())
+            {
+                Chronos.SaveWorkspace();
             }
         }
     }

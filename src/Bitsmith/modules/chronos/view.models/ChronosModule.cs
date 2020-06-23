@@ -1,17 +1,22 @@
 ﻿using Bitsmith.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
 namespace Bitsmith.ViewModels
 {
     public class ChronosModule : Module
     {
+
+        public ObservableCollection<TimeEntryViewModel> TimeEntries { get; set; }
 
         public Chronos Model { get; set; }
 
@@ -61,11 +66,21 @@ namespace Bitsmith.ViewModels
         }
         private bool CanAddItem()
         {
-            return true;
+            bool b = true;
+            b = b && Minutes > 5;
+            b = b && SelectedActivity != null;
+            b = b && SelectedTask != null;
+            return b;
         }
         private void AddItem()
         {
-
+            TimeEntry item = new TimeEntry().Default();
+            item.Task = new TagIdentifier() { Display = SelectedTask.Display, Id = SelectedTask.Model.Id, Token = SelectedTask.Model.Identifier.Token };
+            item.Activity = new TagIdentifier() { Display = SelectedActivity.Display, Id = SelectedActivity.Id, Token = SelectedActivity.Token };
+            item.Minutes = Minutes;
+            item.Comment = Comment; 
+            TimeEntryViewModel vm = new TimeEntryViewModel(item);
+            TimeEntries.Add(vm);
         }
 
         private ICommand _RefreshItemCommand;
@@ -130,6 +145,16 @@ namespace Bitsmith.ViewModels
             }
         }
 
+        public bool CanSaveWorkspace()
+        {
+            return Model != null;
+        }
+
+        public void SaveWorkspace()
+        {
+            SaveData();
+        }
+
 
         public ChronosModule()
         {
@@ -141,7 +166,40 @@ namespace Bitsmith.ViewModels
         {
             Activities = new List<TagIdentifier>().Activities();
             _Minutes = 60;
+            TimeEntries = new ObservableCollection<TimeEntryViewModel>(from x in Model.Items select new TimeEntryViewModel(x));
+            TimeEntries.CollectionChanged += TimeEntries_CollectionChanged;
+
         }
+
+
+
+        private void TimeEntries_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                foreach (var item in e.NewItems)
+                {
+                    var vm = item as TimeEntryViewModel;
+                    if (vm != null)
+                    {
+                        Model.Items.Add(vm.Model);
+                    }
+                }
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                foreach (var item in e.OldItems)
+                {
+                    var vm = item as TimeEntryViewModel;
+                    if (vm != null)
+                    {
+                        Model.Items.Remove(vm.Model);
+                    }
+                }
+            }
+        }
+
+
 
         protected override bool LoadData()
         {
@@ -154,16 +212,34 @@ namespace Bitsmith.ViewModels
                     OnFailure(error);
                 }
             }
-
             bool b = FileSystemDataProvider.TryRead<Chronos>(Filepath, out Chronos model, out string message);
             if (!b)
             {
-                Model = model;
                 OnFailure(message);
+            }
+            else
+            {
+                Model = model;
             }
 
             return b;
         }
+
+        protected override bool SaveData()
+        {
+            bool b = true;
+            if (Model != null)
+            {
+                if (!FileSystemDataProvider.TryWrite<Chronos>(Model,out string message, Filepath))
+                {
+                    OnFailure(message);
+                    b = false;
+                }
+            }
+            return b;
+        }
+
+       
 
 
     }

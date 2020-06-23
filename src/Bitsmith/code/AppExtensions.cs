@@ -150,20 +150,32 @@ namespace Bitsmith
             StringBuilder sb = new StringBuilder();
             if (!String.IsNullOrWhiteSpace(input))
             {
-                int i = -1;
-                foreach (var c in input.Trim().Replace(" ", "-").ToCharArray())
+                var text = input.Trim().Replace(" ", "-").ToCharArray();
+                for (int j = 0; j < text.Length; j++)
                 {
-                    i++;
-                    if (Char.IsUpper(c))
+                    var c = text[j];
+                    if (char.IsUpper(c))
                     {
-                        if (i > 0)
+                        if (j == 0)
                         {
-                            sb.Append($"_{c.ToString().ToLower()}");
+                            sb.Append(c.ToString().ToLower());
                         }
                         else
                         {
-                            sb.Append(c.ToString().ToLower());
-                        }                       
+                            char previous = text[j - 1];
+                            if(Char.IsUpper(previous))
+                            {
+                                sb.Append(c.ToString().ToLower());
+                            }
+                            else if (previous == '-')
+                            {
+                                sb.Append(c.ToString().ToLower());
+                            }
+                            else
+                            {
+                                sb.Append($"_{c.ToString().ToLower()}");
+                            }
+                        }
                     }
                     else
                     {

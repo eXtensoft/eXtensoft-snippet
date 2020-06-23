@@ -219,6 +219,9 @@ namespace Bitsmith.ViewModels
         private void ClearQuery()
         {
             QueryText = string.Empty;
+        }
+        private void Import()
+        {
             int totalfiles = 0;
             int foundfiles = 0;
             List<string> orphanfiles = new List<string>();
@@ -350,7 +353,6 @@ namespace Bitsmith.ViewModels
             list.ForEach(x => {
                 model.Items.Add(x);
             });
-
         }
 
         private ICommand _ExecuteQueryCommand;

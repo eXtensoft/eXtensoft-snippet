@@ -26,16 +26,17 @@ namespace Bitsmith
         object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             int minutes = 30;
+            TimeSpan ts = TimeSpan.FromMinutes(30);
             if (value != null && !String.IsNullOrWhiteSpace(value.ToString()))
             {
-                TimeSpan ts;
                 string s = value.ToString().Trim();
                 string[] parts = s.Split(new char[] { ':' });
                 if (parts.Length == 1)
                 {
-                    if (Double.TryParse(parts[0], out double d))
+                    var part = parts[0];
+                    if (Double.TryParse(part, out double d))
                     {
-                        if (d <= 12)
+                        if (d <= 8)
                         {
                             ts = TimeSpan.FromHours(d);
                         }
@@ -43,11 +44,26 @@ namespace Bitsmith
                         {
                             ts = TimeSpan.FromMinutes(Math.Floor(d));
                         }
-                        minutes = (int)ts.TotalMinutes;
                     }
-                    else if (TimeSpan.TryParse(parts[0], out ts))
+                    else
                     {
-                        minutes = (int)ts.TotalMinutes;
+                        var last = part[part.Length - 1];
+                        if (!Char.IsNumber(last))
+                        {
+                            var stripped = part.Substring(0,part.Length-1);
+                            if (Double.TryParse(stripped, 
+                                out double time))
+                            {
+                                if (last.ToString().Equals("h", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    ts = TimeSpan.FromHours(time);
+                                }
+                                else if (last.ToString().Equals("m", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    ts = TimeSpan.FromMinutes(Math.Floor(time));
+                                }
+                            }
+                        }
                     }
                 }
                 else if (parts.Length == 2)
@@ -57,10 +73,11 @@ namespace Bitsmith
                     {
                         int total = (hours * 60) + min;
                         ts = TimeSpan.FromMinutes(total);
-                        minutes = (int)ts.TotalMinutes;
                     }
                 }
             }
+            minutes = (int)ts.TotalMinutes;
+
             return minutes;
         }
     }

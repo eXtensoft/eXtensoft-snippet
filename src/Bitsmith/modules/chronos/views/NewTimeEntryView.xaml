@@ -59,6 +59,8 @@
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="0"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="5"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="5"/>
@@ -68,7 +70,7 @@
                         <RowDefinition Height="5"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <GroupBox Grid.Column="0" Grid.RowSpan="7" MinWidth="150">
+                    <GroupBox Grid.Column="0" Grid.RowSpan="9" MinWidth="150">
                         <GroupBox.Header>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Activity"/>
@@ -85,16 +87,17 @@
                             </ListBox>
                         </GroupBox.Content>
                     </GroupBox>
-                    <Label Grid.Column="2" Grid.Row="0" Content="Task" HorizontalContentAlignment="Right"/>
+                    <Label Grid.Column="2" Grid.Row="0" Content="Task" />
                     <TextBlock Grid.Column="4" Grid.Row="0" Text="{Binding Path=SelectedTask.Display}" />
-                    <Label Grid.Column="2" Grid.Row="2" Content="Activity" HorizontalContentAlignment="Right"/>
-                    <TextBlock Grid.Column="4" Grid.Row="2" Text="{Binding Path=SelectedActivity.Display}" />
-                    <Label Grid.Column="2" Grid.Row="4" Content="Work On" HorizontalContentAlignment="Right"/>
-                    <DatePicker Grid.Column="4" Grid.Row="4" SelectedDate="{Binding Path=Start}"/>
-                    <Label Grid.Column="2" Grid.Row="6" Content="Time worked" HorizontalContentAlignment="Right"/>
-                    <TextBox Grid.Column="4" Grid.Row="6" Text="{Binding Path=Minutes, Converter={StaticResource cvtTime}, Mode=TwoWay}"/>
+                    <TextBlock Grid.Column="4" Grid.Row="2" Text="{Binding Path=SelectedTask.Identifier}" />
+                    <Label Grid.Column="2" Grid.Row="4" Content="Activity" />
+                    <TextBlock Grid.Column="4" Grid.Row="4" Text="{Binding Path=SelectedActivity.Display}" />
+                    <Label Grid.Column="2" Grid.Row="6" Content="Work On"/>
+                    <DatePicker Grid.Column="4" Grid.Row="6" SelectedDate="{Binding Path=Start}"/>
+                    <Label Grid.Column="2" Grid.Row="8" Content="Time worked"/>
+                    <TextBox Grid.Column="4" Grid.Row="8" Text="{Binding Path=Minutes, Converter={StaticResource cvtTime}, Mode=TwoWay}"/>
 
-                    <GroupBox Grid.Column="6" Grid.RowSpan="7" MinWidth="150">
+                    <GroupBox Grid.Column="6" Grid.RowSpan="9" MinWidth="150">
                         <GroupBox.Header>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Description"/>

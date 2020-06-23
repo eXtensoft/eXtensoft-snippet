@@ -8,6 +8,10 @@
         <Setter Property="Background" Value="{StaticResource ResourceKey=StandardBackground}"/>
     </Style>
 
+    <Style TargetType="Label">
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+    </Style>
+
     <Style x:Key="CommandToggleButton" TargetType="ToggleButton">
         <Setter Property="Template">
             <Setter.Value>

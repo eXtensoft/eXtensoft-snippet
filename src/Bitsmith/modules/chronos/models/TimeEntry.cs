@@ -11,6 +11,8 @@ namespace Bitsmith.Models
     {
         [XmlAttribute("id")]
         public string Id { get; set; }
+        [XmlAttribute("masterId")]
+        public string MasterId { get; set; }
         public TagIdentifier Task { get; set; }
         public TagIdentifier Actor { get; set; }
         public TagIdentifier Role { get; set; }

@@ -357,12 +357,16 @@ namespace Bitsmith.ViewModels
                 Scope = ScopeOption.Private,
             };
             item.Properties.DefaultTags();
+            if (!string.IsNullOrWhiteSpace(Identifier))
+            {
+                item.Properties.Add(new Property() { Name = Identifier });
+            }
             item.Properties.Add(new Property() 
             { 
                 Name = $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Task}", 
                 Value = Model.Id 
             });
-
+            
             bool b = true;
             switch (_ContentType)
             {
