@@ -14,6 +14,7 @@ namespace Bitsmith
         //public Dictionary<string,TagMap> TagMaps { get; set; } = new Dictionary<string,TagMap>(StringComparer.OrdinalIgnoreCase);
 
         public ObservableCollection<TagMapViewModel> Recent { get; set; } = new ObservableCollection<TagMapViewModel>();
+        public ObservableCollection<TagMapViewModel> Popular { get; set; } = new ObservableCollection<TagMapViewModel>();
 
         public List<string> Exclusions { get; set; } = new List<string>() 
         { 
@@ -27,6 +28,7 @@ namespace Bitsmith
             $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.ModifiedAt}",
             $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.ViewedAt}",
             $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Credentials}",
+            $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Task}",
         };
 
         public List<Property> Resolve(string tags)
@@ -104,12 +106,18 @@ namespace Bitsmith
                 }
                 
             }
+            int i = 0;
+            int max = 15;
             foreach (var item in list.OrderByDescending(o => o.Count))
             {
+                if (i++ < max)
+                {
+                    Popular.Add(item);
+                }
                 Items.Add(item);
             }
 
-
+            
 
         }
 

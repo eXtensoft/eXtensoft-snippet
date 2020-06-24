@@ -80,24 +80,57 @@
         <Expander x:Name="expTags" Grid.Column="3"  Grid.Row="0" Grid.RowSpan="5" HorizontalAlignment="Center">
             <Expander.Header>
                 <StackPanel Orientation="Horizontal" IsEnabled="{Binding ElementName=expTags,Path=IsExpanded}">
-                    <RadioButton Content="Recent"/>
-                    <RadioButton Content="Popular"/>
-                    <RadioButton Content="List"/>
+                    <RadioButton Content="Recent" Name="rdoRecent" GroupName="tags"/>
+                    <RadioButton Content="Popular" Name="rdoPopular" GroupName="tags" IsChecked="True"/>
+                    <!--<RadioButton Content="List" Name="rdoList" GroupName="tags"/>-->
                 </StackPanel>
             </Expander.Header>
             <Expander.Content>
-                <ListBox ItemsSource="{Binding Path=Resolver.Recent}" SelectedItem="{Binding Path=Input.SelectedTag}">
-                    <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel MaxWidth="250"/>
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Path=Key}"/>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                <StackPanel>
+                    <ListBox x:Name="lsbRecentTags" Visibility="{Binding ElementName=rdoRecent, Path=IsChecked, Converter={StaticResource cvtBool2Visibility}}" 
+                              
+                             ItemsSource="{Binding Path=Resolver.Recent}" SelectedItem="{Binding Path=Input.SelectedTag, Mode=OneWayToSource}">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel MaxHeight="60"/>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=Key}"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <ListBox x:Name="lsbPopularTags" Visibility="{Binding ElementName=rdoPopular, Path=IsChecked, Converter={StaticResource cvtBool2Visibility}}" 
+                              
+                             ItemsSource="{Binding Path=Resolver.Popular}" SelectedItem="{Binding Path=Input.SelectedTag, Mode=OneWayToSource}">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel MaxHeight="60"/>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=Key}"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <!--<ListBox x:Name="lsbListTags" Visibility="{Binding ElementName=rdoList, Path=IsChecked, Converter={StaticResource cvtBool2Visibility}}" 
+                             ItemsSource="{Binding Path=Resolver.Recent}" SelectedItem="{Binding Path=Input.SelectedTag, Mode=OneWayToSource}">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel MaxWidth="250"/>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=Key}"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>-->
+                </StackPanel>
+
 
             </Expander.Content>
         </Expander>
