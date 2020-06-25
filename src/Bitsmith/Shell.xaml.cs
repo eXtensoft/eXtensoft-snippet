@@ -60,6 +60,19 @@ namespace Bitsmith
             }
         }
 
+        private TasksView _Tasks;
+        public TasksView Tasks
+        {
+            get
+            {
+                if (_Tasks == null)
+                {
+                    _Tasks = new TasksView();
+                }
+                return _Tasks;
+            }
+        }
+
         private CredentialsView _Credentials;
         public CredentialsView Credentials
         {
@@ -116,6 +129,22 @@ namespace Bitsmith
                 return _ToggleProjectsCommand;
             }
         }
+
+        private ICommand _ToggleTasksCommand;
+        public ICommand ToggleTasksCommand
+        {
+            get
+            {
+                if (_ToggleTasksCommand == null)
+                {
+                    _ToggleTasksCommand = new RelayCommand(
+                    param => ToggleTasks());
+                }
+                return _ToggleTasksCommand;
+            }
+        }
+
+
 
         private ICommand _ToggleCredentialsCommand;
         public ICommand ToggleCredentialsCommand
@@ -186,6 +215,7 @@ namespace Bitsmith
             mgr.RegisterEndpointAction(ActivityStateOption.Credentials.ToString(), EndpointOption.Arrival, OnToggleCredentials);
             mgr.RegisterEndpointAction(ActivityStateOption.Projects.ToString(), EndpointOption.Arrival, OnToggleProjects);
             mgr.RegisterEndpointAction(ActivityStateOption.TimeEntry.ToString(), EndpointOption.Arrival, OnToggleTimeEntry);
+            mgr.RegisterEndpointAction(ActivityStateOption.Tasks.ToString(), EndpointOption.Arrival, OnToggleTasks);
 
             AddToggleCommands();
         }
@@ -193,9 +223,10 @@ namespace Bitsmith
         private void AddToggleCommands()
         {
             this.InputBindings.Add(new KeyBinding(ToggleListsCommand, new KeyGesture(Key.L, ModifierKeys.Control)));
-            this.InputBindings.Add(new KeyBinding(ToggleProjectsCommand, new KeyGesture(Key.T, ModifierKeys.Control)));
+            this.InputBindings.Add(new KeyBinding(ToggleProjectsCommand, new KeyGesture(Key.P, ModifierKeys.Control)));
+            this.InputBindings.Add(new KeyBinding(ToggleTasksCommand, new KeyGesture(Key.T, ModifierKeys.Control)));
             this.InputBindings.Add(new KeyBinding(ExitAppCommand, new KeyGesture(Key.X, ModifierKeys.Control)));
-            this.InputBindings.Add(new KeyBinding(ToggleCredentialsCommand, new KeyGesture(Key.P, ModifierKeys.Control)));
+            this.InputBindings.Add(new KeyBinding(ToggleCredentialsCommand, new KeyGesture(Key.Y, ModifierKeys.Control)));
             this.InputBindings.Add(new KeyBinding(ToggleTimeEntryCommand, new KeyGesture(Key.E, ModifierKeys.Control)));
         }
 
@@ -252,6 +283,12 @@ namespace Bitsmith
             grdRoot.Children.Add(Projects);
         }
 
+        private void OnToggleTasks()
+        {
+            grdRoot.Children.Clear();
+            grdRoot.Children.Add(Tasks);
+        }
+
         private void OnToggleTimeEntry()
         {
             grdRoot.Children.Clear();
@@ -272,6 +309,11 @@ namespace Bitsmith
         private void ToggleProjects()
         {
             Workspace.Instance.State.Machine.ExecuteTransition(TransitionTypeOption.ToggleProjects.ToString());
+        }
+
+        private void ToggleTasks()
+        {
+            Workspace.Instance.State.Machine.ExecuteTransition(TransitionTypeOption.ToggleTasks.ToString());
         }
 
         private void ToggleCredentials()

@@ -20,6 +20,17 @@ namespace Bitsmith.ViewModels
 
         public Chronos Model { get; set; }
 
+        private ChronosViewTypeOptions _SelectedView = ChronosViewTypeOptions.Week;
+        public ChronosViewTypeOptions SelectedView
+        {
+            get { return _SelectedView; }
+            set
+            {
+                _SelectedView = value;
+                OnPropertyChanged("SelectedView");
+            }
+        }
+
         public List<TagIdentifier> Activities { get; set; }
 
         private TaskItemViewModel _SelectedTask;

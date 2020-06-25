@@ -24,7 +24,7 @@ namespace Bitsmith
             {
                 settings.Create();
             }
-            DirectoryInfo project = new DirectoryInfo(AppConstants.ProjectDirectory);
+            DirectoryInfo project = new DirectoryInfo(AppConstants.TasksDirectory);
             if (!project.Exists)
             {
                 project.Create();

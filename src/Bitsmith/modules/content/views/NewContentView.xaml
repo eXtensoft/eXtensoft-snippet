@@ -92,7 +92,7 @@
                              ItemsSource="{Binding Path=Resolver.Recent}" SelectedItem="{Binding Path=Input.SelectedTag, Mode=OneWayToSource}">
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <WrapPanel MaxHeight="60"/>
+                                <WrapPanel MaxHeight="60" MaxWidth="120"/>
                             </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
                         <ListBox.ItemTemplate>
@@ -106,7 +106,7 @@
                              ItemsSource="{Binding Path=Resolver.Popular}" SelectedItem="{Binding Path=Input.SelectedTag, Mode=OneWayToSource}">
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <WrapPanel MaxHeight="60"/>
+                                <WrapPanel MaxHeight="60" MaxWidth="120"/>
                             </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
                         <ListBox.ItemTemplate>

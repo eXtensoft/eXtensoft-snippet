@@ -35,7 +35,7 @@ namespace Bitsmith.Models
             return list;
         }
 
-        public static Project Default(this Project model)
+        public static TaskManager Default(this TaskManager model)
         {
             DateTime now = DateTime.Now;
             model.Id = Guid.NewGuid().ToString().ToLower();

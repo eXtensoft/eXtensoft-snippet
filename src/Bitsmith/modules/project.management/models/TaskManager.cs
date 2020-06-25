@@ -6,7 +6,7 @@ using Bitsmith.Models;
 
 namespace Bitsmith.ProjectManagement
 {
-    public class Project
+    public class TaskManager
     {
         [XmlAttribute("id")]
         public string Id { get; set; }

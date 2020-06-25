@@ -21,5 +21,6 @@ namespace Bitsmith
         ToggleRemote,
         ToggleProjects,
         ToggleTimeEntry,
+        ToggleTasks,
     }
 }

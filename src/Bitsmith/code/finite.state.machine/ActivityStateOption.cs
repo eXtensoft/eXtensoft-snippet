@@ -21,5 +21,6 @@ namespace Bitsmith
         Remote,
         Projects,
         TimeEntry,
+        Tasks,
     }
 }

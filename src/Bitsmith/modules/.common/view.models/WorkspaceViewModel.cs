@@ -30,7 +30,7 @@ namespace Bitsmith.ViewModels
         public SettingsModule Settings { get; set; }
         public ContentModule Content { get; set; }
 
-        public ProjectModule Project { get; set; }
+        public TasksModule Project { get; set; }
 
         public WorkflowModule Workflow { get; set; }
 
@@ -73,7 +73,7 @@ namespace Bitsmith.ViewModels
             Credentials = new CredentialsModule();
             Credentials.Setup();
 
-            Project = new ProjectModule();
+            Project = new TasksModule();
             Project.Setup();
 
             Workflow = new WorkflowModule();

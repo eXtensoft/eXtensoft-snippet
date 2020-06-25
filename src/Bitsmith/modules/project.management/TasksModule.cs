@@ -13,7 +13,7 @@ using System.Windows.Input;
 
 namespace Bitsmith.ViewModels
 {
-    public class ProjectModule : Module
+    public class TasksModule : Module
     {
         public string Display { get; set; } = "Projectus Maximus";
 
@@ -133,14 +133,14 @@ namespace Bitsmith.ViewModels
             string filepath = Filepath;
             if (!File.Exists(filepath))
             {
-                Project project = new Project().Default();
-                if (!FileSystemDataProvider.TryWrite<Project>(project, out string error, filepath))
+                TaskManager project = new TaskManager().Default();
+                if (!FileSystemDataProvider.TryWrite<TaskManager>(project, out string error, filepath))
                 {
                     OnFailure(error);
                 }
             }
 
-            bool b = FileSystemDataProvider.TryRead<Project>(Filepath, out model, out string message);
+            bool b = FileSystemDataProvider.TryRead<TaskManager>(Filepath, out model, out string message);
             if (!b)
             {
                 OnFailure(message);
@@ -179,7 +179,7 @@ namespace Bitsmith.ViewModels
 
             if (model != null)
             {
-                if (!FileSystemDataProvider.TryWrite<Project>(model, out string message,Filepath))
+                if (!FileSystemDataProvider.TryWrite<TaskManager>(model, out string message,Filepath))
                 {
                     OnFailure(message);
                     return false;
@@ -237,8 +237,8 @@ namespace Bitsmith.ViewModels
             //ImportanceSelections = new ObservableCollection<Disposition>(Enum.GetNames(typeof(ScaleOption)).ToDispositions("importance"));
         }
 
-        private Project model;
-        public Project Project
+        private TaskManager model;
+        public TaskManager Project
         {
             get
             {
@@ -252,9 +252,9 @@ namespace Bitsmith.ViewModels
         }
 
 
-        public ProjectModule()
+        public TasksModule()
         {
-            Filepath = Path.Combine(AppConstants.ProjectDirectory, FileSystemDataProvider.Filepath<Project>());
+            Filepath = Path.Combine(AppConstants.TasksDirectory, FileSystemDataProvider.Filepath<TaskManager>());
         }
 
     }

@@ -63,6 +63,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="modules\chronos\models\aggregation\AggregationOption.cs" />
+    <Compile Include="modules\styx\models\Estimate.cs" />
+    <Compile Include="modules\project.management\models\ProjectTask.cs" />
+    <Compile Include="modules\chronos\view.models\aggregation\WorkEffortViewModel.cs" />
     <Compile Include="modules\chronos\views\ChronosView.xaml.cs">
       <DependentUpon>ChronosView.xaml</DependentUpon>
     </Compile>
@@ -73,7 +77,7 @@
     <Compile Include="modules\chronos\models\Chronos.cs" />
     <Compile Include="modules\chronos\models\ChronosViewTypeOptions.cs" />
     <Compile Include="modules\chronos\models\TimeEntry.cs" />
-    <Compile Include="modules\chronos\view.models\ChronosModule.cs" />
+    <Compile Include="modules\chronos\ChronosModule.cs" />
     <Compile Include="modules\chronos\view.models\TimeEntryViewModel.cs" />
     <Compile Include="modules\credentials\views\CredentialView.xaml.cs">
       <DependentUpon>CredentialView.xaml</DependentUpon>
@@ -91,6 +95,8 @@
     <Compile Include="modules\.common\view.models\workflow\WorkflowStep.cs" />
     <Compile Include="modules\.common\view.models\workflow\WorkflowViewModel.cs" />
     <Compile Include="modules\credentials\view.models\CredentialsModule.cs" />
+    <Compile Include="modules\styx\models\Project.cs" />
+    <Compile Include="modules\styx\models\ScaleOption.cs" />
     <Compile Include="modules\project.management\ProjectManagementExtensions.cs" />
     <Compile Include="modules\project.management\views\DashboardView.xaml.cs">
       <DependentUpon>DashboardView.xaml</DependentUpon>
@@ -103,11 +109,11 @@
     <Compile Include="modules\project.management\models\FileTypeOption.cs" />
     <Compile Include="modules\project.management\models\Link.cs" />
     <Compile Include="modules\project.management\models\LinkTypeOption.cs" />
-    <Compile Include="modules\project.management\models\Project.cs" />
+    <Compile Include="modules\project.management\models\TaskManager.cs" />
     <Compile Include="modules\project.management\models\Disposition.cs" />
     <Compile Include="modules\project.management\models\TaskItem.cs" />
     <Compile Include="modules\project.management\view.models\NewTaskViewModel.cs" />
-    <Compile Include="modules\project.management\view.models\ProjectModule.cs" />
+    <Compile Include="modules\project.management\TasksModule.cs" />
     <Compile Include="modules\project.management\view.models\TaskItemViewModel.cs" />
     <Compile Include="modules\project.management\views\ProjectsView.xaml.cs">
       <DependentUpon>ProjectsView.xaml</DependentUpon>
@@ -118,6 +124,8 @@
     <Compile Include="modules\project.management\views\TaskView.xaml.cs">
       <DependentUpon>TaskView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="modules\styx\models\TaskEstimate.cs" />
+    <Compile Include="modules\styx\StyxModule.cs" />
     <Compile Include="modules\workflow\models\Builder.cs" />
     <Compile Include="modules\.common\view.models\workflow\Workflow.cs" />
     <Compile Include="modules\workflow\view.models\StateViewModel.cs" />
@@ -133,6 +141,27 @@
     </Compile>
     <Compile Include="modules\chronos\views\NewTimeEntryView.xaml.cs">
       <DependentUpon>NewTimeEntryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\chronos\views\TimeEntryDayView.xaml.cs">
+      <DependentUpon>TimeEntryDayView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\chronos\views\TimeEntryProjectView.xaml.cs">
+      <DependentUpon>TimeEntryProjectView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\chronos\views\TimeEntrySprintView.xaml.cs">
+      <DependentUpon>TimeEntrySprintView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\chronos\views\TimeEntrySystemView.xaml.cs">
+      <DependentUpon>TimeEntrySystemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\chronos\views\TimeEntryWeekView.xaml.cs">
+      <DependentUpon>TimeEntryWeekView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\project.management\views\ProjectView.xaml.cs">
+      <DependentUpon>ProjectView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\project.management\views\TasksView.xaml.cs">
+      <DependentUpon>TasksView.xaml</DependentUpon>
     </Compile>
     <Compile Include="view\state.management\ErrorView.xaml.cs">
       <DependentUpon>ErrorView.xaml</DependentUpon>
@@ -396,6 +425,34 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="modules\chronos\views\TimeEntryDayView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\chronos\views\TimeEntryProjectView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\chronos\views\TimeEntrySprintView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\chronos\views\TimeEntrySystemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\chronos\views\TimeEntryWeekView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\project.management\views\ProjectView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\project.management\views\TasksView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="view\state.management\ErrorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -556,6 +613,8 @@
   <ItemGroup>
     <Folder Include="code\state\" />
     <Folder Include="model\" />
+    <Folder Include="modules\styx\view.models\" />
+    <Folder Include="modules\styx\views\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="images\circle.black.png" />

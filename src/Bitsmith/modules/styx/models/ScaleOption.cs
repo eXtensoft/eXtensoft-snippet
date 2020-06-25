@@ -1,0 +1,18 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Bitsmith.ProjectManagement
+{
+    //public enum ScaleOption
+    //{
+    //    None,
+    //    HighLow,
+    //    ShirtSize,
+    //    Fibonacci,
+    //    Hours,
+    //    Days
+    //}
+}

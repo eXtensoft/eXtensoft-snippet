@@ -14,6 +14,7 @@
   <State name="Remote" display="Remote"/>
   <State name="Projects" display="Projects"/>
   <State name="TimeEntry" display="TimeEntry"/>
+  <State name="Tasks" display="Tasks"/>
 	<Transition name="Login" origin="LoggedOff" destination="Authenticated" order="0" />
 	<Transition name="UnAuthorize" origin="Authenticated" destination="Unauthorized" order="0" />
 	<Transition name="Authorize" origin="Authenticated" destination="Authorized" order="0" />
@@ -39,6 +40,8 @@
   <Transition name="ToggleRemote" origin="Remote" destination="Authorized" order="0" />
   <Transition name="ToggleProjects" origin="Authorized" destination="Projects" order="0" />
   <Transition name="ToggleProjects" origin="Projects" destination="Authorized" order="0" />
+  <Transition name="ToggleTasks" origin="Authorized" destination="Tasks" order="0" />
+  <Transition name="ToggleTasks" origin="Tasks" destination="Authorized" order="0" />  
   <Transition name="ToggleTimeEntry" origin="Authorized" destination="TimeEntry" order="0" />
   <Transition name="ToggleTimeEntry" origin="TimeEntry" destination="Authorized" order="0" />
   <Transition name="Logoff" origin="TimeEntry" destination="LoggedOff" order="0" />
@@ -46,5 +49,6 @@
 	<Transition name="Logoff" origin="Administration" destination="LoggedOff" order="0"/>
 	<Transition name="Logoff" origin="Lists" destination="LoggedOff" order="0"/>
 	<Transition name="Logoff" origin="Contacts" destination="LoggedOff" order="0"/>
-
+  <Transition name="Logoff" origin="Tasks" destination="LoggedOff" order="0"/>
+  <Transition name="ToggleTimeEntry" origin="Tasks" destination="TimeEntry" order="0"/>
 </StateMachine>

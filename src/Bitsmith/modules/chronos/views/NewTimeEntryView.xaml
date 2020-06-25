@@ -117,10 +117,11 @@
         </GroupBox>
         <GroupBox Grid.Column="2"  Grid.Row="2">
             <GroupBox.Header>
-                <ComboBox Grid.Column="4" Grid.Row="0" SelectedItem="{Binding Path=Importance}" ItemsSource="{Binding Source={StaticResource ChronosViews}}"/>
+                <ComboBox Grid.Column="4" Grid.Row="0" SelectedItem="{Binding Path=Chronos.SelectedView}" 
+                          ItemsSource="{Binding Source={StaticResource ChronosViews}}" />
             </GroupBox.Header>
             <GroupBox.Content>
-                <Grid Background="Black"/>
+                <local:TimeEntryWeekView/>
             </GroupBox.Content>
         </GroupBox>
     </Grid>

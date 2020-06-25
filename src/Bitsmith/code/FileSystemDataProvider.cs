@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bitsmith.ProjectManagement;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -248,10 +249,16 @@ namespace Bitsmith
             return b;
         }
 
+        private static Dictionary<Type, string> filepathmaps = new Dictionary<Type, string>() 
+        {
+            { typeof(TaskManager),"tasks" },
+        };
+
         public static string Filepath<T>() where T : class, new()
         {
             T t = new T();
-            var name = t.GetType().Name.Expand();
+            var type = t.GetType();
+            var name = !filepathmaps.ContainsKey(type) ? type.Name.Expand() : filepathmaps[type];
             return $"{name}.xml";
 
         }
@@ -259,7 +266,8 @@ namespace Bitsmith
         public static string Filepath<T>(string suffix) where T : class, new()
         {
             T t = new T();
-            var name = t.GetType().Name.Expand();
+            var type = t.GetType();
+            var name = !filepathmaps.ContainsKey(type) ? type.Name.Expand() : filepathmaps[type];
             return $"{name}_{suffix}.xml";
         }
 
