@@ -6,7 +6,9 @@
              xmlns:local="clr-namespace:Bitsmith"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
+    <TabControl>
+        <TabItem Header="Workflows">
+            <local:WorkflowsView/>
+        </TabItem>
+    </TabControl>
 </UserControl>

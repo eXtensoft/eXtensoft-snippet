@@ -133,7 +133,7 @@ namespace Bitsmith.ViewModels
                     if (b)
                     {
                         Machine.SetState();
-                        Workflow = new WorkflowViewModel(Machine);
+                        //Workflow = new WorkflowViewModel(Machine);
                     }
 
                 }
@@ -182,11 +182,11 @@ namespace Bitsmith.ViewModels
         }
         private void ToDsl()
         {
-            Machine = Item.Build();
-            Workflow = new WorkflowViewModel(Machine);
-            DslBody = Newtonsoft.Json.JsonConvert.SerializeObject(Machine, Newtonsoft.Json.Formatting.Indented);
-            GenericObjectManager.WriteGenericItem<StateMachine>(Machine, $"sm.{Guid.NewGuid().ToString().Substring(0,4)}.xml");
-            File.WriteAllText($"sm.{Guid.NewGuid().ToString().Substring(0,4)}.json", DslBody);
+            //Machine = Item.Build();
+            //Workflow = new WorkflowViewModel(Machine);
+            //DslBody = Newtonsoft.Json.JsonConvert.SerializeObject(Machine, Newtonsoft.Json.Formatting.Indented);
+            //GenericObjectManager.WriteGenericItem<StateMachine>(Machine, $"sm.{Guid.NewGuid().ToString().Substring(0,4)}.xml");
+            //File.WriteAllText($"sm.{Guid.NewGuid().ToString().Substring(0,4)}.json", DslBody);
         }
 
 
@@ -272,7 +272,6 @@ namespace Bitsmith.ViewModels
         {
             Item.Transitions.Add(new TransitionViewModel(new Transition().Default(),Item.States));
         }
-
 
     }
 }

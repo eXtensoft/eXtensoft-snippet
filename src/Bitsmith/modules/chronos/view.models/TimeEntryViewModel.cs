@@ -22,6 +22,18 @@ namespace Bitsmith.ViewModels
             }
         }
 
+        public string Display
+        {
+            get
+            {
+                return Model.Id;
+            }
+            set
+            {
+            }
+        }
+
+
 
 
 

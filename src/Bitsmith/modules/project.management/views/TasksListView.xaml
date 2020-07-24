@@ -9,20 +9,23 @@
     <UserControl.Resources>
         <local:TruncateStringConverter x:Key="cvtTruncate" MaxLength="35" Suffix="..."/>
     </UserControl.Resources>
-    <GroupBox DataContext="{Binding Path=Project}">
+    <GroupBox>
         <GroupBox.Header>
             <StackPanel Orientation="Horizontal">
 
-                <Button Command="{Binding Path=AddItemCommand}" Style="{StaticResource AddCommandButton}"/>
-                <Label Content="{Binding Path=Filepath}"/>
-                <Button Command="{Binding Path=SaveWorkspaceCommand}" Style="{StaticResource SaveCommandButton}"/>
-                <Button Style="{StaticResource DetailsCommandButton}" Command="{Binding Path=ViewDomainsCommand}"/>
-                <Label Content="{Binding Path=SelectedDomain.Name}"/>            
+                <Button Command="{Binding Path=Project.AddItemCommand}" Style="{StaticResource AddCommandButton}"/>
+                <Label Content="{Binding Path=Project.Display}"/>
+                <ComboBox ItemsSource="{Binding Path=Settings.Workflows}" 
+                          SelectedItem="{Binding Path=Project.SelectedWorkflow}" 
+                          DisplayMemberPath="Display"/>
+                <Button Command="{Binding Path=Project.SaveWorkspaceCommand}" Style="{StaticResource SaveCommandButton}"/>
+                <Button Style="{StaticResource DetailsCommandButton}" Command="{Binding Path=Project.ViewDomainsCommand}"/>
+                <Label Content="{Binding Path=Project.SelectedDomain.Name}"/>            
             
             </StackPanel>
         </GroupBox.Header>
         <GroupBox.Content>
-            <DockPanel LastChildFill="True">
+            <DockPanel LastChildFill="True" DataContext="{Binding Path=Project}">
                 <Expander DockPanel.Dock="Bottom" IsExpanded="{Binding Path=IsExpandFilters}">
                     <Expander.Header>
                         <TextBlock/>

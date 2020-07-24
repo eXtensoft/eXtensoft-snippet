@@ -12,33 +12,18 @@ namespace Bitsmith
 {
     public static class Bootstrapper
     {
+        private static List<string> directories = new List<string>() 
+        { 
+            AppConstants.SettingsDirectory,
+            AppConstants.TasksDirectory,
+            Path.Combine(AppConstants.ContentDirectory,AppConstants.ContentFiles),
+            AppConstants.ChronosDirectory,
+            AppConstants.StyxDirectory,
+        };
+
         public static void Start()
         {
-            InitializeLocations();
-        }
-
-        private static void InitializeLocations()
-        {
-            DirectoryInfo settings = new DirectoryInfo(AppConstants.SettingsDirectory);
-            if (!settings.Exists)
-            {
-                settings.Create();
-            }
-            DirectoryInfo project = new DirectoryInfo(AppConstants.TasksDirectory);
-            if (!project.Exists)
-            {
-                project.Create();
-            }
-            DirectoryInfo content = new DirectoryInfo(Path.Combine(AppConstants.ContentDirectory, AppConstants.ContentFiles));
-            if (!content.Exists)
-            {
-                content.Create();
-            }
-            DirectoryInfo chronos = new DirectoryInfo(AppConstants.ChronosDirectory);
-            if (!chronos.Exists)
-            {
-                chronos.Create();
-            }
+            directories.EnsureDirectories();
         }
 
         public static Workspace Workspace()

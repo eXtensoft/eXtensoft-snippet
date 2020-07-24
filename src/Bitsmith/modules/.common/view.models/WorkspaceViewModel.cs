@@ -12,6 +12,22 @@ namespace Bitsmith.ViewModels
     {
         public Grid Root { get; set; }
 
+
+
+        private StyxModule _Styx;
+        public StyxModule Styx
+        {
+            get
+            {
+                if (_Styx == null)
+                {
+                    _Styx = new StyxModule();
+                    _Styx.Setup();
+                }
+                return _Styx;
+            }
+        }
+
         private ChronosModule _Chronos;
         public ChronosModule Chronos
         {
@@ -85,6 +101,10 @@ namespace Bitsmith.ViewModels
 
         internal void Save()
         {
+            if (Settings.CanSaveWorkspace())
+            {
+                Settings.SaveWorkspace();
+            }
             if (Content.CanSaveWorkspace())
             {
                 Content.SaveWorkspace();
@@ -93,10 +113,19 @@ namespace Bitsmith.ViewModels
             {
                 Project.SaveWorkspace();
             }
-            if (Chronos != null && Chronos.CanSaveWorkspace())
+            if (_Chronos != null && Chronos.CanSaveWorkspace())
             {
-                Chronos.SaveWorkspace();
+                _Chronos.SaveWorkspace();
             }
+            if (Styx != null && Styx.CanSaveWorkspace())
+            {
+                Styx.SaveWorkspace();
+            }
+            if (Settings.CanSaveWorkspace())
+            {
+                Settings.SaveWorkspace();
+            }
+
         }
     }
 }

@@ -9,7 +9,7 @@
     <Grid MaxWidth="300">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="10"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -33,7 +33,6 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         
-        <Label Grid.Column="0" Grid.Row="0" Content="Id"/>
         <Label Grid.Column="0" Grid.Row="2" Content="Created On"/>
         <Label Grid.Column="0" Grid.Row="4" Content="Due On"/>
         <Label Grid.Column="0" Grid.Row="6" Content="Urgency"/>
@@ -43,8 +42,14 @@
         <Label Grid.Column="0" Grid.Row="14" Content="Display"/>
         <Label Grid.Column="0" Grid.Row="16" Content="Description"/>
 
-        <TextBlock Grid.Column="2" Grid.Row="0" Text="{Binding Path=Id}"/>
-        <TextBlock Grid.Column="2" Grid.Row="2" Text="{Binding Path=CreatedOn}"/>
+        <Button  Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right"
+                 Style="{StaticResource DetailsCommandButton}" Command="{Binding Path=EditTaskCommand}" />
+        <TextBlock Grid.Column="2" Grid.Row="0" Text="{Binding Path=Identifier}" Visibility="{Binding Path=IsValidExternalUrl, Converter={StaticResource ReverseVisibility}}"/>
+        <Button Grid.Column="2" Grid.Row="0" 
+                Style="{StaticResource CommandButton}" 
+                Content="{Binding Path=Identifier}" Command="{Binding Path=NavigateExternalUrlCommand}"
+                Visibility="{Binding Path=IsValidExternalUrl, Converter={StaticResource VisibilityConverter}}"/>
+        <TextBlock Grid.Column="2" Grid.Row="2" Text="{Binding Path=CreatedOn, Mode=OneWay}"/>
         <DatePicker Grid.Column="2" Grid.Row="4" SelectedDate="{Binding Path=DueOn}"/>
         <ComboBox Grid.Column="2" Grid.Row="6" SelectedItem="{Binding Path=Urgency,Mode=TwoWay}" 
                                       ItemsSource="{Binding Path=UrgencySelections}" DisplayMemberPath="Display"/>
@@ -54,16 +59,18 @@
                   ItemsSource="{Binding Path=StatusSelections}" 
                   SelectedItem="{Binding Path=SelectedStatus}"
                   DisplayMemberPath="Display"/>
+             
         <TextBox Grid.Column="2" Grid.Row="12" Text="{Binding Path=Identifier}"/>
         <TextBox Grid.Column="2" Grid.Row="14" Text="{Binding Path=Display}"/>
+
         <TextBox Grid.Column="2" Grid.Row="16" Text="{Binding Path=Description}" 
                  AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap" 
                  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Visible"/>
-
-        <Button Style="{StaticResource SaveCommandButton}"
+           
+        <!--<Button Style="{StaticResource SaveCommandButton}"
                     Command="{Binding Path=UpdateBodyCommand, 
                 RelativeSource={RelativeSource FindAncestor,AncestorType=UserControl}}"
-                    Visibility="{Binding Path=IsFullTextSearch, Converter={StaticResource VisibilityConverter}}" />
+                    Visibility="{Binding Path=IsFullTextSearch, Converter={StaticResource VisibilityConverter}}" />-->
     </Grid>
 </UserControl>
 

@@ -7,16 +7,180 @@ using System.ComponentModel;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using Bitsmith.Models;
 
 namespace Bitsmith.ViewModels
 {
 
     public class TaskItemViewModel : ViewModel<TaskItem>
     {
+        private Uri _Uri;
+
+        private ICommand _NavigateExternalUrlCommand;
+        public ICommand NavigateExternalUrlCommand
+        {
+            get
+            {
+                if (_NavigateExternalUrlCommand == null)
+                {
+                    _NavigateExternalUrlCommand = new RelayCommand(
+                    param => NavigateExternalUrl(),
+                    param => CanNavigateExternalUrl());
+                }
+                return _NavigateExternalUrlCommand;
+            }
+        }
+        private bool CanNavigateExternalUrl()
+        {
+            return IsValidExternalUrl;
+        }
+        private void NavigateExternalUrl()
+        {
+            if (!String.IsNullOrWhiteSpace(_ExternalUrl))
+            {
+                try
+                {
+                    System.Diagnostics.Process.Start(_ExternalUrl);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+
+
+        private string _ExternalUrl;
+        public string ExternalUrl
+        {
+            get
+            {
+                return _ExternalUrl;
+            }
+            set
+            {
+                IsValidExternalUrl = false;
+                Model.Identifier.Token = Model.Identifier.Id.ToToken();
+                _ExternalUrl = (!string.IsNullOrWhiteSpace(value) && !value.StartsWith("http")) ? $"http://{value}" : value;
+                OnPropertyChanged("ExternalUrl");
+            }
+        }
+
+        private bool _IsValidExternalUrl = false;
+        public bool IsValidExternalUrl
+        { 
+            get { return _IsValidExternalUrl; }
+            set
+            {
+                _IsValidExternalUrl = value;
+                OnPropertyChanged("IsValidExternalUrl");
+            }
+        }
+
+
+        private ICommand _ValidateExternalUrlCommand;
+        public ICommand ValidateExternalUrlCommand
+        {
+            get
+            {
+                if (_ValidateExternalUrlCommand == null)
+                {
+                    _ValidateExternalUrlCommand = new RelayCommand(
+                    param => ValidateExternalUrl(),
+                    param => CanValidateExternalUrl());
+                }
+                return _ValidateExternalUrlCommand;
+            }
+        }
+        private bool CanValidateExternalUrl()
+        {
+            return !string.IsNullOrWhiteSpace(_ExternalUrl);
+        }   
+        private void ValidateExternalUrl()
+        {
+            IsValidExternalUrl = false;
+            if (!Uri.TryCreate(_ExternalUrl, UriKind.Absolute, out _Uri))
+            {
+                MessageBox.Show($"{_ExternalUrl} is not a valid Url.");
+            }
+            else
+            {
+                //try
+                //{
+                //    // Creates an HttpWebRequest for the specified URL.
+                //    HttpWebRequest myHttpWebRequest = (HttpWebRequest)WebRequest.Create(_Uri.AbsoluteUri);
+                //    // Sends the HttpWebRequest and waits for a response.
+                //    HttpWebResponse myHttpWebResponse = (HttpWebResponse)myHttpWebRequest.GetResponse();
+                //    if (myHttpWebResponse.StatusCode == HttpStatusCode.OK)
+                //        Console.WriteLine("\r\nResponse Status Code is OK and StatusDescription is: {0}",
+                //                             myHttpWebResponse.StatusDescription);
+                //    // Releases the resources of the response.
+                //    myHttpWebResponse.Close();
+                //}
+                //catch (WebException e)
+                //{
+                //    Console.WriteLine("\r\nWebException Raised. The following error occurred : {0}", e.Status);
+                //}
+                //catch (Exception e)
+                //{
+                //    Console.WriteLine("\nThe following Exception was raised : {0}", e.Message);
+                //}
+
+                try
+                {
+                    HttpWebRequest request = HttpWebRequest.Create(_Uri.AbsoluteUri) as HttpWebRequest;
+                    request.Timeout = 3000;
+                    request.Method = "GET";
+                    using (var response = request.GetResponse() as HttpWebResponse)
+                    {
+                        int statuscode = (int)response.StatusCode;
+                        if (statuscode >= 100 && statuscode < 400)
+                        {
+                            IsValidExternalUrl = true;
+                            Model.Identifier.Token = this._Uri.AbsoluteUri;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var errormessage = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                    MessageBox.Show($"Unable to validate {_ExternalUrl}: {errormessage}");
+                }
+            }
+        }
+
+
+        private ICommand _EditTaskCommand;
+        public ICommand EditTaskCommand
+        {
+            get
+            {
+                if (_EditTaskCommand == null)
+                {
+                    _EditTaskCommand = new RelayCommand(
+                    param => EditTask(),
+                    param => CanEditTask());
+                }
+                return _EditTaskCommand;
+            }
+        }
+        private bool CanEditTask()
+        {
+            return true;
+        }
+        private void EditTask()
+        {
+            var ctl = new TaskItemDetailsView();
+            ctl.DataContext = this;
+            dynamic param = new System.Dynamic.ExpandoObject();
+            param.Title = this.Display;
+            param.Control = ctl;
+            Workspace.Instance.ViewModel.Overlay.SetOverlay(AppConstants.OverlayContent, param);
+        }
+
 
         private List<Disposition> _UrgencySelections;
         public List<Disposition> UrgencySelections 
@@ -44,7 +208,10 @@ namespace Bitsmith.ViewModels
                 }
                 return _ImportanceSelections;
             }
-            set { _ImportanceSelections = value; }
+            set 
+            { 
+                _ImportanceSelections = value; 
+            }
         
         }
 
@@ -71,6 +238,7 @@ namespace Bitsmith.ViewModels
                 {
                     Transition(value.Name);
                 }
+                OnPropertyChanged("SelectedStatus");
 
             }
         }
@@ -144,6 +312,14 @@ namespace Bitsmith.ViewModels
             {
                 Model.WorkflowId = value;
                 OnPropertyChanged("WorkflowId");
+            }
+        }
+
+        public string CreatedOn
+        {
+            get
+            {
+                return Model.CreatedOn.ToShortDateString();
             }
         }
 
@@ -233,12 +409,11 @@ namespace Bitsmith.ViewModels
             {
                 if (value != null)
                 {
-                    _Urgency = GenericObjectManager.Clone<Disposition>(value);
-                    _Urgency.StartedAt = DateTime.Now;
+                    value.StartedAt = DateTime.Now;
+                    _Urgency = value;
                     Model.Dispositions.Add(_Urgency);
                     OnPropertyChanged("Urgency");
                 }
-
             }
         }
 
@@ -265,8 +440,8 @@ namespace Bitsmith.ViewModels
             {
                 if (value != null)
                 {
-                    _Importance = GenericObjectManager.Clone<Disposition>(value);
-                    _Importance.StartedAt = DateTime.Now;
+                    value.StartedAt = DateTime.Now;
+                    _Importance = value;
                     Model.Dispositions.Add(_Importance);
                     OnPropertyChanged("Importance");
                 }
@@ -603,21 +778,28 @@ namespace Bitsmith.ViewModels
         public TaskItemViewModel(TaskItem model)
         {
             Model = model;
+            if (model.Identifier != null && 
+                !string.IsNullOrWhiteSpace(model.Identifier.Token) && 
+                Uri.TryCreate(model.Identifier.Token, UriKind.Absolute, out _Uri))
+            {
+                _ExternalUrl = _Uri.AbsoluteUri;
+                _IsValidExternalUrl = true;
+            }
         }
 
         private void Initialize()
         {
             if (_Machine == null)
             {
-                if (Workspace.Instance.ViewModel.Settings.Workflows.Contains(WorkflowId))
-                {
-                    _Machine = Workspace.Instance.ViewModel.Settings.Workflows[WorkflowId].Machine.Clone();
-                }
-                else
-                {
+                //if (Workspace.Instance.ViewModel.Settings.Workflows.Contains(WorkflowId))
+                //{
+                //    _Machine = Workspace.Instance.ViewModel.Settings.Workflows[WorkflowId].Machine.Clone();
+                //}
+                //else
+                //{
                     _Machine = new StateMachine().Default();
                     WorkflowId = AppConstants.Defaults.WorkflowId;
-                }
+                //}
 
                 if (Status != null)
                 {

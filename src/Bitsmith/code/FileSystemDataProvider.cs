@@ -1,5 +1,7 @@
 ﻿using Bitsmith.ProjectManagement;
+using Bitsmith.Styx;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -251,7 +253,8 @@ namespace Bitsmith
 
         private static Dictionary<Type, string> filepathmaps = new Dictionary<Type, string>() 
         {
-            { typeof(TaskManager),"tasks" },
+            { typeof(TaskManager), "tasks" },
+            { typeof(GraphDesigner), "graphs" },
         };
 
         public static string Filepath<T>() where T : class, new()

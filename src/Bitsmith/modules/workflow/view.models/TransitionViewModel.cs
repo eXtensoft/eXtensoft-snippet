@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bitsmith.BusinessProcess;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -21,6 +22,7 @@ namespace Bitsmith.ViewModels
             set
             {
                 _From = value;
+                Model.OriginState = value.Name;
                 Display = ToString();
                 OnPropertyChanged("From");
             }
@@ -33,7 +35,7 @@ namespace Bitsmith.ViewModels
             set
             {
                 _To = value;
-                Name = _To.Name;
+                Model.DestinationState = value.Name;
                 Display = ToString();
                 OnPropertyChanged("To");
                 OnPropertyChanged("Monker");
@@ -114,6 +116,23 @@ namespace Bitsmith.ViewModels
         }
 
 
+        private WorkflowViewModel _Workflow;
+        public TransitionViewModel(Transition model, WorkflowViewModel workflow)
+        {
+            Model = model;
+            States = workflow.States;
+            var from = States.FirstOrDefault(x => x.Name.Equals(Model.OriginState));
+            if (from != null)
+            {
+                _From = from;
+            }
+            var to = States.FirstOrDefault(x => x.Name.Equals(Model.DestinationState));
+            if (to != null)
+            {
+                _To = to;
+            }
+            _Workflow = workflow;
+        }
 
         public TransitionViewModel(Transition model, ObservableCollection<StateViewModel> states)
         {
@@ -127,5 +146,6 @@ namespace Bitsmith.ViewModels
             var to = _To != null ? _To.Name : "{to}";
             return $"{from}->{to}";
         }
+
     }
 }

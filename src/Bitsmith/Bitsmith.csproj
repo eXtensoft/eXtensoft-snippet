@@ -63,7 +63,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="code\converters\BooleanToBrushConverter.cs" />
+    <Compile Include="modules\.common\view.models\base\GroupingViewModel`1.cs" />
     <Compile Include="modules\chronos\models\aggregation\AggregationOption.cs" />
+    <Compile Include="modules\styx\models\designer\GraphTemplate.cs" />
     <Compile Include="modules\styx\models\Estimate.cs" />
     <Compile Include="modules\project.management\models\ProjectTask.cs" />
     <Compile Include="modules\chronos\view.models\aggregation\WorkEffortViewModel.cs" />
@@ -95,6 +98,23 @@
     <Compile Include="modules\.common\view.models\workflow\WorkflowStep.cs" />
     <Compile Include="modules\.common\view.models\workflow\WorkflowViewModel.cs" />
     <Compile Include="modules\credentials\view.models\CredentialsModule.cs" />
+    <Compile Include="modules\styx\models\designer\GraphDesign.cs" />
+    <Compile Include="modules\styx\models\designer\GraphDesigner.cs" />
+    <Compile Include="modules\styx\models\graph\Direction.cs" />
+    <Compile Include="modules\styx\models\graph\Edge.cs" />
+    <Compile Include="modules\styx\models\graph\Graph.cs" />
+    <Compile Include="modules\styx\models\graph\Item.cs" />
+    <Compile Include="modules\styx\models\graph\Label.cs" />
+    <Compile Include="modules\styx\models\graph\Property.cs" />
+    <Compile Include="modules\styx\models\graph\Tag.cs" />
+    <Compile Include="modules\styx\models\graph\Vertex.cs" />
+    <Compile Include="modules\styx\models\navgraph\GraphBuilder.cs" />
+    <Compile Include="modules\styx\models\navgraph\GraphExtensions.cs" />
+    <Compile Include="modules\styx\models\navgraph\LevelNode.cs" />
+    <Compile Include="modules\styx\models\navgraph\NavGraph`1.cs" />
+    <Compile Include="modules\styx\models\navgraph\NavLink%271.cs" />
+    <Compile Include="modules\styx\models\navgraph\NavNode`1.cs" />
+    <Compile Include="modules\styx\models\navgraph\StepContextParser.cs" />
     <Compile Include="modules\styx\models\Project.cs" />
     <Compile Include="modules\styx\models\ScaleOption.cs" />
     <Compile Include="modules\project.management\ProjectManagementExtensions.cs" />
@@ -124,8 +144,14 @@
     <Compile Include="modules\project.management\views\TaskView.xaml.cs">
       <DependentUpon>TaskView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="modules\styx\models\site\Link.cs" />
+    <Compile Include="modules\styx\models\site\Node.cs" />
     <Compile Include="modules\styx\models\TaskEstimate.cs" />
+    <Compile Include="modules\styx\StyxExtensions.cs" />
     <Compile Include="modules\styx\StyxModule.cs" />
+    <Compile Include="modules\styx\view.models\GraphBuilder.cs" />
+    <Compile Include="modules\styx\view.models\GraphDesignViewModel.cs" />
+    <Compile Include="modules\styx\view.models\GraphTemplateViewModel.cs" />
     <Compile Include="modules\workflow\models\Builder.cs" />
     <Compile Include="modules\.common\view.models\workflow\Workflow.cs" />
     <Compile Include="modules\workflow\view.models\StateViewModel.cs" />
@@ -162,6 +188,12 @@
     </Compile>
     <Compile Include="modules\project.management\views\TasksView.xaml.cs">
       <DependentUpon>TasksView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\styx\views\StyxView.xaml.cs">
+      <DependentUpon>StyxView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\project.management\views\TaskItemDetailsView.xaml.cs">
+      <DependentUpon>TaskItemDetailsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="view\state.management\ErrorView.xaml.cs">
       <DependentUpon>ErrorView.xaml</DependentUpon>
@@ -253,6 +285,18 @@
     <Compile Include="modules\workflow\views\WorkflowBuilderView.xaml.cs">
       <DependentUpon>WorkflowBuilderView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="modules\workflow\views\WorkflowsView.xaml.cs">
+      <DependentUpon>WorkflowsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\workflow\views\WorkflowListView.xaml.cs">
+      <DependentUpon>WorkflowListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\workflow\views\WorkflowItemView.xaml.cs">
+      <DependentUpon>WorkflowItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\chronos\views\WorkEffortsView.xaml.cs">
+      <DependentUpon>WorkEffortsView.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="code\AppConstants.cs" />
@@ -261,7 +305,7 @@
     <Compile Include="code\ConfigValueProvider.cs" />
     <Compile Include="code\controls\AnimatedTabControl.cs" />
     <Compile Include="code\converters\BooleanToStringConverter.cs" />
-    <Compile Include="code\converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="code\converters\BoolToVisibilityConverter.cs" />
     <Compile Include="code\converters\BoolToIntConverter.cs" />
     <Compile Include="code\converters\TagConverter.cs" />
     <Compile Include="code\Data.cs" />
@@ -453,6 +497,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="modules\styx\views\StyxView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\project.management\views\TaskItemDetailsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="view\state.management\ErrorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -609,12 +661,26 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="modules\workflow\views\WorkflowsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\workflow\views\WorkflowListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\workflow\views\WorkflowItemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\chronos\views\WorkEffortsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="code\state\" />
     <Folder Include="model\" />
-    <Folder Include="modules\styx\view.models\" />
-    <Folder Include="modules\styx\views\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="images\circle.black.png" />
@@ -654,6 +720,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="modules\project.management\data\design.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="modules\styx\code\design.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -22,5 +22,7 @@ namespace Bitsmith
         ToggleProjects,
         ToggleTimeEntry,
         ToggleTasks,
+        ToggleStyx,
+        ToggleSettings,
     }
 }

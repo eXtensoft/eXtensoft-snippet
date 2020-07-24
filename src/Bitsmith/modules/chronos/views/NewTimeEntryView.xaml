@@ -121,7 +121,7 @@
                           ItemsSource="{Binding Source={StaticResource ChronosViews}}" />
             </GroupBox.Header>
             <GroupBox.Content>
-                <local:TimeEntryWeekView/>
+                <local:TimeEntrySystemView DataContext="{Binding Path=Chronos}"/>
             </GroupBox.Content>
         </GroupBox>
     </Grid>

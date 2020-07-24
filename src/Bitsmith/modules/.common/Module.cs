@@ -23,6 +23,16 @@ namespace Bitsmith.ViewModels
 
         protected virtual bool SaveData() { return true; }
 
+        public virtual bool CanSaveWorkspace()
+        {
+            return true;
+        }
+
+        public virtual void SaveWorkspace()
+        {
+            SaveData();
+        }
+
         protected virtual void OnFailure(string message)
         {
             MessageBox.Show(message);

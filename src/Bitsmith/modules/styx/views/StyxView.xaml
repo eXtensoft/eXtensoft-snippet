@@ -1,0 +1,83 @@
+﻿<UserControl x:Class="Bitsmith.StyxView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Bitsmith"
+             mc:Ignorable="d" Background="IndianRed"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <DockPanel LastChildFill="True" DataContext="{Binding Path=Styx}">
+        <Expander DockPanel.Dock="Left">
+            <Expander.Header>
+                <Grid Background="Indigo"/>
+            </Expander.Header>
+            <Expander.Content>
+                <DockPanel LastChildFill="True">
+                    <GroupBox DockPanel.Dock="Top" MinHeight="50" Background="DarkOliveGreen">
+                        <GroupBox.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Style="{StaticResource AddCommandButton}"/>
+                                <CheckBox x:Name="chkTemplate" IsChecked="{Binding Path=IsFromTemplate}"/>
+                                <ComboBox IsEnabled="{Binding ElementName=chkTemplate, Path=IsChecked}" 
+                                          ItemsSource="{Binding Path=Templates}" 
+                                          SelectedItem="{Binding Path=SelectedTemplate}" DisplayMemberPath="Display">
+                                    
+                                </ComboBox>
+                            </StackPanel>
+                        </GroupBox.Header>
+                        <GroupBox.Content>
+                            <ListBox ItemsSource="{Binding Path=Designs}" SelectedItem="{Binding Path=SelectedDesign}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Path=Display}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </GroupBox.Content>
+                    </GroupBox>
+
+                    <Expander DockPanel.Dock="Bottom" ExpandDirection="Up" IsExpanded="True">
+                        <Grid DataContext="{Binding Path=SelectedDesign}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="5"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="5"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="5"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="5"/>
+                                <RowDefinition Height="Auto"/>
+                                
+                            </Grid.RowDefinitions>
+                            <Label Grid.Column="0" Grid.Row="0" Content="Id"/>
+                            <TextBlock Grid.Column="2" Grid.Row="0" Text="{Binding Path=Id}"/>
+                            <Label Grid.Column="0" Grid.Row="2" Content="Display"/>
+                            <TextBox Grid.Column="2" Grid.Row="2" Text="{Binding Path=Display}"/>
+                            <Label Grid.Column="0" Grid.Row="4" Content="Status"/>
+                            <ComboBox Grid.Column="2" Grid.Row="4"/>
+
+                            <GroupBox Header="Description" Grid.ColumnSpan="3" Grid.Row="6">
+                                <TextBox AcceptsReturn="True" Height="300" Width="200"
+                                         TextWrapping="Wrap" 
+                                         VerticalScrollBarVisibility="Visible"
+                                         Text="{Binding Path=Description}"/>
+                            </GroupBox>
+                        </Grid>
+                    </Expander>
+                    <Grid Background="SkyBlue"/>
+                </DockPanel>
+                
+  
+            </Expander.Content>
+        </Expander>
+        <Grid Background="Fuchsia"/>
+    </DockPanel>
+</UserControl>

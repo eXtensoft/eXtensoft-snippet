@@ -7,12 +7,14 @@
 	<State name="Error" display="Error" />
 	<State name="Administration" display="Admin"/>
 	<State name="Lists" display="Lists"/>
+  <State name="Settings" display="Settings"/>
 	<State name="Contacts" display="Contacts"/>
   <State name="Credentials" display="Credentials"/>
   <State name="Security" display="Security"/>
   <State name="Todos" display="Todos"/>
   <State name="Remote" display="Remote"/>
   <State name="Projects" display="Projects"/>
+  <State name="Styx" display="Styx"/>
   <State name="TimeEntry" display="TimeEntry"/>
   <State name="Tasks" display="Tasks"/>
 	<Transition name="Login" origin="LoggedOff" destination="Authenticated" order="0" />
@@ -27,7 +29,9 @@
 	<Transition name="ToggleAdmin" origin="Authorized" destination="Administration" order="0" />
 	<Transition name="ToggleAdmin" origin="Administration" destination="Authorized" order="0" />
 	<Transition name="ToggleLists" origin="Authorized" destination="Lists" order="0" />
-	<Transition name="ToggleLists" origin="Lists" destination="Authorized" order="0" />
+	<Transition name="ToggleSettings" origin="Settings" destination="Authorized" order="0" />
+  <Transition name="ToggleSettings" origin="Authorized" destination="Settings" order="0" />
+  <Transition name="ToggleLists" origin="Lists" destination="Authorized" order="0" />
 	<Transition name="ToggleContacts" origin="Authorized" destination="Contacts" order="0" />
 	<Transition name="ToggleContacts" origin="Contacts" destination="Authorized" order="0" />
   <Transition name="ToggleCredentials" origin="Authorized" destination="Credentials" order="0" />
@@ -36,8 +40,8 @@
   <Transition name="ToggleSecurity" origin="Security" destination="Authorized" order="0" />
   <Transition name="ToggleTodos" origin="Authorized" destination="Todos" order="0" />
   <Transition name="ToggleTodos" origin="Todos" destination="Authorized" order="0" />
-  <Transition name="ToggleRemote" origin="Authorized" destination="Remote" order="0" />
-  <Transition name="ToggleRemote" origin="Remote" destination="Authorized" order="0" />
+  <Transition name="ToggleStyx" origin="Authorized" destination="Styx" order="0" />
+  <Transition name="ToggleStyx" origin="Styx" destination="Authorized" order="0" />
   <Transition name="ToggleProjects" origin="Authorized" destination="Projects" order="0" />
   <Transition name="ToggleProjects" origin="Projects" destination="Authorized" order="0" />
   <Transition name="ToggleTasks" origin="Authorized" destination="Tasks" order="0" />
@@ -50,5 +54,6 @@
 	<Transition name="Logoff" origin="Lists" destination="LoggedOff" order="0"/>
 	<Transition name="Logoff" origin="Contacts" destination="LoggedOff" order="0"/>
   <Transition name="Logoff" origin="Tasks" destination="LoggedOff" order="0"/>
+  <Transition name="Logoff" origin="Settings" destination="LoggedOff" order="0"/>
   <Transition name="ToggleTimeEntry" origin="Tasks" destination="TimeEntry" order="0"/>
 </StateMachine>

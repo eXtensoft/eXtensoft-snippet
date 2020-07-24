@@ -1,4 +1,5 @@
-﻿using Bitsmith.Models;
+﻿using Bitsmith.BusinessProcess;
+using Bitsmith.Models;
 using Bitsmith.ProjectManagement;
 using System;
 using System.Collections.Generic;
@@ -59,6 +60,24 @@ namespace Bitsmith.ViewModels
             Domains.Add(new DomainViewModel(new Domain().Default(DateTime.Now, Guid.NewGuid().ToString().ToLower())));
         }
 
+        private WorkflowViewModel _SelectedWorkflow;
+        public WorkflowViewModel SelectedWorkflow
+        {
+            get
+            {
+                if (_SelectedWorkflow == null)
+                {
+                    _SelectedWorkflow = Workspace.Instance.ViewModel.Settings.Workflows[0];
+                }
+                return _SelectedWorkflow;
+            }
+            set
+            {
+                _SelectedWorkflow = value;
+                OnPropertyChanged("SelectedWorkflow");
+            }
+        }
+
 
         private TaskItemViewModel _SelectedItem;
         public TaskItemViewModel SelectedItem
@@ -98,6 +117,10 @@ namespace Bitsmith.ViewModels
         private void AddItem()
         {
             var model = new TaskItem().Default(SelectedDomain.Model);
+            if (SelectedWorkflow != null)
+            {
+                model.WorkflowId = _SelectedWorkflow.Id;
+            }
             var vm = new TaskItemViewModel(model);
             Items.Add(vm);
         }
@@ -117,15 +140,6 @@ namespace Bitsmith.ViewModels
                 return _SaveWorkspaceCommand;
             }
         }
-        internal bool CanSaveWorkspace()
-        {
-            return true;
-        }
-        internal void SaveWorkspace()
-        {
-            SaveData();
-        }
-
 
 
         protected override bool LoadData()
@@ -190,6 +204,7 @@ namespace Bitsmith.ViewModels
 
         public override void Initialize()
         {
+            
             
             if (model != null)
             {

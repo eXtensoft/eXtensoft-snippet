@@ -9,8 +9,8 @@
     <UserControl.Resources>
         <local:TagConverter x:Key="cnvNewTags"/>
         <local:BooleanToIntConverter x:Key="cvtBool2Int"/>
-        <local:BooleanToVisibilityConverter x:Key="cvtBool2Visibility"/>
-        <local:BooleanToVisibilityConverter x:Key="cvtBool2VisibilityReverse" IsReverse="True"/>
+        <local:BoolToVisibilityConverter x:Key="cvtBool2Visibility"/>
+        <local:BoolToVisibilityConverter x:Key="cvtBool2VisibilityReverse" IsReverse="True"/>
     </UserControl.Resources>
         <Grid Margin="10" DataContext="{Binding Path=Content}">
         <Grid.ColumnDefinitions>

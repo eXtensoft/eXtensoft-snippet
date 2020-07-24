@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace Bitsmith.ViewModels
@@ -16,7 +17,19 @@ namespace Bitsmith.ViewModels
     public class ChronosModule : Module
     {
 
-        public ObservableCollection<TimeEntryViewModel> TimeEntries { get; set; }
+        private ObservableCollection<WorkEffortViewModel> _Groupings;
+        public ObservableCollection<WorkEffortViewModel> Groupings 
+        {
+            get { return _Groupings; }
+            set
+            {
+                _Groupings = value;
+                OnPropertyChanged("Groupings");
+            }
+        
+        }
+
+
 
         public Chronos Model { get; set; }
 
@@ -30,6 +43,69 @@ namespace Bitsmith.ViewModels
                 OnPropertyChanged("SelectedView");
             }
         }
+
+        private Dictionary<ChronosViewTypeOptions, Func<TimeEntryViewModel, string, bool>> _Filters = new Dictionary<ChronosViewTypeOptions, Func<TimeEntryViewModel, string, bool>>() 
+        {
+            {ChronosViewTypeOptions.None,FilterByNone},
+            {ChronosViewTypeOptions.Actor,FilterByActor},
+            {ChronosViewTypeOptions.Day,FilterByDay},
+            {ChronosViewTypeOptions.Week,FilterByWeek},
+            {ChronosViewTypeOptions.Sprint,FilterBySprint},
+            {ChronosViewTypeOptions.Project,FilterByProject},
+            {ChronosViewTypeOptions.System,FilterSystem},
+        };
+
+        private static bool FilterByNone(TimeEntryViewModel item, string arg)
+        {
+            return item != null;
+        }
+
+        private static bool FilterByActor(TimeEntryViewModel item, string arg)
+        {
+            return !string.IsNullOrWhiteSpace(arg) ? item.Model.Actor.Token.Equals(arg,StringComparison.OrdinalIgnoreCase) : true;
+        }
+
+        private static bool FilterByDay(TimeEntryViewModel item, string arg)
+        {
+            DateTime target;
+            if (!string.IsNullOrWhiteSpace(arg) && DateTime.TryParse(arg,out target))
+            {
+            }
+            else
+            {
+                target = DateTime.Now.Date;
+            }
+            return item.Model.Started.Date.Equals(target);
+        }
+
+        private static bool FilterByWeek(TimeEntryViewModel item, string arg)
+        {
+            DateTime target;
+            if (!string.IsNullOrWhiteSpace(arg) && DateTime.TryParse(arg, out target))
+            {
+            }
+            else
+            {
+                target = DateTime.Now.Date;
+            }
+            return true;
+        }
+
+        private static bool FilterBySprint(TimeEntryViewModel item, string arg)
+        {
+            return false;
+        }
+
+        private static bool FilterByProject(TimeEntryViewModel item, string arg)
+        {
+            return false;
+        }
+
+        private static bool FilterSystem(TimeEntryViewModel item, string arg)
+        {
+            return true;
+        }
+
 
         public List<TagIdentifier> Activities { get; set; }
 
@@ -88,12 +164,22 @@ namespace Bitsmith.ViewModels
         private void AddItem()
         {
             TimeEntry item = new TimeEntry().Default(Start);
-            item.Task = new TagIdentifier() { Display = SelectedTask.Display, Id = SelectedTask.Model.Id, Token = SelectedTask.Model.Identifier.Token };
-            item.Activity = new TagIdentifier() { Display = SelectedActivity.Display, Id = SelectedActivity.Id, Token = SelectedActivity.Token };
+            item.Task = new TagIdentifier() 
+            { 
+                Display = SelectedTask.Display, 
+                Id = SelectedTask.Model.Id, 
+                Token = SelectedTask.Status.Display
+            };
+            item.Activity = new TagIdentifier() 
+            { 
+                Display = SelectedActivity.Display, 
+                Id = SelectedActivity.Id, 
+                Token = SelectedActivity.Token 
+            };
             item.Minutes = Minutes;
             item.Comment = Comment; 
             TimeEntryViewModel vm = new TimeEntryViewModel(item);
-            TimeEntries.Add(vm);
+
             RefreshItem();
             Message = item.ToDisplay();
         }
@@ -185,14 +271,9 @@ namespace Bitsmith.ViewModels
             }
         }
 
-        public bool CanSaveWorkspace()
+        public override bool CanSaveWorkspace()
         {
             return Model != null;
-        }
-
-        public void SaveWorkspace()
-        {
-            SaveData();
         }
 
 
@@ -206,12 +287,62 @@ namespace Bitsmith.ViewModels
         {
             Activities = new List<TagIdentifier>().Activities();
             _Minutes = 60;
-            TimeEntries = new ObservableCollection<TimeEntryViewModel>(from x in Model.Items select new TimeEntryViewModel(x));
-            TimeEntries.CollectionChanged += TimeEntries_CollectionChanged;
+            BuildWorkEfforts();
+            //TimeEntries = new ObservableCollection<TimeEntryViewModel>(from x in Model.Items select new TimeEntryViewModel(x));
+            //TimeEntries.CollectionChanged += TimeEntries_CollectionChanged;
+            //_View = (CollectionView)CollectionViewSource.GetDefaultView(TimeEntries);
+            //_View.Filter = FilterEntry;
+
+        }
+
+        private void BuildWorkEfforts()
+        {
+            var grps = from t in Model.Items
+                       group t by t.Task.Id into grp
+                       select grp;
+            if (grps.Count() > 0)
+            {
+                List<WorkEffortViewModel> list = new List<WorkEffortViewModel>(from g in grps select new WorkEffortViewModel(g));
+                Groupings = new ObservableCollection<WorkEffortViewModel>(list);
+            }
 
         }
 
 
+        private bool FilterEntry(object item)
+        {
+            bool b = false;
+            var vm = item as TimeEntryViewModel;
+            if (vm != null)
+            {
+                switch (SelectedView)
+                {
+                    case ChronosViewTypeOptions.None:
+                        b = FilterByNone(vm,null);
+                        break;
+                    case ChronosViewTypeOptions.Actor:
+                        b = false;
+                        break;
+                    case ChronosViewTypeOptions.Day:
+                        b = FilterByDay(vm, DateTime.Now.ToString());
+                        break;
+                    case ChronosViewTypeOptions.Week:
+                        b = FilterByDay(vm, DateTime.Now.ToString());
+                        break;
+                    case ChronosViewTypeOptions.Sprint:
+                        break;
+                    case ChronosViewTypeOptions.Project:
+                        break;
+                    case ChronosViewTypeOptions.System:
+                        b = true;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            return b;
+        }
 
         private void TimeEntries_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {

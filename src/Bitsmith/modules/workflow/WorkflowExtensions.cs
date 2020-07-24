@@ -9,6 +9,14 @@ namespace Bitsmith.BusinessProcess
 {
     public static class WorkflowExtensions
     {
+        public static Workflow Default(this Workflow model)
+        {
+            model.Id = Guid.NewGuid().ToString().ToLower();
+            model.Name = "workflow";
+            model.Display = "Workflow";
+            model.Machine = new StateMachine().Default();
+            return model;
+        }
         public static Transition Default(this Transition model)
         {
             model.Name = "transition";
@@ -49,7 +57,7 @@ namespace Bitsmith.BusinessProcess
                 machine.Transitions.Add(new Transition() 
                 { 
                     Display = t.Display, 
-                    Name = t.Name, 
+                    //Name = t.Name, 
                     OriginState = t.From.Name, 
                     DestinationState = t.To.Name 
                 });
@@ -63,5 +71,44 @@ namespace Bitsmith.BusinessProcess
         {
             return machine.EndStates.Contains(machine.CurrentState);
         }
+
+
+        public static void SetBeginState(this WorkflowViewModel workflow, string stateName)
+        {
+            workflow.Model.Machine.BeginState = stateName;
+            foreach (var state in workflow.States)
+            {
+                state.SetBegin(state.Name.Equals(stateName));
+            }
+        }
+
+        public static void AddEndState(this WorkflowViewModel workflow, string stateName)
+        {
+            if (!workflow.Model.Machine.EndStates.Contains(stateName))
+            {
+                workflow.Model.Machine.EndStates.Add(stateName);
+            }
+            var found = workflow.States.FirstOrDefault(x => x.Name.Equals(stateName));
+            if (found != null)
+            {
+                found.SetEnd(true);
+            }
+        }
+
+        public static void RemoveEndState(this WorkflowViewModel workflow, string stateName)
+        {
+            if (workflow.Model.Machine.EndStates.Contains(stateName))
+            {
+                workflow.Model.Machine.EndStates.Remove(stateName);
+            }
+            var found = workflow.States.FirstOrDefault(x => x.Name.Equals(stateName));
+            if (found != null)
+            {
+                found.SetEnd(false);
+            }
+        }
+
+
+
     }
 }

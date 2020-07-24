@@ -22,5 +22,7 @@ namespace Bitsmith
         Projects,
         TimeEntry,
         Tasks,
+        Styx,
+        Settings,
     }
 }

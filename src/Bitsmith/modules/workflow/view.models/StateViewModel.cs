@@ -1,4 +1,5 @@
-﻿using Bitsmith.Models;
+﻿using Bitsmith.BusinessProcess;
+using Bitsmith.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,15 @@ namespace Bitsmith.ViewModels
             }
             set
             {
-                _IsBegin = value;
+                _Workflow.SetBeginState(Model.Name);
+            }
+        }
+
+        public void SetBegin(bool isBegin)
+        {
+            if (_IsBegin != isBegin)
+            {
+                _IsBegin = isBegin;
                 OnPropertyChanged("IsBegin");
             }
         }
@@ -33,11 +42,32 @@ namespace Bitsmith.ViewModels
             }
             set
             {
-                _IsEnd = value;
-                OnPropertyChanged("IsEnd");
+                if (_IsEnd != value)
+                {
+                    _IsEnd = value;
+                    if (value)
+                    {
+
+                        _Workflow.AddEndState(Model.Name);
+                    }
+                    else
+                    {
+                        _Workflow.RemoveEndState(Model.Name);
+                    }
+
+                    OnPropertyChanged("IsEnd");
+                }
             }
         }
+        public void SetEnd(bool isEnd)
+        {
+            if (_IsEnd != isEnd)
+            {
+                _IsEnd = isEnd;
+                OnPropertyChanged("IsEnd");
+            }
 
+        }
 
 
         public string Name
@@ -73,9 +103,21 @@ namespace Bitsmith.ViewModels
 
 
 
+        private WorkflowViewModel _Workflow;
 
-
-
+        public StateViewModel(State model, WorkflowViewModel workflow)
+        {
+            Model = model;
+            _Workflow = workflow;
+            if (Model.Name.Equals(_Workflow.Model.Machine.BeginState))
+            {
+                _IsBegin = true;
+            }
+            if (_Workflow.Model.Machine.EndStates.Contains(Model.Name))
+            {
+                _IsEnd = true;
+            }
+        }
 
         public StateViewModel(State model)
         {

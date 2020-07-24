@@ -4,7 +4,7 @@ using System.Windows.Data;
 
 namespace Bitsmith
 {
-    public class BooleanToVisibilityConverter : IValueConverter
+    public class BoolToVisibilityConverter : IValueConverter
     {
         private Visibility _FalseValue = Visibility.Collapsed;
         public Visibility FalseValue

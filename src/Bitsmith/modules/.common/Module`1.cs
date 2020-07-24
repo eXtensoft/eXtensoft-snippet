@@ -36,6 +36,16 @@ namespace Bitsmith.ViewModels
             SaveData();
         }
 
+        public virtual bool CanSaveWorkspace()
+        {
+            return Models != null && Models.Count > 0;
+        }
+
+        public virtual void SaveWorkspace()
+        {
+            SaveData();
+        }
+
         protected virtual void SaveData()
         {
             if(!FileSystemDataProvider.TryWrite<T>(Models, out string message, Filepath))

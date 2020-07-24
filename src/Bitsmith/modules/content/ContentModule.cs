@@ -700,16 +700,6 @@ namespace Bitsmith.ViewModels
 
 
 
-        internal bool CanSaveWorkspace()
-        {
-            return true;
-        }
-        internal void SaveWorkspace()
-        {
-            SaveData();
-        }
-
-
         protected override bool LoadData()
         {
             string filepath = Filepath;

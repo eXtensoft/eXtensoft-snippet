@@ -1,6 +1,7 @@
 ﻿using Bitsmith.ViewModels;
 using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -26,9 +27,9 @@ namespace Bitsmith
                 {
                     vm.WorkflowId = AppConstants.Defaults.WorkflowId;
                 }
-                if (Workspace.Instance.ViewModel.Settings.Workflows.Contains(vm.WorkflowId) && vm.Machine == null)
+                if (vm.Machine == null && Workspace.Instance.ViewModel.Settings.Workflows.Any(x=>x.Id.Equals(vm.WorkflowId,StringComparison.OrdinalIgnoreCase)))
                 {
-                    vm.Machine = Workspace.Instance.ViewModel.Settings.Workflows[vm.WorkflowId].Machine.Clone();
+                    vm.Machine = Workspace.Instance.ViewModel.Settings.Workflows.FirstOrDefault(x => x.Id.Equals(vm.WorkflowId, StringComparison.OrdinalIgnoreCase)).Model.Machine.Clone();
                 }
             }
         }

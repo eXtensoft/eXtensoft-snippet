@@ -12,6 +12,18 @@ namespace Bitsmith
 {
     public static class AppExtensions
     {
+
+        public static void EnsureDirectories(this IEnumerable<string> list)
+        {
+            foreach (var item in list)
+            {
+                DirectoryInfo info = new DirectoryInfo(item);
+                if (!info.Exists)
+                {
+                    info.Create();
+                }
+            }
+        }
         public static FlowDocument ToFlowDocument(this string text, string term, Brush background, bool IsCaseSensitive = false)
         {
             StringComparison comparison = IsCaseSensitive ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;

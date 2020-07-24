@@ -20,6 +20,18 @@ namespace Bitsmith
     /// </summary>
     public partial class Shell : WindowBase
     {
+        private StyxView _Styx;
+        public StyxView Styx
+        {
+            get 
+            {
+                if (_Styx == null)
+                {
+                    _Styx = new StyxView();
+                }
+                return _Styx; 
+            }
+        }
 
         private ChronosView _Chronos;
         public ChronosView Chronos
@@ -86,18 +98,48 @@ namespace Bitsmith
             }
         }
 
-        private WorkflowView _Workflow;
-        public WorkflowView Workflow
+        private WorkflowBuilderView _Workflow;
+        public WorkflowBuilderView Workflow
         {
             get
             {
                 if (_Workflow == null)
                 {
-                    _Workflow = new WorkflowView();
+                    _Workflow = new WorkflowBuilderView();
                 }
                 return _Workflow;
             }
         }
+
+        private SettingsView _Settings;
+        public SettingsView Settings
+        {
+            get
+            {
+                if (_Settings == null)
+                {
+                    _Settings = new SettingsView();
+                }
+                return _Settings;
+            }
+        }
+
+        private ICommand _ToggleSettingsCommand;
+        public ICommand ToggleSettingsCommand
+        {
+            get
+            {
+                if (_ToggleSettingsCommand == null)
+                {
+                    _ToggleSettingsCommand = new RelayCommand(
+                    param => ToggleSettings());
+                }
+                return _ToggleSettingsCommand;
+            }
+        }
+
+        
+
 
         private ICommand _ToggleListsCommand;
         public ICommand ToggleListsCommand
@@ -144,7 +186,19 @@ namespace Bitsmith
             }
         }
 
-
+        private ICommand _ToggleStyxCommand;
+        public ICommand ToggleStyxCommand
+        {
+            get
+            {
+                if (_ToggleStyxCommand == null)
+                {
+                    _ToggleStyxCommand = new RelayCommand(
+                        param => ToggleStyx());
+                }
+                return _ToggleStyxCommand;
+            }
+        }
 
         private ICommand _ToggleCredentialsCommand;
         public ICommand ToggleCredentialsCommand
@@ -181,17 +235,12 @@ namespace Bitsmith
             {
                 if (_ExitAppCommand == null)
                 {
-                    _ExitAppCommand = new RelayCommand(param => ExitApp());
+                    _ExitAppCommand = new RelayCommand(
+                        param => OnLoggedOff());
                 }
                 return _ExitAppCommand;
             }
         }
-
-        private void ExitApp()
-        {
-            Workspace.Instance.State.Machine.ExecuteTransition(TransitionTypeOption.Logoff.ToString());
-        }
-
 
         public Shell()
         {
@@ -212,10 +261,12 @@ namespace Bitsmith
             mgr.RegisterEndpointAction(ActivityStateOption.Unauthorized.ToString(), EndpointOption.Arrival, OnUnauthorized);
             mgr.RegisterEndpointAction(ActivityStateOption.Error.ToString(), EndpointOption.Arrival, OnError);
             mgr.RegisterEndpointAction(ActivityStateOption.Lists.ToString(), EndpointOption.Arrival, OnToggleLists);
+            mgr.RegisterEndpointAction(ActivityStateOption.Settings.ToString(), EndpointOption.Arrival, OnToggleSettings);
             mgr.RegisterEndpointAction(ActivityStateOption.Credentials.ToString(), EndpointOption.Arrival, OnToggleCredentials);
             mgr.RegisterEndpointAction(ActivityStateOption.Projects.ToString(), EndpointOption.Arrival, OnToggleProjects);
             mgr.RegisterEndpointAction(ActivityStateOption.TimeEntry.ToString(), EndpointOption.Arrival, OnToggleTimeEntry);
             mgr.RegisterEndpointAction(ActivityStateOption.Tasks.ToString(), EndpointOption.Arrival, OnToggleTasks);
+            mgr.RegisterEndpointAction(ActivityStateOption.Styx.ToString(), EndpointOption.Arrival, OnToggleStyx);
 
             AddToggleCommands();
         }
@@ -223,11 +274,13 @@ namespace Bitsmith
         private void AddToggleCommands()
         {
             this.InputBindings.Add(new KeyBinding(ToggleListsCommand, new KeyGesture(Key.L, ModifierKeys.Control)));
+            this.InputBindings.Add(new KeyBinding(ToggleSettingsCommand, new KeyGesture(Key.U, ModifierKeys.Control)));
             this.InputBindings.Add(new KeyBinding(ToggleProjectsCommand, new KeyGesture(Key.P, ModifierKeys.Control)));
             this.InputBindings.Add(new KeyBinding(ToggleTasksCommand, new KeyGesture(Key.T, ModifierKeys.Control)));
             this.InputBindings.Add(new KeyBinding(ExitAppCommand, new KeyGesture(Key.X, ModifierKeys.Control)));
             this.InputBindings.Add(new KeyBinding(ToggleCredentialsCommand, new KeyGesture(Key.Y, ModifierKeys.Control)));
             this.InputBindings.Add(new KeyBinding(ToggleTimeEntryCommand, new KeyGesture(Key.E, ModifierKeys.Control)));
+            this.InputBindings.Add(new KeyBinding(ToggleStyxCommand, new KeyGesture(Key.Q, ModifierKeys.Control)));
         }
 
         private void WindowBase_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -289,6 +342,12 @@ namespace Bitsmith
             grdRoot.Children.Add(Tasks);
         }
 
+        private void OnToggleStyx()
+        {
+            grdRoot.Children.Clear();
+            grdRoot.Children.Add(Styx);
+        }
+
         private void OnToggleTimeEntry()
         {
             grdRoot.Children.Clear();
@@ -316,6 +375,12 @@ namespace Bitsmith
             Workspace.Instance.State.Machine.ExecuteTransition(TransitionTypeOption.ToggleTasks.ToString());
         }
 
+
+        private void ToggleStyx()
+        {
+            Workspace.Instance.State.Machine.ExecuteTransition(TransitionTypeOption.ToggleStyx.ToString());
+        }
+
         private void ToggleCredentials()
         {
             Workspace.Instance.State.Machine.ExecuteTransition(TransitionTypeOption.ToggleCredentials.ToString());
@@ -324,6 +389,17 @@ namespace Bitsmith
         {
             grdRoot.Children.Clear();
             grdRoot.Children.Add(Workflow);
+        }
+
+        private void ToggleSettings()
+        {
+            Workspace.Instance.State.Machine.ExecuteTransition(TransitionTypeOption.ToggleSettings.ToString());
+        }
+
+        private void OnToggleSettings()
+        {
+            grdRoot.Children.Clear();
+            grdRoot.Children.Add(Settings);
         }
 
         private void ToggleLists()
