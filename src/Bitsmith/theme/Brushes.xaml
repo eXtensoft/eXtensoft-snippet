@@ -45,6 +45,7 @@
     <SolidColorBrush x:Key="SecondaryBHighlight" Color="#406001"/>
 
 
+    <SolidColorBrush x:Key="Hover" Color="Black"/>
 
     <SolidColorBrush x:Key="CommandLight" Color="Silver"/>
     <SolidColorBrush x:Key="CommandMedium" Color="DarkGray"/>
@@ -52,9 +53,25 @@
     <SolidColorBrush x:Key="CommandDark" Color="DarkGray"/>
     <SolidColorBrush x:Key="CommandDark50" Color="DarkGray"/>
     <SolidColorBrush x:Key="CommandDisabled" Color="DarkGray" Opacity="0.5"/>
+    <SolidColorBrush x:Key="CommandEnabled" Color="Black" Opacity="0.5"/>
     <SolidColorBrush x:Key="CommandHover" Color="Silver"/>
+    <SolidColorBrush x:Key="CommandHoverEnabled" Color="#1D568B"/>
+    <SolidColorBrush x:Key="CommandHoverDisabled" Color="Transparent"/>
     <SolidColorBrush x:Key="CommandHoverRemove" Color="DarkGray"/>
     <SolidColorBrush x:Key="LabelDark" Color="DarkGray"/>
-    
- 
+
+    <SolidColorBrush x:Key="MenuCommandActive" Color="#1D568B"/>
+    <SolidColorBrush x:Key="MenuCommandMedium" Color="DarkGray" Opacity="0.5"/>
+    <SolidColorBrush x:Key="MenuCommandEnabled" Color="DarkGray" />
+    <SolidColorBrush x:Key="MenuCommandHoverEnabled" Color="#1D568B"/>
+    <SolidColorBrush x:Key="MenuCommandHoverDisabled" Color="Transparent" />
+
+
+    <Color x:Key="SelectedBackgroundColor">Transparent</Color>
+    <Color x:Key="SelectedUnfocusedColor">Transparent</Color>
+    <Color x:Key="ControlLightColor">Transparent</Color>
+    <Color x:Key="BorderMediumColor">Transparent</Color>
+    <Color x:Key="DisabledControlLightColor">Transparent</Color>
+
+
 </ResourceDictionary>

@@ -20,7 +20,7 @@
                 <GroupBox Grid.Row="0" DataContext="{Binding Path=Content}">
                     <GroupBox.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Button Style="{StaticResource DetailsCommandButton}" Command="{Binding Path=ViewDomainsCommand}"/>
+                            <Button Style="{StaticResource SettingsCommandButton}" Command="{Binding Path=ViewDomainsCommand}"/>
                             <Label Content="{Binding Path=SelectedDomain.Name}"/>
                             <ToggleButton IsChecked="{Binding Path=IsTagSearch}" 
                                           Content="{Binding Path=IsTagSearch, Converter={StaticResource cvtSearchType}}" Style="{StaticResource CommandToggleButton}" />                            
@@ -34,10 +34,10 @@
                                 <ColumnDefinition Width="1*"></ColumnDefinition>
                                 <ColumnDefinition Width="1*"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
-                            <Button Grid.Column="0" HorizontalAlignment="Left" 
-                                    TabIndex="-1" Content="Save"  Style="{StaticResource CommandButton}" Command="{Binding Path=SaveWorkspaceCommand}"/>
+                            <Button Grid.Column="0" HorizontalAlignment="Center" 
+                                    TabIndex="-1" Style="{StaticResource SaveCommandButton}" Command="{Binding Path=SaveWorkspaceCommand}"/>
                             <Button Grid.Column="1" HorizontalAlignment="Center" TabIndex="-1" Content="Clear"  Style="{DynamicResource ResourceKey=CommandButton}" Command="{Binding Path=ClearQueryCommand}"/>
-                            <Button Grid.Column="2" HorizontalAlignment="Right" IsDefault="True" Content="Search"  Style="{StaticResource ResourceKey=CommandButton}" Command="{Binding Path=ExecuteQueryCommand}"/>
+                            <Button Grid.Column="2" HorizontalAlignment="Center" IsDefault="True"  Style="{StaticResource ResourceKey=SearchCommandButton}" Command="{Binding Path=ExecuteQueryCommand}"/>
                         </Grid>
 
                     </StackPanel>

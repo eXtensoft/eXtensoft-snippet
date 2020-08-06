@@ -88,47 +88,53 @@
             <Expander.Content>
                 <StackPanel>
                     <ListBox x:Name="lsbRecentTags" Visibility="{Binding ElementName=rdoRecent, Path=IsChecked, Converter={StaticResource cvtBool2Visibility}}" 
-                              
+                              Style="{StaticResource TagListItem}"
                              ItemsSource="{Binding Path=Resolver.Recent}" SelectedItem="{Binding Path=Input.SelectedTag, Mode=OneWayToSource}">
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <WrapPanel MaxHeight="60" MaxWidth="120"/>
+                                <WrapPanel MaxHeight="60" MaxWidth="500"/>
                             </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Path=Key}"/>
+                                <Border Style="{StaticResource ResourceKey=TagBorder}">
+                                    <DockPanel LastChildFill="True">
+                                        <Button DockPanel.Dock="Right" 
+                                                Style="{StaticResource RemoveCommandButton}" 
+                                                Command="{Binding Path=DataContext.Content.RemoveRecentTagCommand, RelativeSource={RelativeSource FindAncestor,AncestorType=UserControl}}"
+                                                CommandParameter="{Binding Path=Key}" 
+                                                FontSize="10" />
+                                        <TextBlock Text="{Binding Path=Key}" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                                    </DockPanel>
+                                </Border>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-                    <ListBox x:Name="lsbPopularTags" Visibility="{Binding ElementName=rdoPopular, Path=IsChecked, Converter={StaticResource cvtBool2Visibility}}" 
-                              
+                    <ListBox x:Name="lsbPopularTags"                             
+                             Visibility="{Binding ElementName=rdoPopular, Path=IsChecked, Converter={StaticResource cvtBool2Visibility}}" 
+                             ItemContainerStyle="{StaticResource TagListBoxItem}"
                              ItemsSource="{Binding Path=Resolver.Popular}" SelectedItem="{Binding Path=Input.SelectedTag, Mode=OneWayToSource}">
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <WrapPanel MaxHeight="60" MaxWidth="120"/>
+                                <WrapPanel MaxHeight="60" MaxWidth="500"/>
                             </ItemsPanelTemplate>
-                        </ListBox.ItemsPanel>
+                        </ListBox.ItemsPanel>                        
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Path=Key}"/>
+                                <Border Style="{StaticResource TagBorder}">
+                                    <DockPanel LastChildFill="True">
+                                        <Button DockPanel.Dock="Right" 
+                                                Style="{StaticResource RemoveCommandButton}" 
+                                                Command="{Binding Path=DataContext.Content.RemovePopularTagCommand, RelativeSource={RelativeSource FindAncestor,AncestorType=UserControl}}" 
+                                                CommandParameter="{Binding Path=Key}"
+                                                FontSize="10"/>
+                                        <TextBlock Text="{Binding Path=Key}" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                                    </DockPanel>
+                                </Border>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
 
-                    <!--<ListBox x:Name="lsbListTags" Visibility="{Binding ElementName=rdoList, Path=IsChecked, Converter={StaticResource cvtBool2Visibility}}" 
-                             ItemsSource="{Binding Path=Resolver.Recent}" SelectedItem="{Binding Path=Input.SelectedTag, Mode=OneWayToSource}">
-                        <ListBox.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel MaxWidth="250"/>
-                            </ItemsPanelTemplate>
-                        </ListBox.ItemsPanel>
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Path=Key}"/>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>-->
                 </StackPanel>
 
 

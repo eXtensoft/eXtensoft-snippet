@@ -310,6 +310,18 @@ namespace Bitsmith
             }
         }
 
+        public static IEnumerable<TSource> DistinctBy<TSource,TKey>(this IEnumerable<TSource> source, Func<TSource,TKey> keySelector)
+        {
+            HashSet<TKey> keys = new HashSet<TKey>();
+            foreach (var item in source)
+            {
+                if (keys.Add(keySelector(item)))
+                {
+                    yield return item;
+                }
+            }
+        }
+
         private static void ToCsv(this DataTable dt, TextWriter writer, bool includeHeaders)
         {
             if (includeHeaders)

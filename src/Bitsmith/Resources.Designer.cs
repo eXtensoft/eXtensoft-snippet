@@ -61,6 +61,40 @@ namespace Bitsmith {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;StateMachine xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; beginState=&quot;LoggedOff&quot; endState=&quot;LoggedOff&quot;&gt;
+        ///  
+        ///  &lt;State name=&quot;LoggedOff&quot; display=&quot;LoggedOff&quot; /&gt;
+        ///  &lt;State name=&quot;Authenticate&quot; display=&quot;Authenticate&quot; /&gt;
+        ///  &lt;State name=&quot;Unauthorized&quot; display=&quot;Unauthorized&quot; /&gt;
+        ///  &lt;State name=&quot;Error&quot; display=&quot;Error&quot; /&gt;
+        ///  &lt;State name=&quot;Startup&quot; display=&quot;Startup&quot; /&gt;
+        ///  &lt;State name=&quot;Dashboard&quot; display=&quot;Dashboard&quot; /&gt;
+        ///  &lt;State [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string nav_state_machine {
+            get {
+                return ResourceManager.GetString("nav_state_machine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;StateMachine xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; beginState=&quot;LoggedOff&quot; endState=&quot;LoggedOff&quot;&gt;
+        ///  &lt;State name=&quot;LoggedOff&quot; display=&quot;LoggedOff&quot; /&gt;
+        ///  &lt;State name=&quot;Authenticated&quot; display=&quot;Authenticated&quot; /&gt;
+        ///  &lt;State name=&quot;Content&quot; display=&quot;Content&quot; /&gt;
+        ///
+        ///  &lt;Transition name=&quot;Login&quot; origin=&quot;LoggedOff&quot; destination=&quot;Authenticated&quot; order=&quot;0&quot; /&gt;
+        ///  &lt;Transition name=&quot;Content&quot; origin=&quot;Authenticated&quot; destination=&quot;Con [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string simple_state_machine {
+            get {
+                return ResourceManager.GetString("simple_state_machine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;StateMachine xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; beginState=&quot;LoggedOff&quot; endState=&quot;LoggedOff&quot;&gt;
         ///	&lt;State name=&quot;LoggedOff&quot; display=&quot;LoggedOff&quot; /&gt;

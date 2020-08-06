@@ -1,0 +1,54 @@
+﻿<UserControl x:Class="Biblio.ImportView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Biblio"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" MinWidth="50"/>
+            <ColumnDefinition Width="15"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <DockPanel Grid.Column="0" LastChildFill="True">
+            <GroupBox DockPanel.Dock="Top">
+                <GroupBox.Header>
+                    <Label Content="Search terms"/>
+                </GroupBox.Header>
+                <GroupBox.Content>
+                    <TextBox AcceptsReturn="True" AcceptsTab="True" Height="150" 
+                             TextWrapping="Wrap" Text="{Binding Path=Bible.Terms,UpdateSourceTrigger=PropertyChanged}"/>
+                </GroupBox.Content>
+            </GroupBox>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="2" Style="{StaticResource DetailsCommandButton}"  Command="{Binding Path=Bible.SearchCommand}"/>
+            </Grid>
+            
+            <Grid/>
+        </DockPanel>
+
+        <ListBox Grid.Column="2" Margin="40,20" ItemsSource="{Binding Path=Bible.SearchResults}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Column="0" Content="{Binding Path=Display}"/>
+                        <TextBlock Grid.Column="1" Text="{Binding Path=Text}"/>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    
+    </Grid>
+</UserControl>

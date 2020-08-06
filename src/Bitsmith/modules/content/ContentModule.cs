@@ -661,6 +661,55 @@ namespace Bitsmith.ViewModels
 
         public TagResolver Resolver { get; set; } = new TagResolver();
 
+        private ICommand _RemoveRecentTagCommand;
+        public ICommand RemoveRecentTagCommand
+        {
+            get
+            {
+                if (_RemoveRecentTagCommand == null)
+                {
+                    _RemoveRecentTagCommand = new RelayCommand<string>(RemoveRecentTag);
+                }
+                return _RemoveRecentTagCommand;
+            }
+        }
+        private bool CanRemoveRecentTag()
+        {
+            return true;
+        }
+        private void RemoveRecentTag(string tag)
+        {
+            var found = Resolver.Recent.FirstOrDefault(x => x.Key.Equals(tag));
+            if (found != null)
+            {
+                Resolver.Recent.Remove(found);
+            }
+        }
+
+
+        private ICommand _RemovePopularTagCommand;
+        public ICommand RemovePopularTagCommand
+        {
+            get
+            {
+                if (_RemovePopularTagCommand == null)
+                {
+                    _RemovePopularTagCommand = new RelayCommand<string>(RemovePopularTag);
+                }
+                return _RemovePopularTagCommand;
+            }
+        }
+
+        private void RemovePopularTag(string tag)
+        {
+            var found = Resolver.Popular.FirstOrDefault(x => x.Key.Equals(tag));
+            if (found != null)
+            {
+                Resolver.Popular.Remove(found);
+            }
+        }
+
+
         public string Id
         {
             get { return model.Id; }

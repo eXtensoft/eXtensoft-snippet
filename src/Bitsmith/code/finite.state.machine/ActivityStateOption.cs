@@ -13,6 +13,7 @@ namespace Bitsmith
         Unauthorized,
         Error,
         Administration,
+        Content,
         Lists,
         Contacts,
         Credentials,

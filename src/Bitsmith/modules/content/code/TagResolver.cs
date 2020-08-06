@@ -11,7 +11,6 @@ namespace Bitsmith
     {
 
         public ObservableCollection<TagMapViewModel> Items { get; set; } = new ObservableCollection<TagMapViewModel>();
-        //public Dictionary<string,TagMap> TagMaps { get; set; } = new Dictionary<string,TagMap>(StringComparer.OrdinalIgnoreCase);
 
         public ObservableCollection<TagMapViewModel> Recent { get; set; } = new ObservableCollection<TagMapViewModel>();
         public ObservableCollection<TagMapViewModel> Popular { get; set; } = new ObservableCollection<TagMapViewModel>();
@@ -120,7 +119,6 @@ namespace Bitsmith
             
 
         }
-
 
     }
 }

@@ -33,7 +33,7 @@ namespace Bitsmith
             _Timer.Stop();
             Dispatcher.Invoke((Action)(() =>
             {                
-                Workspace.Instance.State.Machine.ExecuteTransition(TransitionTypeOption.Authorize.ToString());
+                Workspace.Instance.State.ExecuteTransition(TransitionTypeOption.Content.ToString());
             }));
         }
 

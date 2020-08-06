@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<StateMachine xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" beginState="LoggedOff" endState="LoggedOff">
+  
+  <State name="LoggedOff" display="LoggedOff" />
+  <State name="Authenticate" display="Authenticate" />
+  <State name="Unauthorized" display="Unauthorized" />
+  <State name="Error" display="Error" />
+  <State name="Startup" display="Startup" />
+  <State name="Dashboard" display="Dashboard" />
+  <State name="Content" display="Content"/>
+  <State name="Tasks" display="Tasks"/>  
+  <State name="Todos" display="Todos"/>  
+  <State name="Projects" display="Projects"/>
+  <State name="TimeEntry" display="TimeEntry"/>  
+  <State name="Settings" display="Settings"/>
+  <State name="Credentials" display="Credentials"/>
+
+  <Transition name="Login" origin="LoggedOff" destination="Auth" order="0" />
+  <Transition name="NoAuth" origin="Auth" destination="NoAuth" order="0" />
+  <Transition name="Logoff" origin="NoAuth" destination="LoggedOff" order="0" />
+  <Transition name="Startup" origin="Auth" destiniation="Startup" order="0" />
+
+  <Transition name="Dashboard" origin="Startup" destination="Dashboard" order="0"/>
+  <Transition name="Content" origin="Startup" destination="Content" order="0"/>
+  <Transition name="Tasks" origin="Startup" destination="Tasks" order="0"/>
+  <Transition name="Todos" origin="Startup" destination="Todos" order="0"/>
+  <Transition name="Projects" origin="Startup" destination="Projects" order="0"/>
+  <Transition name="TimeEntry" origin="Startup" destination="TimeEntry" order="0"/>
+
+
+  <Transition name="Tasks" origin="Content" destination="Tasks" order="0"/>
+  <Transition name="Todos" origin="Content" destination="Todos" order="0"/>
+  <Transition name="Projects" origin="Content" destination="Projects" order="0"/>
+  <Transition name="TimeEntry" origin="Content" destination="TimeEntry" order="0"/>
+  <Transition name="Settings " origin="Content" destination="Settings" order="0"/>
+  <Transition name="Logoff" origin="Content" destination="Logoff" order="0" />
+
+  <Transition name="Content" origin="Tasks" destination="Content" order="0"/>
+  <Transition name="Todos" origin="Tasks" destination="Todos" order="0"/>
+  <Transition name="Projects" origin="Tasks" destination="Projects" order="0"/>
+  <Transition name="TimeEntry" origin="Tasks" destination="TimeEntry" order="0"/>
+  <Transition name="Settings " origin="Tasks" destination="Settings" order="0"/>
+  <Transition name="Logoff" origin="Tasks" destination="Logoff" order="0" />
+  
+  <Transition name="Content" origin="Todos" destination="Content" order="0"/>
+  <Transition name="Tasks" origin="Todos" destination="Tasks" order="0"/>
+  <Transition name="Projects" origin="Todos" destination="Projects" order="0"/>
+  <Transition name="TimeEntry" origin="Todos" destination="TimeEntry" order="0"/>
+  <Transition name="Settings " origin="Todos" destination="Settings" order="0"/>
+  <Transition name="Logoff" origin="Todos" destination="Logoff" order="0" />
+
+  <Transition name="Content" origin="Projects" destination="Content" order="0"/>
+  <Transition name="Tasks" origin="Projects" destination="Tasks" order="0"/>
+  <Transition name="Todos" origin="Projects" destination="Todos" order="0"/>
+  <Transition name="TimeEntry" origin="Projects" destination="TimeEntry" order="0"/>
+  <Transition name="Settings " origin="Projects" destination="Settings" order="0"/>
+  <Transition name="Logoff" origin="Projects" destination="Logoff" order="0" />
+  
+  <Transition name="Content" origin="TimeEntry" destination="Content" order="0"/>
+  <Transition name="Tasks" origin="TimeEntry" destination="Tasks" order="0"/>
+  <Transition name="Todos" origin="TimeEntry" destination="Todos" order="0"/>
+  <Transition name="Projects" origin="TimeEntry" destination="Projects" order="0"/>
+  <Transition name="Settings " origin="TimeEntry" destination="Settings" order="0"/>
+  <Transition name="Logoff" origin="TimeEntry" destination="Logoff" order="0" />
+  
+</StateMachine>

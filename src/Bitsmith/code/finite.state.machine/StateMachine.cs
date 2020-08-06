@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 using System.Xml.Serialization;
 
 namespace Bitsmith
@@ -74,9 +75,26 @@ namespace Bitsmith
             BeginState = document.Root.Attribute("beginState").Value;
             string endState = document.Root.Attribute("endState").Value;
             EndStates.Add(endState);
-            States = (from x in document.Descendants("State")
-                       select new State() { Name = x.Attribute("name").Value, Display = x.Attribute("display").Value }).ToList();
+            States = new List<State>();
+            //States = (from x in document.Descendants("State")
 
+            //           select new State() { Name = x.Attribute("name").Value, Display = x.Attribute("display").Value }).ToList();
+            foreach (var x in document.Descendants("State"))
+            {
+               
+                var state = new State() { Name = x.Attribute("name").Value, Display = x.Attribute("display").Value }; 
+                var isnav = x.Attribute("isNavigate");
+                if (isnav != null && Boolean.TryParse( isnav.Value, out bool isNav))
+                {
+                    state.IsNavigate = isNav;
+                    var order = x.Attribute("order");
+                    if (order != null && Int32.TryParse(order.Value, out int i))
+                    {
+                        state.SortOrder = i;
+                    }
+                }
+                States.Add(state);
+            }
 
             Transitions = (from x in document.Descendants("Transition")
                            select new Transition() { Name = x.Attribute("name").Value,
@@ -84,6 +102,7 @@ namespace Bitsmith
                                 DestinationState = x.Attribute("destination").Value,
                                 SortOrder = Convert.ToInt32(x.Attribute("order").Value)
                            }).ToList();
+
         }
 
 
@@ -98,7 +117,7 @@ namespace Bitsmith
             {
                 throw new ArgumentOutOfRangeException("Current State cannot be null");
             }
-            return GetState(statename);
+            return GetState(statename);         
         }
 
         public State GetState(string stateName)

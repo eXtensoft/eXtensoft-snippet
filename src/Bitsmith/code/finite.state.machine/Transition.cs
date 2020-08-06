@@ -56,29 +56,32 @@ namespace Bitsmith
                 }
             }
             State destination = stateMachine.GetState(DestinationState);
-            if (destination.EndpointActions != null)
+            if (destination != null)
             {
-                var destinationactions = destination.EndpointActions.Where(x => x.Endpoint == EndpointOption.Arrival);
-                if (destinationactions != null)
+                if (destination.EndpointActions != null)
                 {
-                    foreach (var item in destinationactions)
+                    var destinationactions = destination.EndpointActions.Where(x => x.Endpoint == EndpointOption.Arrival);
+                    if (destinationactions != null)
                     {
-                        item.Execute();
+                        foreach (var item in destinationactions)
+                        {
+                            item.Execute();
+                        }
                     }
                 }
-            }
-            if (EndpointActions != null)
-            {
-                var arrivalactions = EndpointActions.Where(x => x.Endpoint == EndpointOption.Arrival);
-                if (arrivalactions != null)
+                if (EndpointActions != null)
                 {
-                    foreach (var item in arrivalactions)
+                    var arrivalactions = EndpointActions.Where(x => x.Endpoint == EndpointOption.Arrival);
+                    if (arrivalactions != null)
                     {
-                        item.Execute();
+                        foreach (var item in arrivalactions)
+                        {
+                            item.Execute();
+                        }
                     }
                 }
+                stateMachine.CurrentState = DestinationState;
             }
-            stateMachine.CurrentState = DestinationState;
         }
 
         public Transition() { }

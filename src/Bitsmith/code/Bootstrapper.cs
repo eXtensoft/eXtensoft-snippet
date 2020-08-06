@@ -38,11 +38,9 @@ namespace Bitsmith
 
         public static StateManager StateMachine()
         {
-            XDocument doc = XDocument.Parse(Resources.statemachine);
-            return new StateManager()
-            {
-                Machine = new StateMachine(doc)
-            };
+            XDocument doc = XDocument.Parse(Resources.simple_state_machine);
+            return new StateManager().Initialize(doc);
+
         }
     }
 }

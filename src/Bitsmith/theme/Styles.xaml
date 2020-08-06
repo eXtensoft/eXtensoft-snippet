@@ -12,6 +12,16 @@
         <Setter Property="HorizontalAlignment" Value="Right"/>
     </Style>
 
+    <Style TargetType="RadioButton">
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="TextBlock.Foreground" Value="{StaticResource ResourceKey=Hover}"/>
+                <Setter Property="TextBlock.FontWeight" Value="Normal"/>
+                <Setter Property="TextBlock.Opacity" Value="1.0"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <Style x:Key="CommandToggleButton" TargetType="ToggleButton">
         <Setter Property="Template">
             <Setter.Value>
@@ -27,13 +37,60 @@
         <Setter Property="Cursor" Value="Hand"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="true">
-                <Setter Property="Foreground" Value="{StaticResource ResourceKey=CommandHover}"/>
+                <Setter Property="Foreground" Value="{StaticResource ResourceKey=CommandHoverEnabled}"/>
             </Trigger>
             <Trigger Property="IsEnabled" Value="false">
                 <Setter Property="Foreground" Value="{StaticResource ResourceKey=CommandDisabled}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
+
+    <Style x:Key="MenuCommandButton" TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <TextBlock><ContentPresenter/></TextBlock>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+        <Setter Property="FontWeight" Value="ExtraBold"/>
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="Foreground" Value="{StaticResource ResourceKey=MenuCommandMedium}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource ResourceKey=MenuCommandEnabled}"/>
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsMouseOver" Value="true"/>
+                    <Condition Property="IsEnabled" Value="true"/>
+                </MultiTrigger.Conditions>
+                <MultiTrigger.Setters>
+                    <Setter Property="Foreground" Value="{StaticResource ResourceKey=MenuCommandHoverEnabled}"/>
+                </MultiTrigger.Setters>
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsMouseOver" Value="true"/>
+                    <Condition Property="IsEnabled" Value="false"/>
+                </MultiTrigger.Conditions>
+                <MultiTrigger.Setters>
+                    <Setter Property="Foreground" Value="{StaticResource ResourceKey=MenuCommandHoverDisabled}"/>
+                </MultiTrigger.Setters>
+            </MultiTrigger>            
+            <DataTrigger Binding="{Binding Path=DataContext.IsCurrent, RelativeSource={RelativeSource Self}}" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource ResourceKey=MenuCommandActive}"/>
+            </DataTrigger>
+
+        </Style.Triggers>
+    </Style>
+
+
+
+
 
     <Style x:Key="CommandButton" TargetType="Button">
         <Setter Property="Template">
@@ -49,14 +106,32 @@
         <Setter Property="Foreground" Value="{StaticResource ResourceKey=CommandMedium}"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="true">
-                <Setter Property="Foreground" Value="{StaticResource ResourceKey=CommandHover}"/>
+            <Trigger Property="IsEnabled" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource ResourceKey=CommandEnabled}"/>
             </Trigger>
-            <Trigger Property="IsEnabled" Value="false">
-                <Setter Property="Foreground" Value="{StaticResource ResourceKey=CommandDisabled}"/>
-            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsMouseOver" Value="true"/>
+                    <Condition Property="IsEnabled" Value="true"/>
+                </MultiTrigger.Conditions>
+                <MultiTrigger.Setters>
+                    <Setter Property="Foreground" Value="{StaticResource ResourceKey=CommandHoverEnabled}"/>
+                </MultiTrigger.Setters>
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsMouseOver" Value="true"/>
+                    <Condition Property="IsEnabled" Value="false"/>
+                </MultiTrigger.Conditions>
+                <MultiTrigger.Setters>
+                    <Setter Property="Foreground" Value="{StaticResource ResourceKey=CommandHoverDisabled}"/>
+                </MultiTrigger.Setters>
+            </MultiTrigger>
         </Style.Triggers>
     </Style>
+
+
+    
 
     <Style x:Key="IconCommandButton" TargetType="Button" BasedOn="{StaticResource CommandButton}">
         <Setter Property="Content" Value="X"/>
@@ -66,9 +141,16 @@
     <Style x:Key="RefreshCommandButton" TargetType="Button" BasedOn="{StaticResource CommandButton}">
         <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
         <Setter Property="Content" Value="&#xE895;"/>
+        <!--<Setter Property="Content" Value="&#xE117;"/>-->
         <Setter Property="FontWeight" Value="ExtraBold"/>
     </Style>
-
+    
+    <Style x:Key="SettingsCommandButton" TargetType="Button" BasedOn="{StaticResource CommandButton}">
+        <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+        <Setter Property="Content" Value="&#xE713;"/>
+        <Setter Property="FontWeight" Value="ExtraBold"/>
+    </Style>
+    
     <Style x:Key="DownloadCommandButton" TargetType="Button" BasedOn="{StaticResource CommandButton}">
         <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
         <Setter Property="Content" Value="&#xE897;"/>
@@ -78,6 +160,7 @@
     <Style x:Key="UploadCommandButton" TargetType="Button" BasedOn="{StaticResource CommandButton}">
         <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
         <Setter Property="Content" Value="&#xE89;"/>
+        <!--<Setter Property="Content" Value="&#xE11C;"/>-->
         <Setter Property="FontWeight" Value="ExtraBold"/>
     </Style>
 
@@ -86,9 +169,15 @@
         <Setter Property="Content" Value="&#xE8AB;"/>
         <Setter Property="FontWeight" Value="ExtraBold"/>
     </Style>
+    <Style x:Key="SwitchCommandButton" TargetType="Button" BasedOn="{StaticResource CommandButton}">
+        <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+        <Setter Property="Content" Value="&#xE14C;"/>
+        <Setter Property="FontWeight" Value="ExtraBold"/>
+    </Style>
     <Style x:Key="DetailsCommandButton" TargetType="Button" BasedOn="{StaticResource CommandButton}">
         <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
-        <Setter Property="Content" Value="&#xE721;"/>
+        <!--<Setter Property="Content" Value="&#xE721;"/>-->
+        <Setter Property="Content" Value="&#xE109;"/>
         <Setter Property="FontWeight" Value="ExtraBold"/>
     </Style>
     <Style x:Key="KeyCommandButton" TargetType="Button" BasedOn="{StaticResource CommandButton}">
@@ -123,10 +212,64 @@
     </Style>
     <Style x:Key="SearchCommandButton" TargetType="Button" BasedOn="{StaticResource CommandButton}">
         <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
-        <Setter Property="Content" Value="&#xE711;"/>
+        <Setter Property="Content" Value="&#xE721;"/>
         <Setter Property="FontWeight" Value="ExtraBold"/>
     </Style>
 
+    <Style x:Key="PlayCommandButton" TargetType="Button" BasedOn="{StaticResource CommandButton}">
+        <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+        <Setter Property="Content" Value="&#xE768;"/>
+        <Setter Property="FontWeight" Value="ExtraBold"/>
+    </Style>
+    <Style x:Key="PauseCommandButton" TargetType="Button" BasedOn="{StaticResource CommandButton}">
+        <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+        <Setter Property="Content" Value="&#xE769;"/>
+        <Setter Property="FontWeight" Value="ExtraBold"/>
+    </Style>
+    <Style x:Key="StopCommandButton" TargetType="Button" BasedOn="{StaticResource CommandButton}">
+        <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+        <Setter Property="Content" Value="&#xE71A;"/>
+        <Setter Property="FontWeight" Value="ExtraBold"/>
+    </Style>
+    <Style x:Key="TrashCommandButton" TargetType="Button" BasedOn="{StaticResource CommandButton}">
+        <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+        <Setter Property="Content" Value="&#xE74D;"/>
+        <Setter Property="FontWeight" Value="ExtraBold"/>
+    </Style>
+    
+    
+    <!-- Navigation States-->
+    
+    <Style x:Key="ContentStateCommandButton" TargetType="Button" BasedOn="{StaticResource CommandButton}">
+        <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+        <Setter Property="Content" Value="&#xE929;"/>
+        <Setter Property="FontWeight" Value="ExtraBold"/>
+    </Style>    
+    
+    <Style x:Key="TaskStateCommandButton" TargetType="Button" BasedOn="{StaticResource CommandButton}">
+        <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+        <Setter Property="Content" Value="&#xE8FD;"/>
+        <Setter Property="FontWeight" Value="ExtraBold"/>
+    </Style>    
+    
+    <Style x:Key="TimekeepingStateCommandButton" TargetType="Button" BasedOn="{StaticResource CommandButton}">
+        <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+        <Setter Property="Content" Value="&#xE916;"/>
+        <Setter Property="FontWeight" Value="ExtraBold"/>
+    </Style>
+    
+    <Style x:Key="ListsStateCommandButton" TargetType="Button" BasedOn="{StaticResource CommandButton}">
+        <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+        <Setter Property="Content" Value="&#xE8FD;"/>
+        <Setter Property="FontWeight" Value="ExtraBold"/>
+    </Style> 
+    
+    <Style x:Key="ExitAppCommandButton" TargetType="Button" BasedOn="{StaticResource CommandButton}">
+        <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+        <Setter Property="Content" Value="&#xE894;"/>
+        <Setter Property="FontWeight" Value="ExtraBold"/>
+    </Style>     
+    
     <Style TargetType="Button">
         <Setter Property="Template">
             <Setter.Value>
@@ -147,8 +290,21 @@
         </Style.Triggers>
     </Style>
 
+    <Style TargetType="{x:Type ListBox}" x:Key="TagListItem">
+        <Style.Resources>
+            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Lime" />
+            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="DarkRed"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent"/>
+        </Style.Resources>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="FontSize" Value="10"/>
+       
 
-    <Style TargetType="{x:Type ListBoxItem}">
+    </Style>
+
+
+
+    <Style TargetType="{x:Type ListBoxItem}" >
         <Style.Resources>
             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Silver" />
             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black"/>
@@ -183,6 +339,129 @@
                 <Setter Property="Background" Value="{StaticResource ResourceKey=SystemColors.HighlightBrushKey}"/>
             </Trigger>-->
         </Style.Triggers>
+    </Style>
+
+
+
+    <Style x:Key="TagListBox"
+       TargetType="ListBox">
+        <Setter Property="SnapsToDevicePixels"
+          Value="true" />
+        <Setter Property="OverridesDefaultStyle"
+          Value="true" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility"
+          Value="Auto" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility"
+          Value="Auto" />
+        <Setter Property="ScrollViewer.CanContentScroll"
+          Value="true" />
+        <Setter Property="MinWidth"
+          Value="120" />
+        <Setter Property="MinHeight"
+          Value="95" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBox">
+                    
+                    <Border Name="Border" BorderThickness="0" CornerRadius="2">
+                        <Border.Background>
+                            <SolidColorBrush Color="{StaticResource ControlLightColor}" />
+                        </Border.Background>
+                        <Border.BorderBrush>
+                            <SolidColorBrush Color="{StaticResource BorderMediumColor}" />
+                        </Border.BorderBrush>
+                        <ScrollViewer Margin="0"
+                        Focusable="false">
+                            <StackPanel Margin="2"
+                        IsItemsHost="True" />
+                        </ScrollViewer>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter TargetName="Border" Property="Background">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="{StaticResource DisabledControlLightColor}" />
+                                </Setter.Value>
+                            </Setter>
+                            <Setter TargetName="Border" Property="BorderBrush">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="{DynamicResource DisabledBorderLightColor}" />
+                                </Setter.Value>
+
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsGrouping" Value="true">
+                            <Setter Property="ScrollViewer.CanContentScroll" Value="false" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <WrapPanel MaxHeight="60" MaxWidth="500" Background="Transparent"/>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style x:Key="TagListBoxItem"
+       TargetType="ListBoxItem">
+        <Setter Property="SnapsToDevicePixels"
+          Value="true" />
+        <Setter Property="OverridesDefaultStyle"
+          Value="true" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Border x:Name="Border"
+                Padding="2"
+                SnapsToDevicePixels="true">
+                        <Border.Background>
+                            <SolidColorBrush Color="Transparent" />
+                        </Border.Background>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="SelectionStates">
+                                <VisualState x:Name="Unselected" />
+                                <VisualState x:Name="Selected">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0" Value="{StaticResource SelectedBackgroundColor}" />
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="SelectedUnfocused">
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
+                                                Storyboard.TargetProperty="(Panel.Background). (SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0" Value="{StaticResource SelectedUnfocusedColor}" />
+                                        </ColorAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <ContentPresenter />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="Border" x:Key="TagBorder">
+        <Setter Property="CornerRadius" Value="5"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderBrush" Value="DarkGray"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="#B8B8B8"/>
+                <Setter Property="Background" Value="Gainsboro"/>
+            </Trigger>
+        </Style.Triggers>
+
+
     </Style>
 
 

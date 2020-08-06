@@ -5,6 +5,10 @@ VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bitsmith", "src\Bitsmith\Bitsmith.csproj", "{B3A1F5EE-B572-4B89-AC1E-1BF0FD9FD935}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Biblio", "src\Biblio\Biblio.csproj", "{121AA892-6730-4A66-967E-302D0079F8EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bitsmythe", "src\Bitsmythe\Bitsmythe.csproj", "{CCE736F8-EEB2-4CCB-945D-B77DDE30477A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{B3A1F5EE-B572-4B89-AC1E-1BF0FD9FD935}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3A1F5EE-B572-4B89-AC1E-1BF0FD9FD935}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3A1F5EE-B572-4B89-AC1E-1BF0FD9FD935}.Release|Any CPU.Build.0 = Release|Any CPU
+		{121AA892-6730-4A66-967E-302D0079F8EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{121AA892-6730-4A66-967E-302D0079F8EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{121AA892-6730-4A66-967E-302D0079F8EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{121AA892-6730-4A66-967E-302D0079F8EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCE736F8-EEB2-4CCB-945D-B77DDE30477A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCE736F8-EEB2-4CCB-945D-B77DDE30477A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCE736F8-EEB2-4CCB-945D-B77DDE30477A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCE736F8-EEB2-4CCB-945D-B77DDE30477A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

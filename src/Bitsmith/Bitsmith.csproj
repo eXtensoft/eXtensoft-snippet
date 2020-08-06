@@ -64,6 +64,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="code\converters\BooleanToBrushConverter.cs" />
+    <Compile Include="code\converters\NavMenuItemStyleConverter.cs" />
+    <Compile Include="code\finite.state.machine\navigation\NavMenuItem.cs" />
+    <Compile Include="code\finite.state.machine\StateMachineExtensions.cs" />
+    <Compile Include="code\style.selectors\NavMenuItemStyleSelector.cs" />
+    <Compile Include="code\ViewManager.cs" />
     <Compile Include="modules\.common\view.models\base\GroupingViewModel`1.cs" />
     <Compile Include="modules\chronos\models\aggregation\AggregationOption.cs" />
     <Compile Include="modules\styx\models\designer\GraphTemplate.cs" />
@@ -194,6 +199,9 @@
     </Compile>
     <Compile Include="modules\project.management\views\TaskItemDetailsView.xaml.cs">
       <DependentUpon>TaskItemDetailsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="view\NavigationMenu.xaml.cs">
+      <DependentUpon>NavigationMenu.xaml</DependentUpon>
     </Compile>
     <Compile Include="view\state.management\ErrorView.xaml.cs">
       <DependentUpon>ErrorView.xaml</DependentUpon>
@@ -505,6 +513,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="view\NavigationMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="view\state.management\ErrorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -723,6 +735,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="modules\styx\code\design.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="data\nav-state-machine.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="data\simple-state-machine.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -7,9 +7,36 @@
         Closing="WindowBase_Closing" Loaded="WindowBase_Loaded"
         Title="{x:Static local:ConfigValueProvider.ShellTitle}"
         mc:Ignorable="d">
-    <Grid x:Name="grdRoot">
+    <Window.Resources>
+        <Style x:Key="NavCommandButton" BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
+
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="Red"/>
+            <Style.Triggers>
+                <Trigger Property="Tag" Value="True">
+                    <Setter Property="Foreground" Value="Black"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
+        <Grid x:Name="grdRoot" Grid.RowSpan="3">
+
+        </Grid>
+
+        <Border x:Name="brdMenu" Grid.Row="1" HorizontalAlignment="Left" Margin="-40,0,0,0" >
+            <local:NavigationMenu/>
+        </Border>
 
     </Grid>
+
 </local:WindowBase>
     
     <!-- 

@@ -31,6 +31,12 @@ namespace Bitsmith
         }
         #endregion
 
+        [XmlAttribute("isNav")]
+        public bool IsNavigate { get; set; } = false;
+
+        [XmlAttribute("order")]
+        public int SortOrder { get; set; } = 0;
+
         [XmlIgnore]
         public List<IEndpointAction> EndpointActions { get; set; }
 
