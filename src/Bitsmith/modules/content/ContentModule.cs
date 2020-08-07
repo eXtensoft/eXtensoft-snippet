@@ -25,6 +25,22 @@ namespace Bitsmith.ViewModels
         internal ContentManager ContentManager { get; set; }
         public ObservableCollection<MimeMapViewModel> Mimes { get; set; }
 
+
+        private bool _IsTagsExpanded = false;
+        public bool IsTagsExpanded
+        {
+            get
+            {
+                return _IsTagsExpanded;
+            }
+            set
+            {
+                _IsTagsExpanded = value;
+                OnPropertyChanged("IsTagsExpanded");
+            }
+        }
+
+
         private int _SelectedIndex = 1;
         public int SelectedIndex
         {

@@ -66,6 +66,7 @@
     <SolidColorBrush x:Key="MenuCommandHoverEnabled" Color="#1D568B"/>
     <SolidColorBrush x:Key="MenuCommandHoverDisabled" Color="Transparent" />
 
+    <SolidColorBrush x:Key="RemoveHoverForeground" Color="Red"/>
 
     <Color x:Key="SelectedBackgroundColor">Transparent</Color>
     <Color x:Key="SelectedUnfocusedColor">Transparent</Color>

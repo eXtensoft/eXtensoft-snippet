@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Bitsmith"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <local:TagConverter x:Key="cnvNewTags"/>
@@ -12,12 +12,12 @@
         <local:BoolToVisibilityConverter x:Key="cvtBool2Visibility"/>
         <local:BoolToVisibilityConverter x:Key="cvtBool2VisibilityReverse" IsReverse="True"/>
     </UserControl.Resources>
-        <Grid Margin="10" DataContext="{Binding Path=Content}">
+        <Grid Margin="10,20,10,5" DataContext="{Binding Path=Content}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
+
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -76,83 +76,69 @@
 
         <Label Grid.Column="0" Grid.Row="2" Content="Tags:" HorizontalAlignment="Right"/>
         <Label Grid.Column="0" Grid.Row="4" Content="Title:" HorizontalAlignment="Right"/>
-            
-        <Expander x:Name="expTags" Grid.Column="3"  Grid.Row="0" Grid.RowSpan="5" HorizontalAlignment="Center">
-            <Expander.Header>
-                <StackPanel Orientation="Horizontal" IsEnabled="{Binding ElementName=expTags,Path=IsExpanded}">
-                    <RadioButton Content="Recent" Name="rdoRecent" GroupName="tags"/>
-                    <RadioButton Content="Popular" Name="rdoPopular" GroupName="tags" IsChecked="True"/>
-                    <!--<RadioButton Content="List" Name="rdoList" GroupName="tags"/>-->
-                </StackPanel>
-            </Expander.Header>
+
+        <Expander x:Name="expTags" Grid.Column="2"  Grid.Row="0" ExpandDirection="Right" IsExpanded="{Binding Path=IsTagsExpanded}">
             <Expander.Content>
-                <StackPanel>
-                    <ListBox x:Name="lsbRecentTags" Visibility="{Binding ElementName=rdoRecent, Path=IsChecked, Converter={StaticResource cvtBool2Visibility}}" 
-                              Style="{StaticResource TagListItem}"
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <ListBox Grid.Column="1" x:Name="lsbRecentTags" Visibility="{Binding ElementName=rdoRecent, Path=IsChecked, Converter={StaticResource cvtBool2Visibility}}" 
+                             Style="{StaticResource TagsListBox}" ItemContainerStyle="{StaticResource TagsListBoxItem}"
                              ItemsSource="{Binding Path=Resolver.Recent}" SelectedItem="{Binding Path=Input.SelectedTag, Mode=OneWayToSource}">
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <WrapPanel MaxHeight="60" MaxWidth="500"/>
+                                <StackPanel Orientation="Horizontal"/>
                             </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Border Style="{StaticResource ResourceKey=TagBorder}">
                                     <DockPanel LastChildFill="True">
-                                        <Button DockPanel.Dock="Right" 
-                                                Style="{StaticResource RemoveCommandButton}" 
+                                        <Button DockPanel.Dock="Right" Margin="0,0,5,0"
+                                                Style="{StaticResource RemoveTagButton}" 
                                                 Command="{Binding Path=DataContext.Content.RemoveRecentTagCommand, RelativeSource={RelativeSource FindAncestor,AncestorType=UserControl}}"
-                                                CommandParameter="{Binding Path=Key}" 
-                                                FontSize="10" />
-                                        <TextBlock Text="{Binding Path=Key}" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                                                CommandParameter="{Binding Path=Key}" />
+                                    <TextBlock Style="{StaticResource TagTextHover}" Text="{Binding Path=Key}" Margin="5,0"/>
                                     </DockPanel>
                                 </Border>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-                    <ListBox x:Name="lsbPopularTags"                             
-                             Visibility="{Binding ElementName=rdoPopular, Path=IsChecked, Converter={StaticResource cvtBool2Visibility}}" 
-                             ItemContainerStyle="{StaticResource TagListBoxItem}"
+                    <ListBox Grid.Column="1" x:Name="lsbPopularTags" Visibility="{Binding ElementName=rdoPopular, Path=IsChecked, Converter={StaticResource cvtBool2Visibility}}" 
+                             Style="{StaticResource TagsListBox}" ItemContainerStyle="{StaticResource TagsListBoxItem}"
                              ItemsSource="{Binding Path=Resolver.Popular}" SelectedItem="{Binding Path=Input.SelectedTag, Mode=OneWayToSource}">
-                        <ListBox.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel MaxHeight="60" MaxWidth="500"/>
-                            </ItemsPanelTemplate>
-                        </ListBox.ItemsPanel>                        
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Border Style="{StaticResource TagBorder}">
                                     <DockPanel LastChildFill="True">
-                                        <Button DockPanel.Dock="Right" 
-                                                Style="{StaticResource RemoveCommandButton}" 
+                                        <Button DockPanel.Dock="Right" Margin="0,0,5,0"
+                                                Style="{StaticResource RemoveTagButton}" 
                                                 Command="{Binding Path=DataContext.Content.RemovePopularTagCommand, RelativeSource={RelativeSource FindAncestor,AncestorType=UserControl}}" 
-                                                CommandParameter="{Binding Path=Key}"
-                                                FontSize="10"/>
-                                        <TextBlock Text="{Binding Path=Key}" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                                                CommandParameter="{Binding Path=Key}"/>
+                                        <TextBlock Style="{StaticResource TagTextHover}" Text="{Binding Path=Key}"  Margin="5,0" />
                                     </DockPanel>
                                 </Border>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-
-                </StackPanel>
-
-
+                    <StackPanel Orientation="Horizontal" Grid.Column="0">
+                        <RadioButton Content="Popular" Name="rdoPopular" GroupName="tags" IsChecked="True"/>
+                        <RadioButton Content="Recent" Name="rdoRecent" GroupName="tags"/>
+                    </StackPanel>
+                </Grid>
             </Expander.Content>
         </Expander>
 
 
-        <DockPanel Grid.Column="2" 
-                   Grid.Row="2" 
-                   Grid.ColumnSpan="{Binding ElementName=expTags, Path=IsExpanded, Converter={StaticResource cvtBool2Int}}" 
-                   LastChildFill="True" >
+        <DockPanel Grid.Column="2"  Grid.Row="2" LastChildFill="True" >
             <Button Style="{StaticResource RemoveCommandButton}" DockPanel.Dock="Right" Command="{Binding Path=Input.ClearTagsCommand}"/>
             <TextBox Grid.Column="2"  Grid.Row="2" 
                  Grid.ColumnSpan="{Binding ElementName=expTags, Path=IsExpanded, Converter={StaticResource cvtBool2Int}}"
                  Text="{Binding Path=Input.Tags, Converter={StaticResource ResourceKey=cnvNewTags}}" />                      
         </DockPanel>
-        <TextBox Grid.Column="2" Grid.Row="4" Text="{Binding Path=Input.Display, UpdateSourceTrigger=PropertyChanged}"
-                 Grid.ColumnSpan="{Binding ElementName=expTags, Path=IsExpanded, Converter={StaticResource cvtBool2Int}}" />
+        <TextBox Grid.Column="2" Grid.Row="4" Text="{Binding Path=Input.Display, UpdateSourceTrigger=PropertyChanged}" />
         <TextBox Grid.Column="2" Grid.ColumnSpan="2"  Grid.Row="6"  Text="{Binding Path=Input.Body, UpdateSourceTrigger=PropertyChanged}" 
                  Visibility="{Binding ElementName=rdoText, Path=IsChecked, Converter={StaticResource cvtBool2VisibilityReverse}}" />
         <TextBox Grid.Column="2" Grid.ColumnSpan="2"  Grid.Row="6"  Grid.RowSpan="3"

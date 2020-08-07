@@ -45,10 +45,14 @@ namespace Bitsmith
                 string s = value.ToString().Trim().Trim(',');
                 if (!String.IsNullOrEmpty(s))
                 {
+                    HashSet<string> hs = new HashSet<string>();
                     string[] t = s.Split(new char[] { ',',' ',';' },StringSplitOptions.RemoveEmptyEntries);
                     foreach (var item in t)
                     {
-                        list.Add(item.Trim());
+                        if (hs.Add(item))
+                        {
+                            list.Add(item.Trim());
+                        }                        
                     }
                 }
             }
