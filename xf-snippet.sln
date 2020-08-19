@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bitsmith", "src\Bitsmith\Bi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Biblio", "src\Biblio\Biblio.csproj", "{121AA892-6730-4A66-967E-302D0079F8EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bitsmythe", "src\Bitsmythe\Bitsmythe.csproj", "{CCE736F8-EEB2-4CCB-945D-B77DDE30477A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bitsmythe", "src\Bitsmythe\Bitsmythe.csproj", "{CCE736F8-EEB2-4CCB-945D-B77DDE30477A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

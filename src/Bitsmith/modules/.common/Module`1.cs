@@ -8,6 +8,32 @@ namespace Bitsmith.ViewModels
 {
     public class Module<T>  where T : class, new()
     {
+        private UserSettings _UserPreferences;
+        public UserSettings UserPreferences
+        {
+            get
+            {
+                return _UserPreferences;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    _UserPreferences = value;
+                    ApplyPreferences(_UserPreferences);
+                }
+            }
+        }
+
+        protected virtual void ApplyPreferences(UserSettings userPreferences)
+        {
+        }
+
+        internal virtual void SetPreferences()
+        {
+
+        }
+
         protected List<T> Models { get; set; } = new List<T>();
 
         public virtual string Filepath { get; set; } = FileSystemDataProvider.Filepath<T>();

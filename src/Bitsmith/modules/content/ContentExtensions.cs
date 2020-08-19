@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Controls;
 
@@ -78,6 +77,7 @@ namespace Bitsmith.Models
         {
             bool b = vm.Validate();
             item = new ContentItem();
+            var contentType = vm.ContentType;
             if (b)
             {
                 b = !b;
@@ -111,6 +111,18 @@ namespace Bitsmith.Models
                     {
                         item.Body = vm.Body.StartsWith("http://") ? vm.Body : $"http://{vm.Body}";
                     }
+                    else if (vm.Body.Length > contentManager.MaxLength && 
+                        contentManager.TryInloadAsFile(vm.Body, item.Id, out string filename, out FileInfo info))
+                    {
+                        item.Mime = mimes.Resolve(info);
+                        item.Body = filename;
+                        item.Properties.Add(new Property()
+                        {
+                            Name = $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Extension}",
+                            Value = item.Mime
+                        });
+                        b = true;
+                    }
                     else
                     {
                         item.Body = vm.Body;
@@ -118,11 +130,13 @@ namespace Bitsmith.Models
                     item.Mime = vm.Mime;
                     b = true;
                 }
+                
                 vm.Filepath = string.Empty;
                 vm.Display = string.Empty;
                 vm.Body = string.Empty;
                 vm.Tags = new List<string>();
                 vm.AddTag(vm.SelectedTag);
+                vm.ContentType = contentType;
             }
             return b;
         }

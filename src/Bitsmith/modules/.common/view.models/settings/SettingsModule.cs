@@ -5,10 +5,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Bitsmith.ViewModels
@@ -129,7 +126,19 @@ namespace Bitsmith.ViewModels
             {
                 _Settings = Models[0];
             }
-
+            if (_Settings.UserPreferences == null)
+            {
+                _Settings.UserPreferences = new List<UserSettings>();
+                var current = new UserSettings().Default();
+                _Settings.UserPreferences.Add(current);
+            }
+            var preferences = _Settings.UserPreferences.FirstOrDefault(x => x.Username.Equals(Environment.UserName));
+            if (preferences == null)
+            {
+                preferences = new UserSettings().Default();
+                _Settings.UserPreferences.Add(preferences);
+            }
+            UserPreferences = preferences;
             return b;
         }
 

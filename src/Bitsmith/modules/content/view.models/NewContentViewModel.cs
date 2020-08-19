@@ -10,6 +10,8 @@ namespace Bitsmith.ViewModels
     public class NewContentViewModel : INotifyPropertyChanged
     {
 
+        private const int MaxLength = 300;
+
         private TagMapViewModel _SelectedTag;
         public TagMapViewModel SelectedTag
         {
@@ -172,17 +174,33 @@ namespace Bitsmith.ViewModels
         }
 
         private ContentTypeOption _ContentType = ContentTypeOption.Text;
+        public ContentTypeOption ContentType 
+        {
+            get { return _ContentType; } 
+            set
+            {
+                _ContentType = value;
+                if (_ContentType == ContentTypeOption.Link)
+                {
+                    _Mime = "url";
+                }
+                //IsLink = _ContentType == ContentTypeOption.Link;
+                //IsFile = _ContentType == ContentTypeOption.File;
+                //IsText = _ContentType == ContentTypeOption.Text;
+            }
+        } 
+
         public bool IsLink
         {
             get
             {
-                return _ContentType == ContentTypeOption.Link;
+                return ContentType == ContentTypeOption.Link;
             }
             set
             {
                 if (value)
                 {
-                    _ContentType = ContentTypeOption.Link;
+                    ContentType = ContentTypeOption.Link;
                     _Mime = "url";
                 }
             }
@@ -192,13 +210,13 @@ namespace Bitsmith.ViewModels
         {
             get
             {
-                return _ContentType == ContentTypeOption.File;
+                return ContentType == ContentTypeOption.File;
             }
             set
             {
                 if (value)
                 {
-                    _ContentType = ContentTypeOption.File;
+                    ContentType = ContentTypeOption.File;
                 }
             }
         }
@@ -207,13 +225,13 @@ namespace Bitsmith.ViewModels
         {
             get
             {
-                return _ContentType == ContentTypeOption.Text;
+                return ContentType == ContentTypeOption.Text;
             }
             set
             {
                 if (value)
                 {
-                    _ContentType = ContentTypeOption.Text;
+                    ContentType = ContentTypeOption.Text;
                     Mime = "text";
                 }
             }
@@ -225,6 +243,13 @@ namespace Bitsmith.ViewModels
             b = b ? !string.IsNullOrWhiteSpace(Display) : b;
             b = b ? !string.IsNullOrWhiteSpace(Body) : b;
             b = b ? !string.IsNullOrWhiteSpace(Mime) : b;
+
+            if (Body.Length > MaxLength)
+            {
+
+            }
+
+
 
             return b;
         }

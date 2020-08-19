@@ -9,6 +9,15 @@ namespace Bitsmith
 {
     public static class SettingsExtensions
     {
+
+        public static UserSettings Default(this UserSettings model)
+        {
+            model.CreatedAt = DateTime.Now;
+            model.Machine = Environment.MachineName;
+            model.Username = Environment.UserName;
+
+            return model;
+        }
         public static Settings Default(this Settings model)
         {
             model.Workflows = new List<Workflow>().Default();

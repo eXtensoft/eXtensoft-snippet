@@ -76,6 +76,8 @@ namespace Bitsmith.ViewModels
         public WorkspaceViewModel(Workspace model)
         {
             Overlay.RegisterOverlay(AppConstants.OverlayContent, ShowContentOverlay);
+            Settings = new SettingsModule();
+            Settings.Setup();
 
             Paths = new VirtualPathModule();
             Paths.Setup();
@@ -85,17 +87,18 @@ namespace Bitsmith.ViewModels
 
             Content = new ContentModule();
             Content.Setup(Paths,Mimes);
+            Content.UserPreferences = Settings.UserPreferences;
 
             Credentials = new CredentialsModule();
             Credentials.Setup();
 
             Project = new TasksModule();
             Project.Setup();
+            Project.UserPreferences = Settings.UserPreferences;
 
             Workflow = new WorkflowModule();
 
-            Settings = new SettingsModule();
-            Settings.Setup();
+
 
         }
 
@@ -103,14 +106,17 @@ namespace Bitsmith.ViewModels
         {
             if (Settings.CanSaveWorkspace())
             {
+                
                 Settings.SaveWorkspace();
             }
             if (Content.CanSaveWorkspace())
             {
+                Content.SetPreferences();
                 Content.SaveWorkspace();
             }
             if (Project.CanSaveWorkspace())
             {
+                Project.SetPreferences();
                 Project.SaveWorkspace();
             }
             if (_Chronos != null && Chronos.CanSaveWorkspace())

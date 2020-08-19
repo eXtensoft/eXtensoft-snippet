@@ -6,6 +6,31 @@ namespace Bitsmith.ViewModels
     public class Module : INotifyPropertyChanged
     {
 
+        private UserSettings _UserPreferences;
+        public UserSettings UserPreferences
+        {
+            get
+            {
+                return _UserPreferences;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    _UserPreferences = value;
+                    ApplyPreferences(_UserPreferences);
+                }
+            }
+        }
+
+        protected virtual void ApplyPreferences(UserSettings userPreferences)
+        {
+        }
+
+        internal virtual void SetPreferences()
+        {
+
+        }
 
         public virtual string Filepath { get; set; }
         public bool IsInitialized { get; set; }

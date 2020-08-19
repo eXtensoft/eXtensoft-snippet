@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Bitsmith
 {
@@ -11,6 +12,9 @@ namespace Bitsmith
     {
 
         public List<Workflow> Workflows { get; set; }
+
+        [XmlElement("Preferences")]
+        public List<UserSettings> UserPreferences { get; set; }
 
 
         public Settings()

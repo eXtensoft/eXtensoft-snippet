@@ -32,25 +32,40 @@ namespace Bitsmith
             ContentItemViewModel viewmodel = DataContext as ContentItemViewModel;
             if (viewmodel != null)
             {
-                string directory = Application.Current.Properties[AppConstants.ContentDirectory] as string;
-                if (!String.IsNullOrEmpty(directory))
-                {
-                    string filepath = System.IO.Path.Combine(directory, viewmodel.Body);
-                    if (System.IO.File.Exists(filepath))
-                    {
+                string filepath = System.IO.Path.Combine(AppConstants.ContentDirectory, AppConstants.ContentFiles, viewmodel.Body);
+                if (System.IO.File.Exists(filepath))
+                { 
                         
-                        try
-                        {
-                            System.Diagnostics.Process.Start(filepath);
-                        }
-                        catch (Exception ex)
-                        {
-                            string message = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
-                            MessageBox.Show(message);
-                        }
-
+                    try
+                    {
+                        System.Diagnostics.Process.Start(filepath);
                     }
+                    catch (Exception ex)
+                    {
+                        string message = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                        MessageBox.Show(message);
+                    }                
                 }
+
+                //    string directory = Application.Current.Properties[AppConstants.ContentDirectory] as string;
+                //if (!String.IsNullOrEmpty(directory))
+                //{
+                //    string filepath = System.IO.Path.Combine(directory, viewmodel.Body);
+                //    if (System.IO.File.Exists(filepath))
+                //    {
+                        
+                //        try
+                //        {
+                //            System.Diagnostics.Process.Start(filepath);
+                //        }
+                //        catch (Exception ex)
+                //        {
+                //            string message = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                //            MessageBox.Show(message);
+                //        }
+
+                //    }
+                //}
             }
         }
     }

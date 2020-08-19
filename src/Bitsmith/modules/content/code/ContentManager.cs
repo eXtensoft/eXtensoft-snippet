@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bitsmith.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,6 +12,8 @@ namespace Bitsmith.Models
     {
         public bool IsInitialized { get; private set; } = false;
         public DirectoryInfo ContentDirectory { get; set; }
+
+        public int MaxLength { get; set; } = 300;
         public bool TryInload(FileInfo info, out string filename)
         {
             filename = string.Empty;
@@ -35,6 +38,20 @@ namespace Bitsmith.Models
         }
 
 
+        internal bool TryInloadAsFile(string body, string id, out string filename, out FileInfo info)
+        {
+            bool b = false;
+            info = null;
+            filename = $"{id}.txt";
+            if (IsInitialized)
+            {
+                string fullFilepath = Path.Combine(ContentDirectory.FullName, filename);
+                info = new FileInfo(filename);               
+                File.WriteAllText(fullFilepath, body);
+                b = true;
+            }
+            return b;
+        }
 
         public ContentManager(string folderpath)
         {
@@ -50,6 +67,7 @@ namespace Bitsmith.Models
                 IsInitialized = true;
             }
         }
-        
+
+
     }
 }

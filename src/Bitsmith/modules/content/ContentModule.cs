@@ -829,6 +829,19 @@ namespace Bitsmith.ViewModels
             Filepath = Path.Combine(AppConstants.ContentDirectory, FileSystemDataProvider.Filepath<Content>());
         }
 
+        protected override void ApplyPreferences(UserSettings userPreferences)
+        {
+            if (userPreferences.TryGet<ContentTypeOption>("content-module","content-type", out ContentTypeOption option))
+            {
+                Input.ContentType = option;
+            }
+        }
+
+        internal override void SetPreferences()
+        {
+            UserPreferences.EnsurePreference("content-module", "content-type", Input.ContentType);
+        }
+
         protected override bool SaveData()
         {
             if (model !=null)
