@@ -13,12 +13,13 @@ namespace Bitsmith
         [XmlAttribute("group")]
         public string Group {get;set;}
 
-        [XmlElement]
+        [XmlAttribute("key")]
         public string Key { get; set; }
 
         [XmlElement]
         public object Value { get; set; }
 
+        [XmlAttribute("effective")]
         public DateTime Effective { get; set; }
 
         [XmlIgnore]

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Lifetime;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -46,6 +47,34 @@ namespace Bitsmith.Models
         {
             string output = !String.IsNullOrWhiteSpace(text) ? text.Trim().Replace("  ", " ").Replace(" ", "-").ToLower() : string.Empty;
             return output;
+        }
+        public static string CamelToKebab(this string text)
+        {
+            StringBuilder sb = new StringBuilder();
+            if (!String.IsNullOrWhiteSpace(text))
+            {
+                string s = !String.IsNullOrWhiteSpace(text) ? text.Trim().Replace("  ", " ").Replace(" ", "-") : string.Empty;
+                var array = s.ToCharArray();
+                for (int i = 0; i < array.Length; i++)
+                {
+                    if (i == 0)
+                    {
+
+                    }
+                    else if(Char.IsUpper(array[i]))
+                    {
+                        sb.Append("-");                        
+                    }
+                    sb.Append(array[i].ToString().ToLower());
+
+                }
+            }
+            else
+            {
+                return text;
+            }
+            return sb.ToString();
+
         }
 
     }

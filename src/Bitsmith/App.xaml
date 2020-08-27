@@ -14,6 +14,7 @@
             </ResourceDictionary.MergedDictionaries>
             <!--<local:BooleanToStringConverter x:Key="BoolToStringConverter"/>-->
             <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
+            <local:BoolToVisibilityConverter x:Key="cvtBool2Visibility"/>
             <local:BoolToVisibilityConverter x:Key="ReverseVisibility" IsReverse="true" />
                 <local:BooleanToBrushConverter x:Key="Bool2Brush"/>
             <local:TagsConverter x:Key="cvtTags"/>

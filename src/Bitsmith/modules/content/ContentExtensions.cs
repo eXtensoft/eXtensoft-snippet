@@ -11,6 +11,27 @@ namespace Bitsmith.Models
 {
     public static class ContentExtensions
     {
+
+        public static int Total(this List<Counter> list, string domainId = AppConstants.Default)
+        {
+            int i = 0;
+            list.ForEach((item) => { i += item.Count; });
+            return i;
+        }
+        public static bool InDomain(this ContentItem item, string domain)
+        { 
+            return item.Properties.Any((p)=>
+            { 
+                return p.Name.Equals("x-domain") && 
+                p.Value.ToString().Equals(domain, StringComparison.OrdinalIgnoreCase); 
+            });
+        }
+
+        public static List<ContentItem> ForDomain(this List<ContentItem> superset, string domain)
+        {
+            return (!string.IsNullOrWhiteSpace(domain) ? superset.Where(x => x.InDomain(domain)) : superset).ToList();
+        }
+
         public static bool Includes(this ContentItem model, List<QueryExpression> list)
         {
             bool b = false;

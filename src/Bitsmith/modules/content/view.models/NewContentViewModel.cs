@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Bitsmith.ViewModels
@@ -61,6 +62,69 @@ namespace Bitsmith.ViewModels
             OnPropertyChanged("Tags");
             SelectedTag = null;
         }
+
+        private ICommand _CycleTagsCommand;
+        public ICommand CycleTagsCommand
+        {
+            get
+            {
+                if (_CycleTagsCommand == null)
+                {
+                    _CycleTagsCommand = new RelayCommand(
+                    param => CycleTags(),
+                    param => CanCycleTags());
+                }
+                return _CycleTagsCommand;
+            }
+        }
+        private bool CanCycleTags()
+        {
+            return true;
+        }
+        private void CycleTags()
+        {
+            _TagsIndex = _TagsIndex < _TagsMax ? _TagsIndex + 1 : 0;
+            OnPropertyChanged("IsTagsRecent");
+            OnPropertyChanged("IsTagsPopular");
+            OnPropertyChanged("TagsExpander");
+        }
+
+        private int _TagsMax = 2;
+        private int _TagsIndex = 0;
+
+        private static Dictionary<int, string> tagmaps = new Dictionary<int, string>()
+        {
+            {0, "../../../content/icons/tag-black-basic.png" },
+            {1, "../../../content/icons/tag-black-list.png" },
+            {2, "../../../content/icons/tag-black-star.png" },
+        };
+        public string TagsExpander
+        {
+            get
+            {
+                return tagmaps[_TagsIndex];
+            }
+            set { }
+        }
+        
+
+        public Visibility IsTagsRecent
+        {
+            get
+            {
+                return _TagsIndex == 1 ? Visibility.Visible : Visibility.Collapsed;
+            }
+
+        }
+
+        public Visibility IsTagsPopular
+        {
+            get
+            {
+                return _TagsIndex == 1 ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
 
         public bool HasFile
         {

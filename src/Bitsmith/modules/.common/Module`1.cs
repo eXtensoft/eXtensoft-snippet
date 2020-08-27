@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bitsmith.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
@@ -6,8 +7,16 @@ using System.Windows.Input;
 
 namespace Bitsmith.ViewModels
 {
+
     public class Module<T>  where T : class, new()
     {
+
+        protected virtual string ModuleKey
+        {
+            get { return this.GetType().Name.CamelToKebab(); }
+
+        }
+
         private UserSettings _UserPreferences;
         public UserSettings UserPreferences
         {

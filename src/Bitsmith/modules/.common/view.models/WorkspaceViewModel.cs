@@ -85,9 +85,9 @@ namespace Bitsmith.ViewModels
             Mimes = new MimeModule();
             Mimes.Setup();
 
-            Content = new ContentModule();
-            Content.Setup(Paths,Mimes);
-            Content.UserPreferences = Settings.UserPreferences;
+            Content = new ContentModule() { UserPreferences = Settings.UserPreferences };
+            Content.Setup(Paths,Mimes,Settings);
+            //Content.UserPreferences = Settings.UserPreferences;
 
             Credentials = new CredentialsModule();
             Credentials.Setup();

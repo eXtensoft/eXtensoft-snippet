@@ -420,7 +420,7 @@ namespace Bitsmith.ViewModels
         private List<ContentItemViewModel> Search(List<string> list)
         {
             List<ContentItemViewModel> result = null;
-            
+
             if (list.Contains("all"))
             {
                 result = new List<ContentItemViewModel>(from x in model.Items select new ContentItemViewModel(x));
@@ -446,20 +446,22 @@ namespace Bitsmith.ViewModels
 
             }
             else
-            {
-                if (IsTagSearch)
+            {                
+                // for a given domain, execute a query;
+                var domain = SelectedDomain.Id;       
+                if (IsTagSearch) // tag search
                 {
-                    var found = model.Items.Where(x => x.Includes((from s in list select new QueryExpression(s)).ToList())).OrderBy(z => z.Display).ToList();
+                                 
+                    var found = model.Items.ForDomain(domain).Where(x => x.Includes((from s in list select new QueryExpression(s)).ToList())).OrderBy(z => z.Display).ToList();
                     result = new List<ContentItemViewModel>(from f in found select new ContentItemViewModel(f));
                 }
-                else // is fulltext search
+                else // fulltext search
                 {
                     IEnumerable<string> ids = Indexer.Query(list);
-                    var found = model.Items.Where(x => ids.Contains(x.Id)).OrderBy(z=>z.Display).ToList();
+                    var found = model.Items.ForDomain(domain).Where(x => ids.Contains(x.Id)).OrderBy(z=>z.Display).ToList();
                     result = new List<ContentItemViewModel>(from f in found select new ContentItemViewModel(f) {SearchTerm = list[0] });
                 }
-                // for a given domain, execute a query;
-                // either tag or fulltext
+
             }
 
             if (result == null)
@@ -487,7 +489,9 @@ namespace Bitsmith.ViewModels
             set
             {
                 _SelectedDomain = value;
+                Resolver.Domain = _SelectedDomain;
                 OnPropertyChanged("SelectedDomain");
+                
             }
         }
 
@@ -506,9 +510,11 @@ namespace Bitsmith.ViewModels
             }
         }
 
-        internal void Setup(VirtualPathModule paths, MimeModule mimes)
+        internal void Setup(VirtualPathModule paths, MimeModule mimes, SettingsModule settings)
         {
             base.Setup();
+
+
             Mimes = mimes.Items;
             List<DomainPathMapViewModel> additions = new List<DomainPathMapViewModel>();
             List<DomainViewModel> list = new List<DomainViewModel>();
@@ -532,7 +538,11 @@ namespace Bitsmith.ViewModels
 
             Domains = new ObservableCollection<DomainViewModel>(list);
             Domains.CollectionChanged += Domains_CollectionChanged;
-            SelectedDomain = Domains[0];
+
+            ApplyPreferences(UserPreferences);
+            this.IndexContent();
+            Resolver.Load(model.Items);
+
         }
 
 
@@ -695,10 +705,15 @@ namespace Bitsmith.ViewModels
         }
         private void RemoveRecentTag(string tag)
         {
-            var found = Resolver.Recent.FirstOrDefault(x => x.Key.Equals(tag));
+            var found = Resolver.recent.FirstOrDefault(x => x.Key.Equals(tag));
             if (found != null)
             {
-                Resolver.Recent.Remove(found);
+                var counter = found.Model.Counters.FirstOrDefault(y => y.Domain.Equals(SelectedDomain.Id));
+                if (counter != null)
+                {
+                    found.Model.Counters.Remove(counter);
+                }
+                //Resolver.recent.Remove(found);
             }
         }
 
@@ -718,10 +733,15 @@ namespace Bitsmith.ViewModels
 
         private void RemovePopularTag(string tag)
         {
-            var found = Resolver.Popular.FirstOrDefault(x => x.Key.Equals(tag));
+            var found = Resolver.popular.FirstOrDefault(x => x.Key.Equals(tag));
             if (found != null)
             {
-                Resolver.Popular.Remove(found);
+                var counter = found.Model.Counters.FirstOrDefault(y => y.Domain.Equals(SelectedDomain.Id));
+                if (counter != null)
+                {
+                    found.Model.Counters.Remove(counter);
+                }
+                //Resolver.popular.Remove(found);
             }
         }
 
@@ -788,8 +808,8 @@ namespace Bitsmith.ViewModels
 
         public override void Initialize()
         {
-            LoadTagResolver();
-            this.IndexContent();
+            //LoadTagResolver();
+            //this.IndexContent();
         }
 
         private void Domains_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -831,15 +851,32 @@ namespace Bitsmith.ViewModels
 
         protected override void ApplyPreferences(UserSettings userPreferences)
         {
-            if (userPreferences.TryGet<ContentTypeOption>("content-module","content-type", out ContentTypeOption option))
+            if (userPreferences.TryGet<ContentTypeOption>(ModuleKey,"content-type", out ContentTypeOption option))
             {
                 Input.ContentType = option;
+            }
+            if (userPreferences.TryGet<string>(ModuleKey,"selected-domain",out string id))
+            {
+                var found = Domains.FirstOrDefault(x => x.Model.Id.Equals(id));
+                if (found != null)
+                {
+                    SelectedDomain = found;
+                }
+                else
+                {
+                    SelectedDomain = Domains[0];
+                }
+            }
+            else
+            {
+                SelectedDomain = Domains[0];
             }
         }
 
         internal override void SetPreferences()
         {
-            UserPreferences.EnsurePreference("content-module", "content-type", Input.ContentType);
+            UserPreferences.EnsurePreference(ModuleKey, "content-type", Input.ContentType);
+            UserPreferences.EnsurePreference(ModuleKey, "selected-domain", SelectedDomain.Model.Id);
         }
 
         protected override bool SaveData()

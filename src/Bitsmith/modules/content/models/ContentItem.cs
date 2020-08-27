@@ -20,6 +20,5 @@ namespace Bitsmith.Models
         [XmlElement("Tag")]
         public List<Property> Properties { get; set; } = new List<Property>();
         public string Body { get; set; }
-
     }
 }

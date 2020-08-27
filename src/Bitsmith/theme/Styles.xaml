@@ -271,8 +271,31 @@
         <Setter Property="Content" Value="&#xE74D;"/>
         <Setter Property="FontWeight" Value="ExtraBold"/>
     </Style>
-    
-    
+    <Style x:Key="TagCommandButton" TargetType="Button" BasedOn="{StaticResource CommandButton}">
+        <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+        <Setter Property="Content" Value="&#xE8EC;"/>
+        <Setter Property="FontWeight" Value="ExtraBold"/>
+    </Style>    
+    <Style x:Key="DomainCommandButton" TargetType="Button" BasedOn="{StaticResource CommandButton}">
+        <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+        <Setter Property="Content" Value="&#xE91B;"/>
+        <Setter Property="FontWeight" Value="ExtraBold"/>
+    </Style>
+    <Style x:Key="HomeCommandButton" TargetType="Button" BasedOn="{StaticResource CommandButton}">
+        <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+        <Setter Property="Content" Value="&#xE80F;"/>
+        <Setter Property="FontWeight" Value="ExtraBold"/>
+    </Style> 
+    <Style x:Key="HomeSolidCommandButton" TargetType="Button" BasedOn="{StaticResource CommandButton}">
+        <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+        <Setter Property="Content" Value="&#xEA8A;"/>
+        <Setter Property="FontWeight" Value="ExtraBold"/>
+    </Style>     
+    <Style x:Key="SwitchThickCommandButton" TargetType="Button" BasedOn="{StaticResource CommandButton}">
+        <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+        <Setter Property="Content" Value="&#xF1CB;"/>
+        <Setter Property="FontWeight" Value="ExtraBold"/>
+    </Style>    
     <!-- Navigation States-->
     
     <Style x:Key="ContentStateCommandButton" TargetType="Button" BasedOn="{StaticResource CommandButton}">
@@ -544,7 +567,9 @@
     </Style>
 
 
-<Style x:Key="VerticalGridsplitter" TargetType="{x:Type GridSplitter}">
+
+
+    <Style x:Key="VerticalGridsplitter" TargetType="{x:Type GridSplitter}">
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="Background" Value="{StaticResource ResourceKey=PrimaryBackgroundDark}"/>
         <Setter Property="VerticalAlignment" Value="Stretch"/>

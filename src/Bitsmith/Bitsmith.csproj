@@ -72,7 +72,9 @@
     <Compile Include="code\ViewManager.cs" />
     <Compile Include="modules\.common\ModuleExtensions.cs" />
     <Compile Include="modules\.common\view.models\base\GroupingViewModel`1.cs" />
+    <Compile Include="modules\.common\view.models\base\SortableObservableCollection`2.cs" />
     <Compile Include="modules\chronos\models\aggregation\AggregationOption.cs" />
+    <Compile Include="modules\content\code\Counter.cs" />
     <Compile Include="modules\styx\models\designer\GraphTemplate.cs" />
     <Compile Include="modules\styx\models\Estimate.cs" />
     <Compile Include="modules\project.management\models\ProjectTask.cs" />
@@ -201,6 +203,9 @@
     </Compile>
     <Compile Include="modules\project.management\views\TaskItemDetailsView.xaml.cs">
       <DependentUpon>TaskItemDetailsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\content\views\TagSelectorView.xaml.cs">
+      <DependentUpon>TagSelectorView.xaml</DependentUpon>
     </Compile>
     <Compile Include="view\NavigationMenu.xaml.cs">
       <DependentUpon>NavigationMenu.xaml</DependentUpon>
@@ -515,6 +520,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="modules\content\views\TagSelectorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="view\NavigationMenu.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -699,37 +708,37 @@
     <Folder Include="modules\project.management\dataprovider\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="images\circle.black.png" />
-    <Resource Include="images\circle.blue.png" />
-    <Resource Include="images\circle.brown.png" />
-    <Resource Include="images\circle.cyan.png" />
-    <Resource Include="images\circle.gray.png" />
-    <Resource Include="images\circle.green.png" />
-    <Resource Include="images\circle.orange.png" />
-    <Resource Include="images\circle.red.png" />
-    <Resource Include="images\command.add.png" />
-    <Resource Include="images\content.help.PNG" />
-    <Resource Include="images\content.image.png" />
-    <Resource Include="images\content.list.png" />
-    <Resource Include="images\content.msexcel.png" />
-    <Resource Include="images\content.msword.png" />
-    <Resource Include="images\content.pdf.png" />
-    <Resource Include="images\content.powerpoint.png" />
-    <Resource Include="images\content.snippet.png" />
-    <Resource Include="images\content.text.png" />
-    <Resource Include="images\content.textfile.png" />
-    <Resource Include="images\content.url.png" />
-    <Resource Include="images\content.visio.png" />
-    <Resource Include="images\content.xml.png" />
-    <Resource Include="images\folder.blue.png" />
-    <Resource Include="images\shadow_b.png" />
-    <Resource Include="images\shadow_bl.png" />
-    <Resource Include="images\shadow_br.png" />
-    <Resource Include="images\shadow_l.png" />
-    <Resource Include="images\shadow_r.png" />
-    <Resource Include="images\shadow_t.png" />
-    <Resource Include="images\shadow_tl.png" />
-    <Resource Include="images\shadow_tr.png" />
+    <Resource Include="content\images\circle.black.png" />
+    <Resource Include="content\images\circle.blue.png" />
+    <Resource Include="content\images\circle.brown.png" />
+    <Resource Include="content\images\circle.cyan.png" />
+    <Resource Include="content\images\circle.gray.png" />
+    <Resource Include="content\images\circle.green.png" />
+    <Resource Include="content\images\circle.orange.png" />
+    <Resource Include="content\images\circle.red.png" />
+    <Resource Include="content\images\command.add.png" />
+    <Resource Include="content\images\content.help.PNG" />
+    <Resource Include="content\images\content.image.png" />
+    <Resource Include="content\images\content.list.png" />
+    <Resource Include="content\images\content.msexcel.png" />
+    <Resource Include="content\images\content.msword.png" />
+    <Resource Include="content\images\content.pdf.png" />
+    <Resource Include="content\images\content.powerpoint.png" />
+    <Resource Include="content\images\content.snippet.png" />
+    <Resource Include="content\images\content.text.png" />
+    <Resource Include="content\images\content.textfile.png" />
+    <Resource Include="content\images\content.url.png" />
+    <Resource Include="content\images\content.visio.png" />
+    <Resource Include="content\images\content.xml.png" />
+    <Resource Include="content\images\folder.blue.png" />
+    <Resource Include="content\images\shadow_b.png" />
+    <Resource Include="content\images\shadow_bl.png" />
+    <Resource Include="content\images\shadow_br.png" />
+    <Resource Include="content\images\shadow_l.png" />
+    <Resource Include="content\images\shadow_r.png" />
+    <Resource Include="content\images\shadow_t.png" />
+    <Resource Include="content\images\shadow_tl.png" />
+    <Resource Include="content\images\shadow_tr.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="modules\project.management\models\design.txt" />
@@ -745,6 +754,11 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="data\simple-state-machine.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="content\icons\tag-black-basic.png" />
+    <Resource Include="content\icons\tag-black-list.png" />
+    <Resource Include="content\icons\tag-black-star.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

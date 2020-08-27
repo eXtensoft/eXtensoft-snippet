@@ -10,6 +10,17 @@ namespace Bitsmith.ViewModels
     public class TagMapViewModel : ViewModel<TagMap>
     {
 
+        private string _Domain;
+        public string Domain
+        {
+            get { return _Domain; }
+            set
+            {
+                _Domain = value;
+                OnPropertyChanged("Domain");
+            }
+        }
+        
         public string Key
         {
             get
@@ -24,15 +35,16 @@ namespace Bitsmith.ViewModels
         }
 
 
+        private int _Count;
         public int Count
         {
             get
             {
-                return Model.Count;
+                return _Count;
             }
             set
             {
-                Model.Count = value;
+                _Count = value;
                 OnPropertyChanged("Count");
             }
         }
@@ -41,6 +53,26 @@ namespace Bitsmith.ViewModels
         public TagMapViewModel(TagMap model)
         {
             Model = model;
+            _Count = model.Counters.Total();
         }
+
+
+        public bool SetFilter(string domain, int min = 0)
+        {
+            Domain = domain;
+            _Count = 0;
+            var counter = Model.Counters.FirstOrDefault(xx => xx.Domain.Equals(domain, StringComparison.OrdinalIgnoreCase));
+            if (counter != null)
+            {
+                Count = counter.Count;
+            }
+            return _Count > min;
+        }
+
+        public override string ToString()
+        {
+            return Model.ToString();
+        }
+
     }
 }

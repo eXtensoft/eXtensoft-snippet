@@ -19,7 +19,13 @@
                 </StackPanel>
             </GroupBox.Header>
             <GroupBox.Content>
-                <ListBox x:Name="lsbDomains" ItemsSource="{Binding Path=Domains}" SelectedItem="{Binding Path=SelectedDomain}"></ListBox>
+                <ListBox x:Name="lsbDomains" ItemsSource="{Binding Path=Domains}" SelectedItem="{Binding Path=SelectedDomain}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Display}"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
             </GroupBox.Content>
         </GroupBox>
         <Grid Grid.Column="2" Margin="40,20"
@@ -37,12 +43,15 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="5"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" Content="Id"/>
             <Label Grid.Column="0" Grid.Row="2" HorizontalAlignment="Right" Content="Created On"/>
             <Label Grid.Column="0" Grid.Row="4" HorizontalAlignment="Right" Content="Name"/>
             <Label Grid.Column="0" Grid.Row="6" HorizontalAlignment="Right" Content="Scope"/>
+            <Label Grid.Column="0" Grid.Row="8" HorizontalAlignment="Right" Content="Minimum Tag Count"/>
 
             <TextBox Grid.Column="2" Grid.Row="0" Text="{Binding Path=Id}"/>
             <TextBox Grid.Column="2" Grid.Row="2" Text="{Binding Path=CreatedOn}" IsReadOnly="True"/>
@@ -50,7 +59,7 @@
             <ComboBox Grid.Column="2" Grid.Row="6" 
                       SelectedItem="{Binding Path=Scope}" 
                       ItemsSource="{Binding Source={StaticResource Scopes}}"/>
-
+            <TextBox Grid.Column="2" Grid.Row="8" Text="{Binding Path=MinimumTagCount}"/>
         </Grid>
     </Grid>
 </UserControl>

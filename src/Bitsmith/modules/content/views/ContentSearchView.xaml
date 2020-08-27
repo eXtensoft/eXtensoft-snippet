@@ -20,7 +20,7 @@
                 <GroupBox Grid.Row="0" DataContext="{Binding Path=Content}">
                     <GroupBox.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Button Style="{StaticResource SettingsCommandButton}" Command="{Binding Path=ViewDomainsCommand}"/>
+                            <Button Style="{StaticResource HomeCommandButton}" Command="{Binding Path=ViewDomainsCommand}"/>
                             <Label Content="{Binding Path=SelectedDomain.Name}"/>
                             <ToggleButton IsChecked="{Binding Path=IsTagSearch}" 
                                           Content="{Binding Path=IsTagSearch, Converter={StaticResource cvtSearchType}}" Style="{StaticResource CommandToggleButton}" />                            

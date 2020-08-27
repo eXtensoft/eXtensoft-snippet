@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <StateMachine xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" beginState="LoggedOff" endState="LoggedOff">
-  <State name="LoggedOff" display="LoggedOff" isNavigate="true" order="4" />
+  <State name="LoggedOff" display="LoggedOff" isNavigate="true" order="9" />
   <State name="Authenticated" display="Authenticated" />
   <State name="Content" display="Content" isNavigate="true" order="0" />
   <State name="Tasks" display="Tasks" isNavigate="true" order="1" />
   <State name="TimeEntry" display="TimeEntry" isNavigate="true" order="2" />
   <State name="Settings" display="Settings" isNavigate="true" order="3" />
-  <State name="Credentials" display="Credentials" />
+  <State name="Credentials" display="Credentials" isNavigate="false" order="4" />
 
   <Transition name="Login" origin="LoggedOff" destination="Authenticated" order="0" />
   <Transition name="Content" origin="Authenticated" destination="Content" order="0" />

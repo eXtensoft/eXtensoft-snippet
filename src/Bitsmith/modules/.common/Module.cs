@@ -1,10 +1,17 @@
-﻿using System.ComponentModel;
+﻿using Bitsmith.Models;
+using System.CodeDom;
+using System.ComponentModel;
 using System.Windows;
 
 namespace Bitsmith.ViewModels
 {
     public class Module : INotifyPropertyChanged
     {
+        protected virtual string ModuleKey 
+        { 
+            get { return this.GetType().Name.CamelToKebab(); } 
+
+        }
 
         private UserSettings _UserPreferences;
         public UserSettings UserPreferences
@@ -18,7 +25,7 @@ namespace Bitsmith.ViewModels
                 if (value != null)
                 {
                     _UserPreferences = value;
-                    ApplyPreferences(_UserPreferences);
+                    //ApplyPreferences(_UserPreferences);
                 }
             }
         }
