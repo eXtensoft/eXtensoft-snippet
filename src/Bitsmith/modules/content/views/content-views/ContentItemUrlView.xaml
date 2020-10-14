@@ -9,12 +9,7 @@
     <UserControl.Resources>
         <Style x:Key="browser" TargetType="{x:Type WebBrowser}"/>
     </UserControl.Resources>
-    <Grid Background="White">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="10"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-        </Grid.RowDefinitions>
+
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
@@ -28,6 +23,9 @@
                 <RowDefinition Height="5"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="5"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" Grid.Column="0" Text="Title:" HorizontalAlignment="Right" />
             <TextBlock Grid.Row="2" Grid.Column="0" Text="Tags:" HorizontalAlignment="Right" />
@@ -35,8 +33,11 @@
             <TextBox Grid.Row="0" Grid.Column="2" Text="{Binding Path=Display}"/>
             <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding Path=Tags, Converter={StaticResource ResourceKey=cvtTags}}"/>
             <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding Path=Body}"/>
-        </Grid>
-        <WebBrowser Style="{StaticResource ResourceKey=browser}" Grid.Row="2" x:Name="webContent" Margin="10"/>
+            <TextBlock Grid.Column="0" Grid.Row="8" Text="Paths"/>
+            <TextBox Grid.Column="2" Grid.Row="8" Text="{Binding Path=Paths, Converter={StaticResource cvtPaths}}" Background="Transparent"/>
+            <WebBrowser Style="{StaticResource ResourceKey=browser}" Grid.Column="2" Grid.Row="6" x:Name="webContent" />
     </Grid>
+
+
 </UserControl>
 

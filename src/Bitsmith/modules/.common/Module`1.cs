@@ -1,4 +1,5 @@
-﻿using Bitsmith.Models;
+﻿using Bitsmith.DataServices.Abstractions;
+using Bitsmith.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,6 +11,7 @@ namespace Bitsmith.ViewModels
 
     public class Module<T>  where T : class, new()
     {
+        public IDataService DataService { get; set; }
 
         protected virtual string ModuleKey
         {
@@ -45,7 +47,19 @@ namespace Bitsmith.ViewModels
 
         protected List<T> Models { get; set; } = new List<T>();
 
-        public virtual string Filepath { get; set; } = FileSystemDataProvider.Filepath<T>();
+        private string _Filepath;
+        public virtual string Filepath 
+        { 
+            get
+            {
+                if (String.IsNullOrWhiteSpace(_Filepath) && DataService != null)
+                {
+                    _Filepath = DataService.Filepath<T>();
+                }
+                return _Filepath;
+            }
+            set { _Filepath = value; } 
+        }
 
         private ICommand _SaveItemsCommand;
         public ICommand SaveItemsCommand
@@ -92,7 +106,6 @@ namespace Bitsmith.ViewModels
         protected virtual bool LoadData()
         {
             bool b = FileSystemDataProvider.TryRead<T>(out List<T> items, out string message, Filepath);
-
             if(!b)
             {
                 OnFailure("load-data",message);
@@ -120,14 +133,16 @@ namespace Bitsmith.ViewModels
 
         public void Setup()
         {
-            IsInitialized = LoadData();
-            Initialize();
+            if (DataService != null)
+            {
+                IsInitialized = LoadData();
+                Initialize();
+            }
         }
         public void Cleanup()
         {
             SaveData();
         }
-
 
         #region INotifyPropertyChanged Members
 

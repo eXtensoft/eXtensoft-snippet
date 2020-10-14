@@ -2,10 +2,14 @@
 using Bitsmith.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Media;
 
 namespace Bitsmith.Models
 {
@@ -19,12 +23,18 @@ namespace Bitsmith.Models
             return i;
         }
         public static bool InDomain(this ContentItem item, string domain)
-        { 
+        {
             return item.Properties.Any((p)=>
             { 
                 return p.Name.Equals("x-domain") && 
                 p.Value.ToString().Equals(domain, StringComparison.OrdinalIgnoreCase); 
             });
+        }
+
+        public static string Domain(this ContentItem item)
+        {
+            var found = item.Properties.FirstOrDefault(y => y.Name.Equals("x-domain"));
+            return found?.Value.ToString() ?? AppConstants.Default;
         }
 
         public static List<ContentItem> ForDomain(this List<ContentItem> superset, string domain)
@@ -43,11 +53,53 @@ namespace Bitsmith.Models
             return b;
         }
 
+
+
+        public static bool Includes(this ContentItem model, string token)
+        {
+            QueryExpression expression = new QueryExpression(token);
+            return expression.Evaluate(model.Properties);
+        }
+
         public static string Datatype(this Property property)
         {
             return (property.Value != null) ? property.Value.GetType().Name : "x:Null";
         }
 
+        public static List<Query> Default(this List<Query> list, List<Domain> domains)
+        {
+            foreach (var domain in domains)
+            {
+                list.Add(new Query().Default(domain));               
+            }
+            return list;
+        }
+
+        public static string ToQueryText(this Query model )
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (var item in model.TokenQueries)
+            {
+                sb.AppendLine(item.Token);
+            }
+
+            return sb.ToString();
+        }
+
+        public static Query Default(this Query model, Domain domain)
+        {
+            model.QueryType = QueryTypeOption.Named;
+            model.Name = "All";
+            model.Domain = domain.Id;
+            model.TokenQueries = new List<TokenQuery>().Default();
+            return model;
+        }
+        public static List<TokenQuery> Default(this List<TokenQuery> list)
+        {
+            list.Add(new TokenQuery() { SearchType = SearchTypeOptions.Tag, Token = "all" });
+            //list.Add(new TokenQuery() { SearchType = SearchTypeOptions.Tag, Token = "ext" });
+            return list;
+        }
         public static List<MimeMap> Default(this List<MimeMap> list)
         {
 
@@ -80,7 +132,7 @@ namespace Bitsmith.Models
             model.Id = id;
             model.Scope = ScopeOption.Private;
             model.Name = "default";
-
+            model.Lists = new List<Property>();
             return model;
         }
 
@@ -107,10 +159,6 @@ namespace Bitsmith.Models
                 item.Scope = vm.Scope;
                 item.Properties.DefaultTags(domain);
                 item.Properties.AddRange(resolver.Resolve(vm.Tags));
-                if (!String.IsNullOrWhiteSpace(vm.Path))
-                {
-                    item.Paths.Add(vm.Path);
-                }
                 if (vm.HasFile)
                 {
                     FileInfo info = new FileInfo(vm.Filepath);
@@ -123,6 +171,8 @@ namespace Bitsmith.Models
                             Name = $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Extension}", 
                             Value = item.Mime 
                         });
+                        var filetype = item.Mime.Trim(new char[] { '.' });
+                        vm.Paths.Add($"/files/{filetype}");
                         b = true;
                     }
                 }
@@ -130,7 +180,14 @@ namespace Bitsmith.Models
                 {
                     if (vm.IsLink)
                     {
-                        item.Body = vm.Body.StartsWith("http://") ? vm.Body : $"http://{vm.Body}";
+                        if(!vm.Body.StartsWithAny(new string[] { "http://", "https://" }))
+                        {
+                            item.Body = $"http://{vm.Body}";
+                        }
+                        else
+                        {
+                            item.Body = vm.Body;
+                        }
                     }
                     else if (vm.Body.Length > contentManager.MaxLength && 
                         contentManager.TryInloadAsFile(vm.Body, item.Id, out string filename, out FileInfo info))
@@ -151,13 +208,27 @@ namespace Bitsmith.Models
                     item.Mime = vm.Mime;
                     b = true;
                 }
+                HashSet<string> hs = new HashSet<string>();
+                foreach (var path in vm.Paths)
+                {
+                    if (hs.Add(path))
+                    {
+                        item.Paths.Add(path);
+                    }
+                }
+                var tag = vm.SelectedTag;
                 
-                vm.Filepath = string.Empty;
-                vm.Display = string.Empty;
-                vm.Body = string.Empty;
-                vm.Tags = new List<string>();
-                vm.AddTag(vm.SelectedTag);
-                vm.ContentType = contentType;
+                vm.Refresh(tag,contentType);
+            }
+            return b;
+        }
+
+        private static bool StartsWithAny(this string text, IEnumerable<string> tokens)
+        {
+            bool b = false;
+            if (!string.IsNullOrWhiteSpace(text))
+            {
+                b = tokens.Any((t) => { return text.StartsWith(t, StringComparison.OrdinalIgnoreCase); });
             }
             return b;
         }
@@ -210,6 +281,21 @@ namespace Bitsmith.Models
             return ctl;
 
         }
+
+
+        public static bool HasFile(this ContentItem item, string fileExtension = "")
+        {
+            if (string.IsNullOrWhiteSpace(fileExtension))
+            {
+                return item.Properties.Any(x => x.Name.Equals(_Replacements["ext"]));               
+            }
+            else
+            {
+                var found = item.Properties.FirstOrDefault(x => x.Name.Equals($"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Extension}"));
+                return found != null && found.Value.Equals(fileExtension);
+            }
+        }
+
         public static List<Property> Tags(this List<Property> properties)
         {
             return properties.Where(x => !ExcludedTags.Contains(x.Name)).ToList();
@@ -333,5 +419,94 @@ namespace Bitsmith.Models
             return !String.IsNullOrWhiteSpace(text) ? text.Trim().Replace(' ', '-') : text.Trim();
         }
 
+        public static bool TryBuildFlowDocument(this FileInfo info, out FlowDocument flowDocument, IEnumerable<string> termsToHighlight)
+        {
+            flowDocument = null;
+            if (info.Exists)
+            {
+                if (info.Extension.Equals(".docx",StringComparison.OrdinalIgnoreCase))
+                {
+                    return info.TryBuildFlowDocumentFromDocx(out flowDocument, termsToHighlight);
+                }
+                else if(info.Extension.Equals(".pdf",StringComparison.OrdinalIgnoreCase))
+                {
+                    return info.TryBuildFlowDocumentFromPdf(out flowDocument, termsToHighlight);
+                }
+            }
+            return false;
+        }
+
+        public static bool TryBuildFlowDocumentFromPdf(this FileInfo info, out FlowDocument flowDocument, IEnumerable<string> termsToHighlight)
+        {
+            bool b = false;
+            flowDocument = new FlowDocument();
+            return b;
+        }
+
+        public static bool TryBuildFlowDocumentFromDocx(this FileInfo info, out FlowDocument flowDocument, IEnumerable<string> termsToHighlight)
+        {
+            bool b = false;
+            flowDocument = new FlowDocument();
+            try
+            {
+                
+                using (var doc = DocumentFormat.OpenXml.Packaging.WordprocessingDocument.Open(info.FullName,false))
+                {
+                    //if (String.IsNullOrWhiteSpace(termToHighlight))
+                    //{
+                    //    foreach (var paragraph in doc.MainDocumentPart.Document.Body)
+                    //    {
+                    //        Paragraph p = new Paragraph(new Run(paragraph.InnerText));
+
+                    //        flowDocument.Blocks.Add(p);                        
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    foreach (var paragraph in doc.MainDocumentPart.Document.Body)
+                    //    {
+
+                    //        if (!paragraph.InnerText.Contains(termToHighlight))
+                    //        {
+                    //            Paragraph p = new Paragraph(new Run(paragraph.InnerText));
+                    //            flowDocument.Blocks.Add(p);
+                    //        }
+                    //        else
+                    //        {
+                    //            Paragraph p = new Paragraph();
+                    //            string text = paragraph.InnerText.Trim();
+                    //            int pos = 0;
+                    //            while (pos < text.Length)
+                    //            {
+                    //                int x = text.IndexOf(termToHighlight,pos);
+                    //                if (x < 0)
+                    //                {
+                    //                    string s = text.Substring(pos);
+                    //                    p.Inlines.Add(new Run(s));
+                    //                    pos = text.Length;
+                    //                }
+                    //                else
+                    //                {
+                    //                    string s = text.Substring(pos, x-pos);
+                    //                    string t = text.Substring(x, termToHighlight.Length);
+                    //                    p.Inlines.Add(new Run(s));
+                    //                    p.Inlines.Add(new Span(new Run(t) { Background = Brushes.Yellow }));
+                    //                    pos = x + termToHighlight.Length;
+                    //                }
+
+                    //            }
+                    //            flowDocument.Blocks.Add(p);
+                    //        }
+                    //    }
+                    //}
+                    b = true;
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+
+            return b;
+        }
     }
 }

@@ -1,0 +1,27 @@
+﻿https://blog.insightdatascience.com/how-to-solve-90-of-nlp-problems-a-step-by-step-guide-fda605278e4e
+
+Remove all irrelevant characters such as any non alphanumeric characters
+Tokenize your text by separating it into individual words
+Remove words that are not relevant, such as “@” twitter mentions or urls
+Convert all characters to lowercase, in order to treat words such as “hello”, “Hello”, and “HELLO” the same
+Consider combining misspelled or alternately spelled words to a single representation (e.g. “cool”/”kewl”/”cooool”)
+Consider lemmatization (reduce words such as “am”, “are”, and “is” to a common form such as “be”)
+
+
+Bag of Words
+https://en.wikipedia.org/wiki/Bag-of-words_model
+
+Additive smoothing
+Bag-of-words model in computer vision
+Document classification
+Document-term matrix
+Feature extraction
+Hashing trick
+Machine learning
+MinHash
+n-gram
+Natural language processing
+Vector space model
+w-shingling
+tf-idf
+

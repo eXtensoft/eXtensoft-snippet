@@ -21,6 +21,8 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="5"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
@@ -50,6 +52,7 @@
                    Source="{Binding Path=Body, Converter={StaticResource ResourceKey=UriToImageConverter}}"/>
             </ScrollViewer>
         </Border>
-
+        <TextBlock Grid.Column="0" Grid.Row="6" Text="Paths"/>
+        <TextBox Grid.Column="2" Grid.Row="6" Text="{Binding Path=Paths, Converter={StaticResource cvtPaths}}" Background="Transparent"/>
     </Grid>
 </UserControl>

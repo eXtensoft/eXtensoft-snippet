@@ -46,13 +46,13 @@ namespace Bitsmith
                 if (!String.IsNullOrEmpty(s))
                 {
                     HashSet<string> hs = new HashSet<string>();
-                    string[] t = s.Split(new char[] { ',',' ',';' },StringSplitOptions.RemoveEmptyEntries);
+                    string[] t = s.Split(new char[] { ',', ' ', ';' }, StringSplitOptions.RemoveEmptyEntries);
                     foreach (var item in t)
                     {
                         if (hs.Add(item))
                         {
                             list.Add(item.Trim());
-                        }                        
+                        }
                     }
                 }
             }

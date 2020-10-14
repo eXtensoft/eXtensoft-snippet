@@ -31,10 +31,7 @@ namespace Bitsmith
             return new Workspace();
         }
 
-        internal static Data Data()
-        {
-            return new Data();
-        }
+
 
         public static StateManager StateMachine()
         {

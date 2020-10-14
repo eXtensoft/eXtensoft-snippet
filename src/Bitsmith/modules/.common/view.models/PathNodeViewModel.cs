@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 namespace Bitsmith.ViewModels
 {
-    public class PathNodeViewModel : ViewModel<PathNode>
+    public class PathNodeViewModel : ViewModel<PathNode>, IPathNode
     {
 		public PathNodeViewModel Master { get; set; }
 
@@ -24,10 +24,10 @@ namespace Bitsmith.ViewModels
 			{
 				Model.Path = value;
 				OnPropertyChanged("Path");
-				foreach (PathNodeViewModel item in Items)
-				{
-					item.Path = $"{Model.Path}/{item.Slug}";
-				}
+				//foreach (PathNodeViewModel item in Items)
+				//{
+				//	item.Path = $"{Model.Path}/{item.Slug}";
+				//}
 			}
 		}
 
@@ -40,7 +40,7 @@ namespace Bitsmith.ViewModels
 			set
 			{
 				Model.Slug = value;
-				Path = (Master != null) ? $"{Master.Path}/{Model.Slug}" : value;
+				//Path = (Master != null) ? $"{Master.Path}/{Model.Slug}" : value;
 				OnPropertyChanged("Slug");
 			}
 		}
@@ -100,13 +100,75 @@ namespace Bitsmith.ViewModels
 		public PathNodeViewModel(PathNode model,PathNodeViewModel master)
 		{
 			Master = master;
-			model.Path = $"{master.Slug}/{model.Slug}";
+			//model.Path = $"{master.Slug}/{model.Slug}";
 			Model = model;
 			if (model.Items != null)
 			{
 				Items = new ObservableCollection<PathNodeViewModel>(from x in model.Items select new PathNodeViewModel(x, this));
 				Items.CollectionChanged += Items_CollectionChanged;
 			}
+		}
+
+
+		public PathNodeViewModel(PathNodeViewModel master, string path, string slug = "")
+        {
+			Master = master;
+			Items = new ObservableCollection<PathNodeViewModel>();
+			Items.CollectionChanged += Items_CollectionChanged;
+			var token = !String.IsNullOrWhiteSpace(slug) ? slug : path.TrimStart('/');
+			Model = new PathNode()
+			{
+				Display = token.ToTitleCase(),
+				Slug = token,
+				Path = $"{master.Slug}/{token}"
+			};
+            if (!String.IsNullOrWhiteSpace(slug))
+            {
+				if (path.StripSlug(out string nextSlug, out string next))
+				{
+					//Items.Add(new PathNodeViewModel(string.Empty,))
+				}
+				else
+				{
+					Items.Add(new PathNodeViewModel(this, path));
+				}
+            }
+
+
+        }
+
+		internal void EnsurePath(string path)
+		{
+			if (path.StripSlug(out string slug, out string next))
+			{
+				var found = Items.FirstOrDefault(y => y.Slug.Equals(slug));
+                if (found == null)
+                {
+					var token = Path.Equals("/virtual") ? $"/{slug}" : $"{Path}/{slug}";
+
+					found = new PathNodeViewModel(new PathNode() 
+					{ 
+						Display = slug,
+						Path = token,
+						Slug = slug
+					},this);
+					Items.Add(found);
+                }
+				found.EnsurePath(next);
+			}
+            else if (!Path.Equals(path, StringComparison.OrdinalIgnoreCase))
+			{
+				var p = path.TrimStart('/');
+				var t = Path.Equals("/virtual") ? path : $"{Path}/{p}";
+				var token = Master != null && !Master.Path.Equals("/virtual") ? $"{Master.Path}/{Slug}/{p}" : t;
+                Items.Add(new PathNodeViewModel(new PathNode()
+				{
+					Display = p,
+					Path = token,
+					Slug = p
+				},this)); 
+			}
+
 		}
 
 		private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -135,10 +197,9 @@ namespace Bitsmith.ViewModels
 			}
 		}
 
-		public void RefreshPath()
-		{
 
-		}
+
+
 
 	}
 }

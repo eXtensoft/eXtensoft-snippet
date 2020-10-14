@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Bitsmith.DataServices.Abstractions;
 using Bitsmith.Models;
 
 namespace Bitsmith.ViewModels
@@ -34,7 +35,7 @@ namespace Bitsmith.ViewModels
         }
         private void Add()
         {
-            var item = new ContentItem() { Mime = "text/credential", Scope = ScopeOption.Encrypt, Display = "Credentials for {}" };
+            var item = new ContentItem() { Mime = "text/credential", Scope = ScopeOption.Encrypt, Display = "Credentials for {}", Id = Guid.NewGuid().ToString().ToLower() };
             item.Properties.DefaultTags();
             item.Properties.Add(new Property()
             {
@@ -89,8 +90,9 @@ namespace Bitsmith.ViewModels
         }
 
 
-        public CredentialsModule()
+        public CredentialsModule(IDataService dataService)
         {
+            DataService = dataService;
 
         }
 

@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace Bitsmith.ViewModels
 {
-	public class DomainPathMapViewModel : ViewModel<DomainPathMap>
+	public class DomainPathMapViewModel : ViewModel<DomainPathMap>, IPathNode
     {
 
 		public string Id
@@ -131,5 +131,43 @@ namespace Bitsmith.ViewModels
 			}
 		}
 
-	}
+        internal void EnsurePath(string path)
+        {
+			var pattern = string.Empty;
+			var next = path;
+            if (path.StripSlug(out string slug, out next) && 
+				slug.Equals(AppConstants.Paths.Files))
+            {
+				pattern = $"/{AppConstants.Paths.Files}";
+			}
+            else if(path.Equals($"/{AppConstants.Paths.Content}"))
+            {
+				pattern = $"/{AppConstants.Paths.Content}";
+			}
+            else
+            {
+				pattern = $"/{AppConstants.Paths.Default}";
+				next = path;
+            }
+
+            
+			var found = Items.FirstOrDefault(y => y.Path.Equals(pattern));
+            if (found == null)
+            {
+				found = new PathNodeViewModel(new PathNode() 
+				{ 
+					Path = pattern, 
+					Slug = pattern.TrimStart('/'), 
+					Display = pattern.TrimStart('/').ToTitleCase() 
+				});
+				Items.Add(found);
+            }
+            if (!string.IsNullOrWhiteSpace(next))
+            {
+				found.EnsurePath(next);
+            }
+            
+
+        }
+    }
 }

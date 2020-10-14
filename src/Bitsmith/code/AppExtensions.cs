@@ -13,6 +13,16 @@ namespace Bitsmith
     public static class AppExtensions
     {
 
+        public static string Guids(this int max)
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < max; i++)
+            {
+                sb.AppendLine(Guid.NewGuid().ToString().ToLower());
+            }
+
+            return sb.ToString();
+        }
         public static void EnsureDirectories(this IEnumerable<string> list)
         {
             foreach (var item in list)
@@ -23,6 +33,33 @@ namespace Bitsmith
                     info.Create();
                 }
             }
+        }
+
+        public static FlowDocument ToFlowDocument(this string text, IEnumerable<string> terms, Brush background, bool IsCaseSensitive = false)
+        {
+            StringComparison comparison = IsCaseSensitive ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
+            FlowDocument doc = new FlowDocument();
+            Paragraph p = new Paragraph();
+            string body = text;
+            string term;
+            int pos = body.IndexOfNext(terms, comparison, out term);
+            do
+            {
+                if (pos == 0)
+                {
+                    p.Inlines.Add(new Run(body.Substring(0, term.Length)) { Background = background });
+                    body = body.Substring(term.Length);
+                }
+                else if(pos > 0)
+                {
+                    p.Inlines.Add(new Run(body.Substring(0, pos)));
+                    body = body.Substring(pos);
+                }
+                pos = body.IndexOfNext(terms, comparison, out term);
+            } while (pos > -1);
+            p.Inlines.Add(new Run(body));
+            doc.Blocks.Add(p);
+            return doc;
         }
         public static FlowDocument ToFlowDocument(this string text, string term, Brush background, bool IsCaseSensitive = false)
         {
@@ -50,6 +87,25 @@ namespace Bitsmith
             doc.Blocks.Add(p);
 
             return doc;
+        }
+
+        private static int IndexOfNext(this string body, IEnumerable<string> terms, StringComparison comparison, out string nextTerm)
+        {
+            int pos = -1;
+            nextTerm = string.Empty;
+            foreach (var term in terms)
+            {
+                int x = body.IndexOf(term, comparison);
+                if (x > -1)
+                {
+                    if (pos == -1 || x < pos)
+                    {
+                        pos = x;
+                        nextTerm = term;
+                    }
+                }
+            }
+            return pos;
         }
 
         public static string ToText(this TimeSpan timespan, string format = @"dd\:hh\:mm")
@@ -111,7 +167,7 @@ namespace Bitsmith
             List<string> list = new List<string>();
             if (!String.IsNullOrEmpty(p))
             {
-                string[] t = p.Split(',');
+                string[] t = p.Split(new char[] {',',' ',';','\r','\n','\t'},StringSplitOptions.RemoveEmptyEntries);
                 foreach (string s in t)
                 {
                     list.Add(s.Trim().ToLower());

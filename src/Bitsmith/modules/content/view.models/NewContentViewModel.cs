@@ -211,8 +211,8 @@ namespace Bitsmith.ViewModels
         }
 
 
-
-        private string _Path = $"/content/{Environment.UserName}";
+        
+        private string _Path;
         public string Path
         {
             get { return _Path; }
@@ -220,6 +220,20 @@ namespace Bitsmith.ViewModels
             {
                 _Path = value;
                 OnPropertyChanged("Path");
+            }
+        }
+
+        private List<string> _Paths;
+        public List<string> Paths
+        {
+            get
+            {
+                return _Paths;
+            }
+            set
+            {
+                _Paths = value;
+                OnPropertyChanged("Paths");
             }
         }
 
@@ -299,6 +313,22 @@ namespace Bitsmith.ViewModels
                     Mime = "text";
                 }
             }
+        }
+
+        public NewContentViewModel()
+        {
+            Paths = new List<string>(new string[] { $"/content" });
+        }
+
+        internal void Refresh(TagMapViewModel tag, ContentTypeOption contentType)
+        {
+            Paths = new List<string>(new string[] { $"/content" });
+            Filepath = string.Empty;
+            Display = string.Empty;
+            Body = string.Empty;
+            Tags = new List<string>();
+            AddTag(tag);
+            ContentType = contentType;
         }
 
         public bool Validate()

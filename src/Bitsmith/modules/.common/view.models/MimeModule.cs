@@ -1,4 +1,5 @@
-﻿using Bitsmith.Models;
+﻿using Bitsmith.DataServices.Abstractions;
+using Bitsmith.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -51,8 +52,9 @@ namespace Bitsmith.ViewModels
         }
 
 
-        public MimeModule()
+        public MimeModule(IDataService dataService)
         {
+            DataService = dataService;
             Filepath = Path.Combine(AppConstants.SettingsDirectory, base.Filepath);
         }
         protected override bool LoadData()
@@ -69,7 +71,7 @@ namespace Bitsmith.ViewModels
                 list.Add(new MimeMap() { Id = "pdf", Extension = ".pdf", Display = "pdf", Name = "PDF", Mime = "application/pdf", View = "Bitsmith.ContentItemFileView" });
                 list.Add(new MimeMap() { Id = "xlsx", Extension = ".xlsx", Display = "xlsx", Name = "MS-Excel", Mime = "application/vnd.ms-excel", View = "Bitsmith.ContentItemFileView" });
                 list.Add(new MimeMap() { Id = "xls", Extension = ".xls", Display = "xls", Name = "MS-Excel", Mime = "application/vnd.ms-excel", View = "Bitsmith.ContentItemFileView" });
-                list.Add(new MimeMap() { Id = "docx", Extension = ".docx", Display = "docx", Name = "MS-Word", Mime = "application/msword", View = "Bitsmith.ContentItemFileView" });
+                list.Add(new MimeMap() { Id = "docx", Extension = ".docx", Display = "docx", Name = "MS-Word", Mime = "application/msword", View = "Bitsmith.ContentItemWordView" });
                 list.Add(new MimeMap() { Id = "doc", Extension = ".doc", Display = "doc", Name = "MS-Word", Mime = "application/msword", View = "Bitsmith.ContentItemFileView" });
                 list.Add(new MimeMap() { Id = "csv", Extension = ".csv", Display = "csv", Name = "Comma Delimited", Mime = "text/plain", View = "Bitsmith.ContentItemTextfileView" });
                 list.Add(new MimeMap() { Id = "xml", Extension = ".xml", Display = "xml", Name = "XML", Mime = "text/xml", View = "Bitsmith.ContentItemTextfileView" });

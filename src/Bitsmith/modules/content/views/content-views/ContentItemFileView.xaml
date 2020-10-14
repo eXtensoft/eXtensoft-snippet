@@ -19,6 +19,7 @@
             <RowDefinition Height="3"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" Text="Title"/>
         <TextBlock Grid.Column="0" Grid.Row="4" HorizontalAlignment="Right" Text="Text"/>
@@ -29,5 +30,7 @@
         <Border BorderBrush="Gainsboro" BorderThickness="3" CornerRadius="5" Grid.Column="2" Grid.Row="4">
             <TextBox Text="{Binding Path=Body}" IsReadOnly="True" />
         </Border>
+        <TextBlock Grid.Column="0" Grid.Row="6" Text="Paths"/>
+        <TextBox Grid.Column="2" Grid.Row="6" Text="{Binding Path=Paths, Converter={StaticResource cvtPaths}}" Background="Transparent"/>
     </Grid>
 </UserControl>

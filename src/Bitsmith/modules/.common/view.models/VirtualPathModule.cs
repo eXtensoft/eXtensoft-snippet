@@ -1,17 +1,18 @@
-﻿using Bitsmith.Models;
+﻿using Bitsmith.DataServices.Abstractions;
+using Bitsmith.Models;
+using DocumentFormat.OpenXml.Bibliography;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Bitsmith.ViewModels
 {
-	public class VirtualPathModule : Module<DomainPathMap>
+    public class VirtualPathModule : Module<DomainPathMap>
     {
 
         private ICommand _ViewPathDomainsCommand;
@@ -92,6 +93,17 @@ namespace Bitsmith.ViewModels
 
 		public ObservableCollection<DomainPathMapViewModel> Items { get; set; }
 
+		private IPathNode _SelectedNode;
+		public IPathNode SelectedNode
+        {
+            get { return _SelectedNode; }
+            set
+            {
+				_SelectedNode = value;
+				OnPropertyChanged("SelectedNode");
+            }
+        }
+
 
 		private ICommand _AddItemCommand;
 		public ICommand AddItemCommand
@@ -127,19 +139,21 @@ namespace Bitsmith.ViewModels
 
 		}
 
-        public VirtualPathModule()
+        public VirtualPathModule(IDataService dataService)
         {
+
+			DataService = dataService;
 			Filepath = Path.Combine(AppConstants.SettingsDirectory, base.Filepath);
         }
 
 
 		protected override bool LoadData()
         {
-			if (!File.Exists(Filepath))
-            {
-                List<DomainPathMap> list = new List<DomainPathMap>().Default();
-                FileSystemDataProvider.TryWrite<DomainPathMap>(list, out string message, Filepath);
-            }
+			//if (!File.Exists(Filepath))
+   //         {
+   //             List<DomainPathMap> list = new List<DomainPathMap>().Default();
+   //             FileSystemDataProvider.TryWrite<DomainPathMap>(list, out string message, Filepath);
+   //         }
 
             return base.LoadData();
         }
@@ -148,7 +162,11 @@ namespace Bitsmith.ViewModels
         {
             Items = new ObservableCollection<DomainPathMapViewModel>( from x in Models select new DomainPathMapViewModel(x));
 			Items.CollectionChanged += Items_CollectionChanged;
-			SelectedDomain = Items[0];
+            if (Items.Any())
+            {
+				SelectedDomain = Items[0];
+            }
+			
 		}
 
 		private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -177,6 +195,137 @@ namespace Bitsmith.ViewModels
 			}
 		}
 
+        internal List<DomainViewModel> Build(List<Domain> domains, List<ContentItem> items)
+        {
+			List<DomainViewModel> list = new List<DomainViewModel>();
+			List<DomainPathMapViewModel> additions = new List<DomainPathMapViewModel>();
+            foreach (var domain in domains)
+            {
+				var item = Items.FirstOrDefault(p => p.Id.Equals(domain.Id, StringComparison.OrdinalIgnoreCase));
+                if (item == null)
+                {
+					item = new DomainPathMapViewModel(new DomainPathMap() 
+					{ 
+						Id = domain.Id,
+						Display = domain.Name,
+						Slug = domain.Name.ToLower(),
+						Path = domain.Name.ToLower(),
+						Items = new List<PathNode>().Default()
+					});
+					additions.Add(item);
+                }
+				list.Add(new DomainViewModel(domain, item));
+            }
+			additions.ForEach(x => { Items.Add(x); });
+			Build2(items);
+			return list;
+        }
 
+        internal void Build(List<ContentItem> items)
+        {
+			Dictionary<string, List<string>> d = new Dictionary<string, List<string>>();
+			Dictionary<string, HashSet<string>> hs = new Dictionary<string, HashSet<string>>();
+            foreach (var item in items.Where(y=>!y.Mime.Equals("text/credential")))
+            {
+				string domain = item.Domain();
+                foreach (var path in item.Paths)
+                {
+					string s = path.Trim().ToLower();
+                    if (!d.ContainsKey(domain))
+                    {
+						d.Add(domain, new List<string>());
+						hs.Add(domain, new HashSet<string>());
+                    }
+                    if (hs[domain].Add(s))
+                    {
+						d[domain].Add(s);
+                    }
+                }
+            }
+            foreach (var domain in d.Keys)
+            {
+				var found = Items.FirstOrDefault(x => x.Id.Equals(domain));
+                if (found != null)
+                {
+					d[domain].Sort();
+                    foreach (var path in d[domain])
+                    {
+						found.EnsurePath(path);
+                    }
+                }
+            }
+
+        }
+		internal void Build2(List<ContentItem> items)
+		{
+			Dictionary<string, List<string>> d = new Dictionary<string, List<string>>();
+			Dictionary<string, HashSet<string>> hs = new Dictionary<string, HashSet<string>>();
+			foreach (var item in items.Where(y => !y.Mime.Equals("text/credential")))
+			{
+                if (item.HasFile())
+                {
+					var p = $"/{AppConstants.Paths.Files}/{item.Mime.Trim(new char[] { '.' })}";
+                    if (!item.Paths.Contains(p))
+                    {
+						item.Paths.Add(p);
+                    }
+                }
+				string domain = item.Domain();
+				if (!d.ContainsKey(domain))
+				{
+					d.Add(domain, new List<string>());
+					hs.Add(domain, new HashSet<string>());
+				}
+				foreach (var path in item.Paths)
+				{
+					string s = path.Trim().ToLower();
+					if (hs[domain].Add(s))
+					{
+						d[domain].Add(s);
+					}
+				}
+
+				if (item.HasFile())
+				{
+					var filetype = item.Mime.Trim(new char[] { '.' });
+					var p = $"/{AppConstants.Paths.Files}/{filetype}";
+                    if (hs[domain].Add(p))
+                    {
+						d[domain].Add(p);
+                    }
+				}
+
+			}
+			foreach (var domain in d.Keys)
+			{
+				var found = Items.FirstOrDefault(x => x.Id.Equals(domain));
+				if (found != null)
+				{
+					d[domain].Sort();
+					foreach (var path in d[domain])
+					{
+						found.EnsurePath(path);
+					}
+				}
+			}
+
+		}
+
+
+		internal void Ensure(ContentItem item)
+        {
+			string domain = item.Domain();
+			var found = Items.FirstOrDefault(x => x.Id.Equals(domain));
+			if (found != null)
+			{
+				foreach (var path in item.Paths)
+				{
+					found.EnsurePath(path);
+				}
+			}
+
+        }
+    
+	
 	}
 }

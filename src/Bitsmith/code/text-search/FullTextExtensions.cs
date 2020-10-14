@@ -6,20 +6,25 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using Bitsmith;
+using Bitsmith.Models;
 using Bitsmith.ViewModels;
 
 namespace Bitsmith.FullText
 {
     public static class FullTextExtensions
     {
-        public static ContentModule IndexContent(this ContentModule module)
-        {
-            string directory = System.IO.Path.Combine(AppConstants.ContentDirectory, AppConstants.ContentFiles);
-            TextIndexLoader.Load(module.Indexer, module.Content.Items, directory);
-
-            return module;
-        }
-
+        //public static ContentModule IndexContent(this ContentModule module)
+        //{
+        //    string directory = System.IO.Path.Combine(AppConstants.ContentDirectory, AppConstants.ContentFiles);
+        //    TextIndexLoader.Load(module.Indexer, module.Content.Items, directory);
+           
+        //    return module;
+        //}
+        //public static void IndexContent(this ContentModule module, ContentItem contentItem)
+        //{
+        //    string directory = System.IO.Path.Combine(AppConstants.ContentDirectory, AppConstants.ContentFiles);
+        //    TextIndexLoader.Load(module.Indexer, contentItem, directory);
+        //}
         public static List<Tuple<int,string>> Present(this Dictionary<string, int> profile)
         {
             SortedDictionary<int, int> groupprofile = new SortedDictionary<int, int>();
@@ -53,5 +58,27 @@ namespace Bitsmith.FullText
             }
             return tuples;
         }
+
+     
+        public static bool Load(this TextIndexes index, List<TextIndex> list)
+        {
+
+            index.AddRange(list);
+
+            return true;
+        }
+
+        public static void Delete(this TokenCollection tokens, string id)
+        {
+            foreach (var token in tokens)
+            {
+                if (token.Locations.Contains(id))
+                {
+                    token.Locations.Remove(id);
+                }
+            }
+        }
+
+
     }
 }

@@ -35,12 +35,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.11.3.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DocumentFormat.OpenXml.2.11.3\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.Packaging, Version=4.0.5.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.IO.Packaging.4.7.0\lib\net46\System.IO.Packaging.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -59,6 +71,40 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="code\converters\PathsConverter.cs" />
+    <Compile Include="code\FileFormat.cs" />
+    <Compile Include="code\pdf\PdfTextExtractor.cs" />
+    <Compile Include="code\query\Query.cs" />
+    <Compile Include="code\query\QueryExtensions.cs" />
+    <Compile Include="code\query\QueryOperatorOption.cs" />
+    <Compile Include="code\query\QueryTypeOption.cs" />
+    <Compile Include="code\query\SearchTypeOptions.cs" />
+    <Compile Include="code\query\TokenQuery.cs" />
+    <Compile Include="code\text-search\FullTextIndex.cs" />
+    <Compile Include="code\text-search\indexing\IContentIndexer.cs" />
+    <Compile Include="code\text-search\indexing\IContentProvider.cs" />
+    <Compile Include="code\text-search\indexing\Indexer.cs" />
+    <Compile Include="code\text-search\simple-text-indexer\SimpleTextIndexer.cs" />
+    <Compile Include="modules\.common\models\IPathNode.cs" />
+    <Compile Include="modules\.common\view.models\indexer\IndexerModule.cs" />
+    <Compile Include="code\text-search\natural-language-processing\LanguageOption.cs" />
+    <Compile Include="code\text-search\natural-language-processing\LanguageSettings.cs" />
+    <Compile Include="code\text-search\natural-language-processing\Parser.cs" />
+    <Compile Include="code\text-search\natural-language-processing\ParserCollection.cs" />
+    <Compile Include="code\text-search\natural-language-processing\Token.cs" />
+    <Compile Include="code\text-search\natural-language-processing\Processor.cs" />
+    <Compile Include="code\text-search\natural-language-processing\TokenTypeOption.cs" />
+    <Compile Include="modules\.common\view.models\settings\Stopword.cs" />
+    <Compile Include="modules\.common\view.models\settings\StopwordSetting.cs" />
+    <Compile Include="modules\content\view.models\QueryViewModel.cs" />
+    <Compile Include="modules\content\views\content-views\ContentItemPdfView.xaml.cs">
+      <DependentUpon>ContentItemPdfView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\content\views\content-views\ContentItemWordView.xaml.cs">
+      <DependentUpon>ContentItemWordView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="data.services\abstractions\DataResponse`1.cs" />
+    <Compile Include="data.services\abstractions\IDataService`1.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -70,6 +116,9 @@
     <Compile Include="code\json\JsonExtensions.cs" />
     <Compile Include="code\style.selectors\NavMenuItemStyleSelector.cs" />
     <Compile Include="code\ViewManager.cs" />
+    <Compile Include="data.services\FilesystemDataService.cs" />
+    <Compile Include="data.services\JsonDataService.cs" />
+    <Compile Include="data.services\XmlDataService.cs" />
     <Compile Include="modules\.common\ModuleExtensions.cs" />
     <Compile Include="modules\.common\view.models\base\GroupingViewModel`1.cs" />
     <Compile Include="modules\.common\view.models\base\SortableObservableCollection`2.cs" />
@@ -234,9 +283,7 @@
     <Compile Include="code\converters\TagsConverter.cs" />
     <Compile Include="code\text-search\FullTextExtensions.cs" />
     <Compile Include="code\text-search\TextIndex.cs" />
-    <Compile Include="code\text-search\TextIndexer.cs" />
     <Compile Include="code\text-search\TextIndexes.cs" />
-    <Compile Include="code\text-search\TextIndexLoader.cs" />
     <Compile Include="code\text-search\Token.cs" />
     <Compile Include="code\text-search\TokenCollection.cs" />
     <Compile Include="code\text-search\TokenLocation.cs" />
@@ -323,7 +370,6 @@
     <Compile Include="code\converters\BoolToVisibilityConverter.cs" />
     <Compile Include="code\converters\BoolToIntConverter.cs" />
     <Compile Include="code\converters\TagConverter.cs" />
-    <Compile Include="code\Data.cs" />
     <Compile Include="code\FileSystemDataProvider.cs" />
     <Compile Include="code\GenericObjectManager.cs" />
     <Compile Include="code\OverlayManager.cs" />
@@ -354,7 +400,6 @@
     <Compile Include="modules\.common\view.models\base\ViewModel`1.cs" />
     <Compile Include="modules\.common\view.models\commands\RelayCommand.cs" />
     <Compile Include="modules\.common\view.models\commands\RelayCommand`1.cs" />
-    <Compile Include="modules\.common\view.models\DataViewModel.cs" />
     <Compile Include="modules\.common\view.models\DomainPathMapViewModel.cs" />
     <Compile Include="modules\.common\view.models\MimeMapViewModel.cs" />
     <Compile Include="modules\.common\view.models\MimeModule.cs" />
@@ -444,6 +489,14 @@
     <Resource Include="data\statemachine.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="modules\content\views\content-views\ContentItemPdfView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\content\views\content-views\ContentItemWordView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="modules\chronos\views\ChronosView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -703,6 +756,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="code\state\" />
+    <Folder Include="code\text-search\multi-lingual\" />
     <Folder Include="code\xf\" />
     <Folder Include="model\" />
     <Folder Include="modules\project.management\dataprovider\" />
@@ -759,6 +813,27 @@
     <Resource Include="content\icons\tag-black-basic.png" />
     <Resource Include="content\icons\tag-black-list.png" />
     <Resource Include="content\icons\tag-black-star.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="data\indexer-exclusions.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="data\stop-words-english.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="data\stop-words-nlm.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="data\stop-words-x.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="data\stop-words.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="data\stop-words-2.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="code\text-search\natural-language-processing\notes.natural-language-processing.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

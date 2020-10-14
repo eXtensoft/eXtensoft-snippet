@@ -1,4 +1,5 @@
-﻿using Bitsmith.Models;
+﻿using Bitsmith.DataServices.Abstractions;
+using Bitsmith.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -277,9 +278,10 @@ namespace Bitsmith.ViewModels
         }
 
 
-        public ChronosModule()
+        public ChronosModule(IDataService dataService)
         {
-            Filepath = Path.Combine(AppConstants.ChronosDirectory, FileSystemDataProvider.Filepath<Chronos>());
+            DataService = dataService;
+            Filepath = Path.Combine(AppConstants.ChronosDirectory, DataService.Filepath<Chronos>());
         }
 
 
@@ -378,12 +380,12 @@ namespace Bitsmith.ViewModels
             if (!File.Exists(filepath))
             {
                 Chronos chronos = new Chronos().Default();
-                if (!FileSystemDataProvider.TryWrite<Chronos>(chronos, out string error, filepath))
+                if (!DataService.TryWrite<Chronos>(chronos, out string error, filepath))
                 {
                     OnFailure(error);
                 }
             }
-            bool b = FileSystemDataProvider.TryRead<Chronos>(Filepath, out Chronos model, out string message);
+            bool b = DataService.TryRead<Chronos>(Filepath, out Chronos model, out string message);
             if (!b)
             {
                 OnFailure(message);
@@ -401,7 +403,7 @@ namespace Bitsmith.ViewModels
             bool b = true;
             if (Model != null)
             {
-                if (!FileSystemDataProvider.TryWrite<Chronos>(Model,out string message, Filepath))
+                if (!DataService.TryWrite<Chronos>(Model,out string message, Filepath))
                 {
                     OnFailure(message);
                     b = false;

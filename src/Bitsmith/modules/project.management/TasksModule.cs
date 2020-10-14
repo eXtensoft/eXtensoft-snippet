@@ -1,4 +1,5 @@
 ﻿using Bitsmith.BusinessProcess;
+using Bitsmith.DataServices.Abstractions;
 using Bitsmith.Models;
 using Bitsmith.ProjectManagement;
 using System;
@@ -7,9 +8,6 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 
 namespace Bitsmith.ViewModels
@@ -148,13 +146,13 @@ namespace Bitsmith.ViewModels
             if (!File.Exists(filepath))
             {
                 TaskManager project = new TaskManager().Default();
-                if (!FileSystemDataProvider.TryWrite<TaskManager>(project, out string error, filepath))
+                if (!DataService.TryWrite<TaskManager>(project, out string error, filepath))
                 {
                     OnFailure(error);
                 }
             }
 
-            bool b = FileSystemDataProvider.TryRead<TaskManager>(Filepath, out model, out string message);
+            bool b = DataService.TryRead<TaskManager>(Filepath, out model, out string message);
             if (!b)
             {
                 OnFailure(message);
@@ -166,17 +164,17 @@ namespace Bitsmith.ViewModels
         protected override bool SaveData()
         {
             bool b = true;
-            var filepath = FileSystemDataProvider.Filepath<TaskItem>("archive");
+            var filepath = DataService.Filepath<TaskItem>("archive");
             var removals = (from x in Items where x.Status.Token.Equals("archived") select x.Model.Id).ToList();
             
             if (removals.Count > 0)
             {
                 var toArchive = model.Items.Where(x => removals.Contains(x.Id)).ToList();
-                if (FileSystemDataProvider.TryRead<TaskItem>(filepath,out List<TaskItem> previouslyArchived, out string message))
+                if (DataService.TryRead<TaskItem>(filepath,out List<TaskItem> previouslyArchived, out string message))
                 {
                     toArchive.AddRange(previouslyArchived);
                 }
-                if (!FileSystemDataProvider.TryWrite<TaskItem>(toArchive, out string error, filepath))
+                if (!DataService.TryWrite<TaskItem>(toArchive, out string error, filepath))
                 {
                     b = false;
                 }
@@ -193,7 +191,7 @@ namespace Bitsmith.ViewModels
 
             if (model != null)
             {
-                if (!FileSystemDataProvider.TryWrite<TaskManager>(model, out string message,Filepath))
+                if (!DataService.TryWrite<TaskManager>(model, out string message,Filepath))
                 {
                     OnFailure(message);
                     return false;
@@ -267,9 +265,10 @@ namespace Bitsmith.ViewModels
         }
 
 
-        public TasksModule()
+        public TasksModule(IDataService dataService)
         {
-            Filepath = Path.Combine(AppConstants.TasksDirectory, FileSystemDataProvider.Filepath<TaskManager>());
+            DataService = dataService;
+            Filepath = Path.Combine(AppConstants.TasksDirectory, DataService.Filepath<TaskManager>());
         }
 
     }

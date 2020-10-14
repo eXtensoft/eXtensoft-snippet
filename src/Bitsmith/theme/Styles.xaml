@@ -166,7 +166,11 @@
     </Style>
 
 
-    
+    <Style x:Key="OpenFileCommandButton" TargetType="Button" BasedOn="{StaticResource CommandButton}">
+        <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+        <Setter Property="Content" Value="&#xE8E5;"/>
+        <Setter Property="FontWeight" Value="ExtraBold"/>
+    </Style>    
 
     <Style x:Key="IconCommandButton" TargetType="Button" BasedOn="{StaticResource CommandButton}">
         <Setter Property="Content" Value="X"/>

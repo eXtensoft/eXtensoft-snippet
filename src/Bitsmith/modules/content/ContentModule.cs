@@ -1,5 +1,9 @@
-﻿using Bitsmith.FullText;
+﻿using Bitsmith.DataServices.Abstractions;
+using Bitsmith.FullText;
+using Bitsmith.Indexing;
 using Bitsmith.Models;
+using Bitsmith.NaturalLanguage;
+using Bitsmith.Search;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,7 +12,7 @@ using System.ComponentModel;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -20,7 +24,104 @@ namespace Bitsmith.ViewModels
     public class ContentModule : Module
     {
 
-        public TextIndexer Indexer { get; set; } = new TextIndexer();
+        public VirtualPathModule Paths { get; set; }
+
+        private bool _IsRecentQueries = true;
+        public bool IsRecentQueries
+        {
+            get { return _IsRecentQueries; }
+            set
+            {
+                _IsRecentQueries = value;
+                OnPropertyChanged("IsRecentQueries");
+                //MessageBox.Show($"Is Recent = {value}");
+                Queries.Refresh();
+            }
+        }
+
+        private ICollectionView _Queries;
+        public ICollectionView Queries
+        {
+            get
+            {
+                if (AllQueries != null && _Queries == null)
+                {
+                    _Queries = CollectionViewSource.GetDefaultView(AllQueries);
+                    _Queries.Filter = FilterQueries;
+                }
+                return _Queries;
+            }
+        }
+
+
+        private bool FilterQueries(object o)
+        {
+            
+            bool b = false;
+            var vm = o as QueryViewModel;
+            if (vm != null)
+            {
+                if (_IsRecentQueries)
+                {
+                    if (vm.Model.QueryType == QueryTypeOption.Recent)
+                    {
+                        b = true;
+                    }
+                }
+                else if(vm.Model.QueryType != QueryTypeOption.Recent)
+                {
+                    b = true;
+                }
+            }
+            return b;
+        }
+
+
+        private QueryViewModel _SelectedQuery;
+        public QueryViewModel SelectedQuery
+        {
+            get { return _SelectedQuery; }
+            set
+            {
+                _SelectedQuery = value;                     
+                OnPropertyChanged("SelectedQuery");
+                if (_SelectedQuery != null)
+                {
+                    SetSearch(_SelectedQuery);                   
+                    ExecuteQuery();
+                    MessageBox.Show(_SelectedQuery.Model.Id());
+                }
+            }
+        }
+
+        private void SetSearch(QueryViewModel query)
+        {
+            QueryText = query.QueryText;
+            SearchTypeOptions options = SearchTypeOptions.None;
+            foreach (var item in query.Model.TokenQueries)
+            {
+                if (!options.HasFlag(item.SearchType))
+                {
+                    options = options | item.SearchType;
+                }
+            }
+            if (options == SearchTypeOptions.Tag)
+            {
+                IsTagSearch = true;
+            }
+            else if(options == SearchTypeOptions.None)
+            {
+                IsTagSearch = true;
+            }
+            else if (options == SearchTypeOptions.FullText)
+            {
+                IsTagSearch = false;
+            }
+        }
+
+        public ObservableCollection<QueryViewModel> AllQueries { get; set; }
+
+        public IContentIndexer Indexer { get; set; }
 
         internal ContentManager ContentManager { get; set; }
         public ObservableCollection<MimeMapViewModel> Mimes { get; set; }
@@ -391,32 +492,39 @@ namespace Bitsmith.ViewModels
         }
         private void ExecuteQuery()
         {
-            SearchTerms = new List<string>();
-
-            if (!string.IsNullOrWhiteSpace(_QueryText))
-            {
-                _SearchTerms = _QueryText.SplitTrimLower().NormalizeQueryKeys();                
-            }
-            else
-            {
-                _SearchTerms.Add("all");
-            }
-            
-            SearchResults = Search(_SearchTerms);
+            var searchtype = IsTagSearch ? SearchTypeOptions.Tag : SearchTypeOptions.FullText;
+            var query = new Query().Parse(_QueryText,searchtype,QueryOperatorOption.Or, SelectedDomain.Id);
+            SearchResults = query.Execute(model.Items, Indexer);
 
         }
 
         public List<ContentItemViewModel> ExecuteTaskSearch(string taskId)
         {
-            return Search(new List<string> { $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Task}:{taskId}" });
+            var list = new List<string> { $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Task}:{taskId}" };
+            var found = model.Items.Where(x => x.Includes((from s in list select new QueryExpression(s)).ToList())).OrderBy(z => z.Display).ToList();
+            return  new List<ContentItemViewModel>(from f in found select new ContentItemViewModel(f));
+        }
+
+
+        internal void ExecuteQuery(IPathNode node)
+        {
+            
+            var query = new Query().Parse(node,SelectedDomain.Id);
+            SearchResults = query.Execute(model.Items, Indexer);
         }
 
 
         private void ExecuteQuery(string tag)
         {
-            SearchResults = Search(new List<string>() { tag });
+            if (!IsTagSearch)
+            {
+                IsTagsExpanded = true;
+            }
+            var query = new Query().Parse(tag, SearchTypeOptions.Tag, QueryOperatorOption.Or, SelectedDomain.Id);
+            SearchResults = query.Execute(model.Items, Indexer);
         }
 
+        /*
         private List<ContentItemViewModel> Search(List<string> list)
         {
             List<ContentItemViewModel> result = null;
@@ -446,20 +554,20 @@ namespace Bitsmith.ViewModels
 
             }
             else
-            {                
-                // for a given domain, execute a query;
-                var domain = SelectedDomain.Id;       
-                if (IsTagSearch) // tag search
+            {
+
+                var domain = SelectedDomain.Id;
+                if (IsTagSearch) 
                 {
-                                 
+
                     var found = model.Items.ForDomain(domain).Where(x => x.Includes((from s in list select new QueryExpression(s)).ToList())).OrderBy(z => z.Display).ToList();
                     result = new List<ContentItemViewModel>(from f in found select new ContentItemViewModel(f));
                 }
-                else // fulltext search
+                else 
                 {
                     IEnumerable<string> ids = Indexer.Query(list);
-                    var found = model.Items.ForDomain(domain).Where(x => ids.Contains(x.Id)).OrderBy(z=>z.Display).ToList();
-                    result = new List<ContentItemViewModel>(from f in found select new ContentItemViewModel(f) {SearchTerm = list[0] });
+                    var found = model.Items.ForDomain(domain).Where(x => ids.Contains(x.Id)).OrderBy(z => z.Display).ToList();
+                    result = new List<ContentItemViewModel>(from f in found select new ContentItemViewModel(f) { SearchTerm = list[0] });
                 }
 
             }
@@ -473,8 +581,8 @@ namespace Bitsmith.ViewModels
 
 
         }
+        */
 
-        
 
 
         public ObservableCollection<DomainViewModel> Domains { get; set; }
@@ -510,40 +618,7 @@ namespace Bitsmith.ViewModels
             }
         }
 
-        internal void Setup(VirtualPathModule paths, MimeModule mimes, SettingsModule settings)
-        {
-            base.Setup();
 
-
-            Mimes = mimes.Items;
-            List<DomainPathMapViewModel> additions = new List<DomainPathMapViewModel>();
-            List<DomainViewModel> list = new List<DomainViewModel>();
-            foreach (var domain in model.Domains)
-            {
-                var item = paths.Items.FirstOrDefault(p => p.Id.Equals(domain.Id, StringComparison.OrdinalIgnoreCase));
-                if (item == null)
-                {
-                    item = new DomainPathMapViewModel(new DomainPathMap()
-                    {
-                        Id = domain.Id,
-                        Display = domain.Name,
-                        Slug = domain.Name.ToLower(),
-                        Path = domain.Name.ToLower()
-                    });
-                    additions.Add(item);
-                }
-                list.Add(new DomainViewModel(domain,item));
-            }
-            additions.ForEach(x => { paths.Items.Add(x); });
-
-            Domains = new ObservableCollection<DomainViewModel>(list);
-            Domains.CollectionChanged += Domains_CollectionChanged;
-
-            ApplyPreferences(UserPreferences);
-            this.IndexContent();
-            Resolver.Load(model.Items);
-
-        }
 
 
         private bool CanAddDomain()
@@ -681,7 +756,21 @@ namespace Bitsmith.ViewModels
 
         public void AddContent(ContentItem item)
         {
+            var domain = item.Properties.FirstOrDefault(x => x.Name.Equals($"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Domain}"));
+            if (domain == null)
+            {
+                item.Properties.Add(new Property() { Name = $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Domain}", Value = SelectedDomain.Id });
+            }           
+            if (Indexer != null)
+            {
+                Indexer.Index(item);
+            }
+            if (Paths != null)
+            {
+                Paths.Ensure(item);
+            }
             model.Items.Add(item);
+
         }
 
 
@@ -785,31 +874,26 @@ namespace Bitsmith.ViewModels
 
 
 
+
         protected override bool LoadData()
         {
-            string filepath = Filepath;
-            if (!File.Exists(filepath))
+
+            if (!File.Exists(Filepath))
             {
                 Content content = new Content().Default();
-                if(!FileSystemDataProvider.TryWrite<Content>(content, out string error, filepath))
+                if(!DataService.TryWrite<Content>(content, out string error, Filepath))
                 {
                     OnFailure(error);
                 }               
             }
 
-            bool b = FileSystemDataProvider.TryRead<Content>(Filepath, out model, out string message);
+            bool b = DataService.TryRead<Content>(Filepath, out model, out string message);
             if (!b)
             {
                 OnFailure(message);
             }
 
             return b;
-        }
-
-        public override void Initialize()
-        {
-            //LoadTagResolver();
-            //this.IndexContent();
         }
 
         private void Domains_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -843,10 +927,54 @@ namespace Bitsmith.ViewModels
         }
 
 
-        public ContentModule()
+        public ContentModule(IDataService dataService, 
+            SettingsModule settings, 
+            IndexerModule indexer,
+            VirtualPathModule paths)
         {
+            DataService = dataService;
+            UserPreferences = settings.UserPreferences;
+            Indexer = indexer.Indexer;
+            Paths = paths;
             ContentManager = new ContentManager(Path.Combine(AppConstants.ContentDirectory, AppConstants.ContentFiles));
-            Filepath = Path.Combine(AppConstants.ContentDirectory, FileSystemDataProvider.Filepath<Content>());
+            Filepath = Path.Combine(AppConstants.ContentDirectory, DataService.Filepath<Content>());
+
+        }
+
+        internal void Setup(MimeModule mimes, SettingsModule settings)
+        {
+            base.Setup();
+
+            if (model.Queries == null || model.Queries.Count == 0)
+            {
+                model.Queries = new List<Query>().Default(model.Domains);
+            }
+            AllQueries = new ObservableCollection<QueryViewModel>(from x in model.Queries select new QueryViewModel(x));
+            AllQueries.CollectionChanged += AllQueries_CollectionChanged;
+
+
+            Mimes = mimes.Items;
+            //var list = Path.Ensure(model.Domains, model.Items);
+            var list = Paths.Build(model.Domains, model.Items);
+            Domains = new ObservableCollection<DomainViewModel>(list);
+            
+            Domains.CollectionChanged += Domains_CollectionChanged;
+
+            ApplyPreferences(UserPreferences);
+
+
+            if (Indexer != null &&
+                !Indexer.IsInitialized)
+            {
+                Indexer.Index(model.Items);
+            }
+
+            Resolver.Load(model.Items);
+        }
+
+        private void AllQueries_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            Queries.Refresh();
         }
 
         protected override void ApplyPreferences(UserSettings userPreferences)
@@ -904,7 +1032,7 @@ namespace Bitsmith.ViewModels
                     }
                 }
 
-                if (!FileSystemDataProvider.TryWrite<Content>(model, out string message, Filepath))
+                if (!DataService.TryWrite<Content>(model, out string message, Filepath))
                 {
                     OnFailure(message);
                     return false;
@@ -913,12 +1041,10 @@ namespace Bitsmith.ViewModels
             return true;
         }
 
-
-
-        private void LoadTagResolver()
-        {
-            Resolver.Load(model.Items);
-        }
+        //private void LoadTagResolver()
+        //{
+        //    Resolver.Load(model.Items);
+        //}
 
     }
 }

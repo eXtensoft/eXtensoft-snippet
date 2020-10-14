@@ -44,7 +44,7 @@ namespace Bitsmith
         {
             TextRange textRange = new TextRange(rtbBody.Document.ContentStart, rtbBody.Document.ContentEnd);
             viewmodel.Body = textRange.Text;
-            rtbBody.Document = viewmodel.Body.ToFlowDocument(viewmodel.SearchTerm, Brushes.Yellow);
+            rtbBody.Document = viewmodel.Body.ToFlowDocument(viewmodel.SearchTerms, Brushes.Yellow);
         }
 
         private bool _IsDirty = false;
@@ -73,9 +73,9 @@ namespace Bitsmith
         {
 
             viewmodel = DataContext as ContentItemViewModel;
-            if (viewmodel != null && !String.IsNullOrWhiteSpace(viewmodel.SearchTerm))
+            if (viewmodel != null && viewmodel.IsFullTextSearch)
             {
-                rtbBody.Document = viewmodel.Body.ToFlowDocument(viewmodel.SearchTerm, Brushes.Yellow);
+                rtbBody.Document = viewmodel.Body.ToFlowDocument(viewmodel.SearchTerms, Brushes.Yellow);
                 _HasLoaded = true;
             }
         }

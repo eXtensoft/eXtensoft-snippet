@@ -37,5 +37,12 @@ namespace Bitsmith
             public const string Task = "task";
             public const string Credentials = "credentials";
         }
+
+        public static class Paths
+        {
+            public const string Content = "content";
+            public const string Files = "files";
+            public const string Default = "virtual";
+        }
     }
 }

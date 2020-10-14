@@ -1,4 +1,6 @@
-﻿using Bitsmith.Models;
+﻿using Bitsmith.DataServices.Abstractions;
+using Bitsmith.Models;
+using System;
 using System.CodeDom;
 using System.ComponentModel;
 using System.Windows;
@@ -7,6 +9,7 @@ namespace Bitsmith.ViewModels
 {
     public class Module : INotifyPropertyChanged
     {
+        public IDataService DataService { get; set; }
         protected virtual string ModuleKey 
         { 
             get { return this.GetType().Name.CamelToKebab(); } 
@@ -25,7 +28,6 @@ namespace Bitsmith.ViewModels
                 if (value != null)
                 {
                     _UserPreferences = value;
-                    //ApplyPreferences(_UserPreferences);
                 }
             }
         }
@@ -39,15 +41,24 @@ namespace Bitsmith.ViewModels
 
         }
 
-        public virtual string Filepath { get; set; }
+        internal virtual string Filepath { get; set; }
+        //private string _Filepath;
+        //public string Filepath
+        //{
+        //    get { return _Filepath; }
+        //    set { _Filepath = value; }
+        //}
+
+
         public bool IsInitialized { get; set; }
 
         public void Setup()
         {
-            IsInitialized = LoadData();
-            var s = this.GetType().Name;
-            Initialize();
-
+            if (DataService != null)
+            {
+                IsInitialized = LoadData();
+                Initialize();
+            }
         }
 
         public virtual void Initialize() { }

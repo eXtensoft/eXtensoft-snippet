@@ -1,4 +1,5 @@
 ﻿using Bitsmith.BusinessProcess;
+using Bitsmith.DataServices.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -93,8 +94,9 @@ namespace Bitsmith.ViewModels
             }
         }
 
-        public SettingsModule()
+        public SettingsModule(IDataService dataService)
         {
+            DataService = dataService;
             Filepath = Path.Combine(AppConstants.SettingsDirectory, base.Filepath);
         }
 

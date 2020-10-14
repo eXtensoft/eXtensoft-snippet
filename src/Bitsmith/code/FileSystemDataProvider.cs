@@ -1,4 +1,5 @@
-﻿using Bitsmith.ProjectManagement;
+﻿using Bitsmith.DataServices.Abstractions;
+using Bitsmith.ProjectManagement;
 using Bitsmith.Styx;
 using System;
 using System.CodeDom;
@@ -15,12 +16,12 @@ namespace Bitsmith
 
         public static bool TryRead<T>(out List<T> list,
             out string message,
-            string filepath = "") where T : class, new()
+            string filepath) where T : class, new()
         {
             bool b = false;
             message = string.Empty;
             list = new List<T>();
-            filepath = !String.IsNullOrWhiteSpace(filepath) ? filepath : Filepath<T>();
+            //filepath = !String.IsNullOrWhiteSpace(filepath) ? filepath : Filepath<T>();
             try
             {
                 if (File.Exists(filepath))
@@ -105,11 +106,11 @@ namespace Bitsmith
             return b;
         }
 
-        public static bool TryWrite<T>(List<T> list, out string message, string filepath = "") where T : class, new()
+        public static bool TryWrite<T>(List<T> list, out string message, string filepath) where T : class, new()
         {
             bool b = false;
             message = string.Empty;
-            filepath = !String.IsNullOrWhiteSpace(filepath) ? filepath : Filepath<T>();
+            //filepath = !String.IsNullOrWhiteSpace(filepath) ? filepath : Filepath<T>();
             try
             {
                 //JsonSerializerSettings options = new JsonSerializerOptions() 
@@ -133,11 +134,11 @@ namespace Bitsmith
             return b;
         }
 
-        public static bool TryWrite<T>(T model, out string message, string filepath = "") where T : class, new()
+        public static bool TryWrite<T>(T model, out string message, string filepath) where T : class, new()
         {
             bool b = false;
             message = string.Empty;
-            filepath = !String.IsNullOrWhiteSpace(filepath) ? filepath : Filepath<T>();
+            //filepath = !String.IsNullOrWhiteSpace(filepath) ? filepath : Filepath<T>();
             try
             {
                 //JsonSerializerOptions options = new JsonSerializerOptions() 
@@ -257,21 +258,23 @@ namespace Bitsmith
             { typeof(GraphDesigner), "graphs" },
         };
 
-        public static string Filepath<T>() where T : class, new()
+        public static string Filepath<T>(FileFormat fileFormat) where T : class, new()
         {
             T t = new T();
             var type = t.GetType();
             var name = !filepathmaps.ContainsKey(type) ? type.Name.Expand() : filepathmaps[type];
-            return $"{name}.xml";
+            var extension = fileFormat.ToString().ToLower();
+            return $"{name}.{extension}";
 
         }
 
-        public static string Filepath<T>(string suffix) where T : class, new()
+        public static string Filepath<T>(FileFormat fileFormat, string suffix) where T : class, new()
         {
             T t = new T();
             var type = t.GetType();
             var name = !filepathmaps.ContainsKey(type) ? type.Name.Expand() : filepathmaps[type];
-            return $"{name}_{suffix}.xml";
+            var extension = fileFormat.ToString().ToLower();
+            return !String.IsNullOrWhiteSpace(suffix) ? $"{name}_{suffix}.{extension}" : $"{name}.{extension}";
         }
 
 

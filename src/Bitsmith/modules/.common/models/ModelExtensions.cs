@@ -1,5 +1,7 @@
-﻿using System;
+﻿using DocumentFormat.OpenXml.Office2013.Excel;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.Remoting.Lifetime;
 using System.Text;
@@ -30,15 +32,32 @@ namespace Bitsmith.Models
 
         public static List<PathNode> Default(this List<PathNode> list)
         {
-            list.Add(new PathNode().Default());
+            list.Add(new PathNode()
+            {
+                Path = $"/{AppConstants.Paths.Content}",
+                Slug = $"/{AppConstants.Paths.Content}",
+                Display = $"{AppConstants.Paths.Content.ToTitleCase()}"
+            });
+            list.Add(new PathNode()
+            {
+                Path = $"/{AppConstants.Paths.Files}",
+                Slug = $"/{AppConstants.Paths.Files}",
+                Display = $"{AppConstants.Paths.Files.ToTitleCase()}"
+            });
+            list.Add(new PathNode()
+            {
+                Path = $"/{AppConstants.Paths.Default}",
+                Slug = $"/{AppConstants.Paths.Default}",
+                Display = $"{AppConstants.Paths.Default.ToTitleCase()}"
+            });
             return list;
         }
 
 
         public static PathNode Default(this PathNode model)
         {
-            model.Path = $"/paths/{Environment.UserName}";
-            model.Slug = $"/paths/{Environment.UserName.ToLower()}";
+            model.Path = $"/{AppConstants.Paths.Content}";
+            model.Slug = $"/{AppConstants.Paths.Content}";
             model.Display = Environment.UserName;
             return model;
         }
@@ -77,5 +96,34 @@ namespace Bitsmith.Models
 
         }
 
+        public static string ToTitleCase(this string text)
+        {
+            if (!string.IsNullOrWhiteSpace(text))
+            {
+                TextInfo ti = CultureInfo.CurrentCulture.TextInfo;
+                return ti.ToTitleCase(text.Trim());
+            }
+            return text;
+            
+        }
+
+        public static bool StripSlug(this string path, out string slug, out string next)
+        {
+            bool b = false;
+            slug = string.Empty;
+            next = string.Empty;
+            if (!string.IsNullOrWhiteSpace(path))
+            {
+                string s = path.Trim();
+                var pos = s.IndexOf('/', 1);
+                if (pos > -1)
+                {
+                    slug = path.Substring(1, pos - 1);
+                    next = path.Substring(slug.Length+1);
+                    b = true;
+                }
+            }             
+            return b;
+        }
     }
 }

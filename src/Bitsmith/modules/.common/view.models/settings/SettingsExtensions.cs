@@ -1,4 +1,5 @@
 ﻿using Bitsmith.BusinessProcess;
+using Bitsmith.NaturalLanguage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,33 @@ namespace Bitsmith
         public static Settings Default(this Settings model)
         {
             model.Workflows = new List<Workflow>().Default();
+            HashSet<string> hs = new HashSet<string>();
+            var list = Resources.indexer_exclusions.Split(new char[] { '\r','\n',',',';',':' },StringSplitOptions.RemoveEmptyEntries);
+            foreach (var item in list)
+            {
+                string s = item.Trim().ToLowerInvariant();
+                if (hs.Add(s))
+                {
+                    model.IndexExclusions.Add(s);
+                }
+            }
             return model;
+        }
+
+        public static LanguageSettings Default(this LanguageSettings settings)
+        {
+            settings.Language = "en-US";
+            var list = Resources.indexer_exclusions.Split(new char[] { }, StringSplitOptions.RemoveEmptyEntries);
+            HashSet<string> hs = new HashSet<string>();
+            foreach (var item in list)
+            {
+                var s = item.Trim().ToLower();
+                if (hs.Add(s))
+                {
+                    settings.Tokens.Add(new Token() { Language = "en-US", Content = s, Type = TokenTypeOption.Stop });
+                }
+            }
+            return settings;
         }
 
         private static List<Workflow> Default(this List<Workflow> list)

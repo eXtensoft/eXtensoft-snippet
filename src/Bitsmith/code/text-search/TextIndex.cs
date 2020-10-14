@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Bitsmith.FullText
 {
     public class TextIndex
     {
+        [XmlAttribute("v")]
         public string Value { get; set; }
+        [XmlElement("t")]
         public TokenCollection Tokens { get; set; } = new TokenCollection();
 
         internal void AddToken(string token, int posX, int posY)

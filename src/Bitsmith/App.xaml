@@ -13,6 +13,7 @@
                 <ResourceDictionary Source="theme/DataTemplates.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <!--<local:BooleanToStringConverter x:Key="BoolToStringConverter"/>-->
+            <local:PathsConverter x:Key="cvtPaths"/>
             <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
             <local:BoolToVisibilityConverter x:Key="cvtBool2Visibility"/>
             <local:BoolToVisibilityConverter x:Key="ReverseVisibility" IsReverse="true" />

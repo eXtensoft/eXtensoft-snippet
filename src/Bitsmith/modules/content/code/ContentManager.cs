@@ -13,7 +13,7 @@ namespace Bitsmith.Models
         public bool IsInitialized { get; private set; } = false;
         public DirectoryInfo ContentDirectory { get; set; }
 
-        public int MaxLength { get; set; } = 300;
+        public int MaxLength { get; set; } = 500;
         public bool TryInload(FileInfo info, out string filename)
         {
             filename = string.Empty;

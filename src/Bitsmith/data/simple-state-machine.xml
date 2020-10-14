@@ -5,38 +5,27 @@
   <State name="Content" display="Content" isNavigate="true" order="0" />
   <State name="Tasks" display="Tasks" isNavigate="true" order="1" />
   <State name="TimeEntry" display="TimeEntry" isNavigate="true" order="2" />
-  <State name="Settings" display="Settings" isNavigate="true" order="3" />
+  <State name="Settings" display="Settings" isNavigate="false" order="3" />
   <State name="Credentials" display="Credentials" isNavigate="false" order="4" />
-
   <Transition name="Login" origin="LoggedOff" destination="Authenticated" order="0" />
   <Transition name="Content" origin="Authenticated" destination="Content" order="0" />
-
   <Transition name="Tasks" origin="Content" destination="Tasks" order="0" />
   <Transition name="TimeEntry" origin="Content" destination="TimeEntry" order="0" /> 
   <Transition name="Settings" origin="Content" destination="Settings" order="0" />  
-  <Transition name="Credentials" origin="Content" destination="Credentials" order="0" />
-  
+  <Transition name="Credentials" origin="Content" destination="Credentials" order="0" /> 
   <Transition name="Content" origin="Tasks" destination="Content" order="0"/>
   <Transition name="TimeEntry" origin="Tasks" destination="TimeEntry" order="0"/>
   <Transition name="Settings" origin="Tasks" destination="Settings" order="0"/>
-
   <Transition name="Content" origin="TimeEntry" destination="Content" order="0" />
   <Transition name="Tasks" origin="TimeEntry" destination="Tasks" order="0" />
   <Transition name="Settings" origin="TimeEntry" destination="Settings" order="0" />
-
-
   <Transition name="Content" origin="Settings" destination="Content" order="0" />
   <Transition name="TimeEntry" origin="Settings" destination="TimeEntry" order="0" />
-  <Transition name="Tasks" origin="Settings" destination="Tasks" order="0" />
-  
-  
-  <Transition name="Content" origin="Credentials" destination="Content" order="0"/>
-  
-  
+  <Transition name="Tasks" origin="Settings" destination="Tasks" order="0" />  
+  <Transition name="Content" origin="Credentials" destination="Content" order="0"/>  
   <Transition name="LogOff" origin="Content" destination="LoggedOff" order="0" />
   <Transition name="LogOff" origin="Tasks" destination="LoggedOff" order="0"/>
   <Transition name="LogOff" origin="TimeEntry" destination="LoggedOff" order="0" />
   <Transition name="LogOff" origin="Settings" destination="LoggedOff" order="0" />
   <Transition name="LogOff" origin="Credentials" destination="LoggedOff" order="0" />
-
 </StateMachine>

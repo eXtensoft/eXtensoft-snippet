@@ -16,7 +16,8 @@ namespace Bitsmith
         [XmlElement("Preferences")]
         public List<UserSettings> UserPreferences { get; set; }
 
-
+        [XmlElement("noIndex")]
+        public List<string> IndexExclusions { get; set; } = new List<string>();
         public Settings()
         {
 

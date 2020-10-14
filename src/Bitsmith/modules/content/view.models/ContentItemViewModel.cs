@@ -28,20 +28,21 @@ namespace Bitsmith.ViewModels
         {
             get
             {
-				return !String.IsNullOrWhiteSpace(_SearchTerm);
+				return SearchTerms.Count > 0;
             }
             set { }
         }
-		private string _SearchTerm;
-		public string SearchTerm
+
+		private List<string> _SearchTerms = new List<string>();
+		public List<string> SearchTerms
         {
             get
             {
-				return _SearchTerm;
+				return _SearchTerms;
             }
             set
             {
-				_SearchTerm = value;
+				_SearchTerms = value;
             }
         }
 		public string ContentType
@@ -117,6 +118,19 @@ namespace Bitsmith.ViewModels
 				OnPropertyChanged("Body");
 			}
 		}
+
+		public List<string> Paths
+        {
+            get
+            {
+				return Model.Paths;
+            }
+            set
+            {
+				Model.Paths = value;
+				OnPropertyChanged("Paths");
+            }
+        }
 
 
 		private DateTime _UpdatedAt;

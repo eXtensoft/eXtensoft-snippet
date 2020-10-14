@@ -1,4 +1,7 @@
-﻿using Bitsmith.Models;
+﻿using Bitsmith.DataServices;
+using Bitsmith.DataServices.Abstractions;
+using Bitsmith.Models;
+using Bitsmith.NaturalLanguage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +15,7 @@ namespace Bitsmith.ViewModels
     {
         public Grid Root { get; set; }
 
+        public IDataService DataService { get; set; }
 
 
         private StyxModule _Styx;
@@ -21,7 +25,7 @@ namespace Bitsmith.ViewModels
             {
                 if (_Styx == null)
                 {
-                    _Styx = new StyxModule();
+                    _Styx = new StyxModule( DataService );
                     _Styx.Setup();
                 }
                 return _Styx;
@@ -35,7 +39,7 @@ namespace Bitsmith.ViewModels
             {
                 if (_Chronos == null)
                 {
-                    _Chronos = new ChronosModule();
+                    _Chronos = new ChronosModule( DataService );
                     _Chronos.Setup();
                 }
                 return _Chronos;
@@ -45,6 +49,8 @@ namespace Bitsmith.ViewModels
         public CredentialsModule Credentials { get; set; }
         public SettingsModule Settings { get; set; }
         public ContentModule Content { get; set; }
+
+        public IndexerModule Indexer { get; set; }
 
         public TasksModule Project { get; set; }
 
@@ -75,44 +81,50 @@ namespace Bitsmith.ViewModels
 
         public WorkspaceViewModel(Workspace model)
         {
+            DataService = new XmlDataService();
+            //DataService = new JsonDataService();
+
             Overlay.RegisterOverlay(AppConstants.OverlayContent, ShowContentOverlay);
-            Settings = new SettingsModule();
+            Settings = new SettingsModule(DataService );
             Settings.Setup();
 
-            Paths = new VirtualPathModule();
+            Paths = new VirtualPathModule(DataService);
             Paths.Setup();
 
-            Mimes = new MimeModule();
+            Mimes = new MimeModule(DataService);
             Mimes.Setup();
 
-            Content = new ContentModule() { UserPreferences = Settings.UserPreferences };
-            Content.Setup(Paths,Mimes,Settings);
-            //Content.UserPreferences = Settings.UserPreferences;
+            Indexer = new IndexerModule(DataService, Settings);
+            Indexer.Setup();
 
-            Credentials = new CredentialsModule();
+            Content = new ContentModule(DataService, Settings, Indexer, Paths);
+            Content.Setup(Mimes,Settings);
+
+            Credentials = new CredentialsModule(DataService) { };
             Credentials.Setup();
 
-            Project = new TasksModule();
+            Project = new TasksModule(DataService) { UserPreferences = Settings.UserPreferences};
             Project.Setup();
-            Project.UserPreferences = Settings.UserPreferences;
 
             Workflow = new WorkflowModule();
-
 
 
         }
 
         internal void Save()
         {
-            if (Settings.CanSaveWorkspace())
-            {
-                
-                Settings.SaveWorkspace();
-            }
             if (Content.CanSaveWorkspace())
             {
                 Content.SetPreferences();
                 Content.SaveWorkspace();
+            }
+            if (Indexer.CanSaveWorkspace())
+            {
+                Indexer.SaveWorkspace();
+            }
+            if (Settings.CanSaveWorkspace())
+            {                
+                Settings.SaveWorkspace();
             }
             if (Project.CanSaveWorkspace())
             {
@@ -126,10 +138,6 @@ namespace Bitsmith.ViewModels
             if (Styx != null && Styx.CanSaveWorkspace())
             {
                 Styx.SaveWorkspace();
-            }
-            if (Settings.CanSaveWorkspace())
-            {
-                Settings.SaveWorkspace();
             }
 
         }

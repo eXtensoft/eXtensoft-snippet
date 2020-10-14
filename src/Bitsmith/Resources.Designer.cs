@@ -61,6 +61,33 @@ namespace Bitsmith {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to of
+        ///the
+        ///and
+        ///when
+        ///if
+        ///or
+        ///not
+        ///to
+        ///in
+        ///with
+        ///each
+        ///item
+        ///where
+        ///shall
+        ///will
+        ///have
+        ///when
+        ///how
+        ///why.
+        /// </summary>
+        public static string indexer_exclusions {
+            get {
+                return ResourceManager.GetString("indexer_exclusions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
         ///&lt;StateMachine xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; beginState=&quot;LoggedOff&quot; endState=&quot;LoggedOff&quot;&gt;
         ///  
@@ -81,12 +108,11 @@ namespace Bitsmith {
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
         ///&lt;StateMachine xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; beginState=&quot;LoggedOff&quot; endState=&quot;LoggedOff&quot;&gt;
-        ///  &lt;State name=&quot;LoggedOff&quot; display=&quot;LoggedOff&quot; /&gt;
+        ///  &lt;State name=&quot;LoggedOff&quot; display=&quot;LoggedOff&quot; isNavigate=&quot;true&quot; order=&quot;9&quot; /&gt;
         ///  &lt;State name=&quot;Authenticated&quot; display=&quot;Authenticated&quot; /&gt;
-        ///  &lt;State name=&quot;Content&quot; display=&quot;Content&quot; /&gt;
-        ///
-        ///  &lt;Transition name=&quot;Login&quot; origin=&quot;LoggedOff&quot; destination=&quot;Authenticated&quot; order=&quot;0&quot; /&gt;
-        ///  &lt;Transition name=&quot;Content&quot; origin=&quot;Authenticated&quot; destination=&quot;Con [rest of string was truncated]&quot;;.
+        ///  &lt;State name=&quot;Content&quot; display=&quot;Content&quot; isNavigate=&quot;true&quot; order=&quot;0&quot; /&gt;
+        ///  &lt;State name=&quot;Tasks&quot; display=&quot;Tasks&quot; isNavigate=&quot;true&quot; order=&quot;1&quot; /&gt;
+        ///  &lt;State name=&quot;TimeEntry&quot; displa [rest of string was truncated]&quot;;.
         /// </summary>
         public static string simple_state_machine {
             get {

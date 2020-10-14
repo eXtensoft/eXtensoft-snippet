@@ -18,6 +18,8 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="3"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="3"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         <TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" Text="Title"/>
         <StackPanel Grid.Column="0" Grid.Row="4">
@@ -33,12 +35,13 @@
         <TextBox Grid.Column="2" Grid.Row="0" Text="{Binding Path=Display}"/>
         <TextBox Grid.Column="2" Grid.Row="2" Text="{Binding Path=Tags, Converter={StaticResource ResourceKey=cvtTags}}"/>
 
-        
+        <TextBlock Grid.Column="0" Grid.Row="6" Text="Paths"/>
+        <TextBox Grid.Column="2" Grid.Row="6" Text="{Binding Path=Paths, Converter={StaticResource cvtPaths}}" Background="Transparent"/>
         
         <Border BorderBrush="Gainsboro" BorderThickness="3" CornerRadius="5" Grid.Column="2" Grid.Row="4">
             <Grid>
                 <TextBox Text="{Binding Path=Body}" SelectedText="logical" TextWrapping="Wrap" AcceptsTab="True" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"/>
-                <RichTextBox x:Name="rtbBody" Visibility="{Binding Path=IsFullTextSearch, Converter={StaticResource VisibilityConverter}}" TextChanged="rtbBody_TextChanged" />
+                <RichTextBox x:Name="rtbBody" VerticalScrollBarVisibility="Auto" Visibility="{Binding Path=IsFullTextSearch, Converter={StaticResource VisibilityConverter}}" TextChanged="rtbBody_TextChanged" />
             </Grid>
         </Border>
     </Grid>

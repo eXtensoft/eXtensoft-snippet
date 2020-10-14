@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Bitsmith.Models;
+using Bitsmith.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,6 +26,20 @@ namespace Bitsmith
         {
             InitializeComponent();
             //DataContext = Workspace.Instance.ViewModel.Paths;
+        }
+
+        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            var vm = DataContext as WorkspaceViewModel;
+            if (vm != null)
+            {
+                IPathNode selected = e.NewValue as IPathNode;
+                if (selected != null)
+                {
+                    vm.Content.ExecuteQuery(selected);
+                }
+            }
+
         }
     }
 }

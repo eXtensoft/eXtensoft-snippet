@@ -43,13 +43,13 @@ namespace Bitsmith
                         s = reader.ReadToEnd();
                     }
                 }
-                if (String.IsNullOrWhiteSpace(viewmodel.SearchTerm))
+                if (viewmodel.IsFullTextSearch)
                 {
-                    txbBody.Text = s;
+                    rtbBody.Document = s.ToFlowDocument(viewmodel.SearchTerms, Brushes.Yellow);
                 }
                 else
                 {
-                    rtbBody.Document = s.ToFlowDocument(viewmodel.SearchTerm, Brushes.Yellow);
+                    txbBody.Text = s;                    
                 }
 
             }

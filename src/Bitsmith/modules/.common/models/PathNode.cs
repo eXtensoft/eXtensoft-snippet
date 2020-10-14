@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 
 namespace Bitsmith.Models
 {
-    public class PathNode
+    public class PathNode 
     {		
         [XmlIgnore]
         public string Path { get; set; }

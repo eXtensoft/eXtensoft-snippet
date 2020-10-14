@@ -1,4 +1,5 @@
-﻿using Bitsmith.ProjectManagement;
+﻿using Bitsmith.DataServices.Abstractions;
+using Bitsmith.ProjectManagement;
 using Bitsmith.Styx;
 using System;
 using System.Collections.Generic;
@@ -59,9 +60,10 @@ namespace Bitsmith.ViewModels
 
 
 
-        public StyxModule()
+        public StyxModule(IDataService dataService)
         {
-            Filepath = Path.Combine(AppConstants.StyxDirectory, FileSystemDataProvider.Filepath<GraphDesigner>());
+            DataService = dataService;
+            Filepath = Path.Combine(AppConstants.StyxDirectory, DataService.Filepath<GraphDesigner>());
         }
         public override void Initialize()
         {
@@ -124,15 +126,15 @@ namespace Bitsmith.ViewModels
             }
         }
 
-        public bool CanSaveWorkspace()
-        {
-            return Model != null;
-        }
+        //public bool CanSaveWorkspace()
+        //{
+        //    return Model != null;
+        //}
 
-        public void SaveWorkspace()
-        {
-            SaveData();
-        }
+        //public void SaveWorkspace()
+        //{
+        //    SaveData();
+        //}
 
         protected override bool LoadData()
         {
@@ -140,12 +142,12 @@ namespace Bitsmith.ViewModels
             if (!File.Exists(filepath))
             {
                 GraphDesigner designer = new GraphDesigner().Default();
-                if (!FileSystemDataProvider.TryWrite<GraphDesigner>(designer, out string error, filepath))
+                if (!DataService.TryWrite<GraphDesigner>(designer, out string error, filepath))
                 {
                     OnFailure(error);
                 }
             }
-            bool b = FileSystemDataProvider.TryRead<GraphDesigner>(Filepath, out GraphDesigner model, out string message);
+            bool b = DataService.TryRead<GraphDesigner>(Filepath, out GraphDesigner model, out string message);
             if (!b)
             {
                 OnFailure(message);
@@ -163,7 +165,7 @@ namespace Bitsmith.ViewModels
             bool b = true;
             if (Model != null)
             {
-                if (!FileSystemDataProvider.TryWrite<GraphDesigner>(Model, out string message, Filepath))
+                if (!DataService.TryWrite<GraphDesigner>(Model, out string message, Filepath))
                 {
                     OnFailure(message);
                     b = false;

@@ -19,6 +19,18 @@ namespace Bitsmith.ViewModels
     {
         private Uri _Uri;
 
+
+        private bool _AddAsFile = true;
+        public bool AddAsFile
+        {
+            get { return _AddAsFile; }
+            set
+            {
+                _AddAsFile = value;
+                OnPropertyChanged("AddAsFile");
+            }
+        }
+
         private ICommand _NavigateExternalUrlCommand;
         public ICommand NavigateExternalUrlCommand
         {
@@ -541,8 +553,10 @@ namespace Bitsmith.ViewModels
                 Name = $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Task}", 
                 Value = Model.Id 
             });
-            
+
+            var contentmodule = Workspace.Instance.ViewModel.Content;
             bool b = true;
+
             switch (_ContentType)
             {
                 case ContentTypeOption.None:
@@ -571,14 +585,28 @@ namespace Bitsmith.ViewModels
                     break;
                 case ContentTypeOption.Text:
                     item.Display = "new note";
-                    item.Mime = "text";
+                    if (AddAsFile && contentmodule.ContentManager.TryInloadAsFile($"Noe for task={this.Identifier}",item.Id,out string body, out FileInfo fileInfo) )
+                    {
+                        item.Mime = "txt";
+                        item.Body = body;
+                        item.Display = $"task: {this.Identifier}";
+                        item.Properties.Add(new Property() { 
+                            Name = $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Extension}",
+                            Value = item.Mime
+                        });
+                    }
+                    else
+                    {
+                        item.Mime = "text";
+                    }
+                    b = true;
                     break;
                 default:
                     break;
             }
             if (b)
             {
-                Workspace.Instance.ViewModel.Content.AddContent(item);
+                contentmodule.AddContent(item);
                 RefreshContent();
             }
         }
