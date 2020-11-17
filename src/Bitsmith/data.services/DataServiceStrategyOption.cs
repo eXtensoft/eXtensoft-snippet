@@ -4,9 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bitsmith.code
+namespace Bitsmith.DataServices
 {
-    class ViewManager
+    public enum DataServiceStrategyOption
     {
+        None,
+        Xml,
+        Json,
+        Api,
     }
 }

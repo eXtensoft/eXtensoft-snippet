@@ -1,9 +1,5 @@
-﻿
-using System;
+﻿using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Bitsmith
 {
@@ -19,10 +15,27 @@ namespace Bitsmith
         public const string Default = "cb883c5d-3141-4a67-97d8-6475527f3179";
         public const string LastOpenedFileDialogFolderpath = "openfile.dialog.folderpath";
         public const string StateMachine = "state-machine";
+        public const string ImageMaps = "image-maps";
 
+        public static class Data
+        {
+            public const string AppSettings = "appSettings";
+            public const string DataServiceKey = "data-service";
+            public const string Api = "api";
+            public const string Json = "json";
+            public const string Xml = "xml";
+            public static List<string> Services = new List<string>()
+            {
+                Api,
+                Json,
+                Xml,
+            };
+            public const string Default = Xml;
+        }
         public static class Defaults
         {
             public const string WorkflowId = "05cfd309-c090-43b4-958f-96d3652cd797";
+
         }
 
         public static class Tags
@@ -42,7 +55,30 @@ namespace Bitsmith
         {
             public const string Content = "content";
             public const string Files = "files";
-            public const string Default = "virtual";
+            public const string Default = "virtual directory";
+            public const string Tasks = "tasks";
+        }
+
+        public static class Languages
+        {
+            public const string English = "en";
+            public const string French = "fr";
+            public const string Spanish = "es";
+            public const string German = "de";
+            public const string Italian = "it";
+            public const string Chinese = "zn";
+            public const string Greek = "el";
+
+            public static class Display
+            {
+                public const string English = "English";
+                public const string French = "French";
+                public const string Spanish = "Spanish";
+                public const string German = "German";
+                public const string Italian = "Italian";
+                public const string Chinese = "Chinese";
+                public const string Greek = "Greek";
+            }
         }
     }
 }

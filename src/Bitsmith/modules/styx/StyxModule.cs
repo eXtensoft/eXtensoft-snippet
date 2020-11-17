@@ -63,7 +63,12 @@ namespace Bitsmith.ViewModels
         public StyxModule(IDataService dataService)
         {
             DataService = dataService;
-            Filepath = Path.Combine(AppConstants.StyxDirectory, DataService.Filepath<GraphDesigner>());
+            //Filepath = Path.Combine(AppConstants.StyxDirectory, DataService.Filepath<GraphDesigner>());
+        }
+
+        protected override string Filepath()
+        {
+            return Path.Combine(AppConstants.StyxDirectory, DataService.Filepath<GraphDesigner>());
         }
         public override void Initialize()
         {
@@ -138,7 +143,7 @@ namespace Bitsmith.ViewModels
 
         protected override bool LoadData()
         {
-            string filepath = Filepath;
+            string filepath = Filepath();
             if (!File.Exists(filepath))
             {
                 GraphDesigner designer = new GraphDesigner().Default();
@@ -147,7 +152,7 @@ namespace Bitsmith.ViewModels
                     OnFailure(error);
                 }
             }
-            bool b = DataService.TryRead<GraphDesigner>(Filepath, out GraphDesigner model, out string message);
+            bool b = DataService.TryRead<GraphDesigner>(filepath, out GraphDesigner model, out string message);
             if (!b)
             {
                 OnFailure(message);
@@ -165,7 +170,7 @@ namespace Bitsmith.ViewModels
             bool b = true;
             if (Model != null)
             {
-                if (!DataService.TryWrite<GraphDesigner>(Model, out string message, Filepath))
+                if (!DataService.TryWrite<GraphDesigner>(Model, out string message, Filepath()))
                 {
                     OnFailure(message);
                     b = false;

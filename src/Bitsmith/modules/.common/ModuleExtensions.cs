@@ -10,6 +10,11 @@ namespace Bitsmith
 {
     public static class ModuleExtensions
     {
+        public static string ToJson<T>(this IEnumerable<T> enumerable)
+        {
+            return Newtonsoft.Json.JsonConvert.SerializeObject(enumerable, Newtonsoft.Json.Formatting.Indented);
+        }
+
         public static void EnsurePreference(this UserSettings settings, string groupName, string key, object value)
         {
             var found = settings.Items.FirstOrDefault((x) => 
@@ -26,6 +31,14 @@ namespace Bitsmith
             {
                 settings.Items.Add(new TypedItem() { Key = key, Group = groupName, Effective = DateTime.Now, Value = value });
             }
+        }
+
+        public static bool TryGetAny<T>(this UserSettings settings, string groupname, string groupKey, out List<T> list)
+        {
+            bool b = false;
+            list = new List<T>();
+
+            return b;
         }
 
         public static bool TryGet<T>(this UserSettings settings, string groupName, string key, out T value)

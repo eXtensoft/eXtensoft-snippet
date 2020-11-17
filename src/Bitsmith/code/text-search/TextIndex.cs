@@ -13,6 +13,7 @@ namespace Bitsmith.FullText
         public string Value { get; set; }
         [XmlElement("t")]
         public TokenCollection Tokens { get; set; } = new TokenCollection();
+        public int Count { get { return Tokens.Count; } }
 
         internal void AddToken(string token, int posX, int posY)
         {

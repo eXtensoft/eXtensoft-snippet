@@ -11,7 +11,7 @@ namespace Bitsmith.Indexing
     public interface IContentIndexer
     {
         int Delta { get; set; }
-        bool IsInitialized { get; }
+        bool IsInitialized { get;  }
         void Index(ContentItem contentItem); // contentItem.Properties contains a language tag
         void Index(IEnumerable<ContentItem> contentItems);
 

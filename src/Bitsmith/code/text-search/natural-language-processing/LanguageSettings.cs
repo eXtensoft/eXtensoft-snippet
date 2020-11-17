@@ -8,12 +8,10 @@ namespace Bitsmith.NaturalLanguage
 {
     public class LanguageSettings
     {
+        public string Display { get; set; }
         public string Language { get; set; }
 
         public List<Token> Tokens { get; set; } = new List<Token>();
 
-
-
- 
     }
 }

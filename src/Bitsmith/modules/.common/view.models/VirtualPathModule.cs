@@ -143,16 +143,18 @@ namespace Bitsmith.ViewModels
         {
 
 			DataService = dataService;
-			Filepath = Path.Combine(AppConstants.SettingsDirectory, base.Filepath);
+        }
+        public override string Filepath()
+        {
+            return Path.Combine(AppConstants.SettingsDirectory, DataService.Filepath<DomainPathMap>());
         }
 
-
-		protected override bool LoadData()
+        protected override bool LoadData()
         {
 			//if (!File.Exists(Filepath))
    //         {
    //             List<DomainPathMap> list = new List<DomainPathMap>().Default();
-   //             FileSystemDataProvider.TryWrite<DomainPathMap>(list, out string message, Filepath);
+   //             DataService.TryWrite<DomainPathMap>(list, out string message, Filepath);
    //         }
 
             return base.LoadData();
@@ -195,17 +197,17 @@ namespace Bitsmith.ViewModels
 			}
 		}
 
-        internal List<DomainViewModel> Build(List<Domain> domains, List<ContentItem> items)
-        {
+		internal void Build(SettingsModule settings, List<ContentItem> items)
+		{
 			List<DomainViewModel> list = new List<DomainViewModel>();
 			List<DomainPathMapViewModel> additions = new List<DomainPathMapViewModel>();
-            foreach (var domain in domains)
-            {
+			foreach (var domain in settings.Settings.Domains)
+			{
 				var item = Items.FirstOrDefault(p => p.Id.Equals(domain.Id, StringComparison.OrdinalIgnoreCase));
-                if (item == null)
-                {
-					item = new DomainPathMapViewModel(new DomainPathMap() 
-					{ 
+				if (item == null)
+				{
+					item = new DomainPathMapViewModel(new DomainPathMap()
+					{
 						Id = domain.Id,
 						Display = domain.Name,
 						Slug = domain.Name.ToLower(),
@@ -213,50 +215,15 @@ namespace Bitsmith.ViewModels
 						Items = new List<PathNode>().Default()
 					});
 					additions.Add(item);
-                }
+				}
 				list.Add(new DomainViewModel(domain, item));
-            }
+			}
 			additions.ForEach(x => { Items.Add(x); });
-			Build2(items);
-			return list;
-        }
+			Build(items);
+			settings.Initialize(list);			
+		}
 
         internal void Build(List<ContentItem> items)
-        {
-			Dictionary<string, List<string>> d = new Dictionary<string, List<string>>();
-			Dictionary<string, HashSet<string>> hs = new Dictionary<string, HashSet<string>>();
-            foreach (var item in items.Where(y=>!y.Mime.Equals("text/credential")))
-            {
-				string domain = item.Domain();
-                foreach (var path in item.Paths)
-                {
-					string s = path.Trim().ToLower();
-                    if (!d.ContainsKey(domain))
-                    {
-						d.Add(domain, new List<string>());
-						hs.Add(domain, new HashSet<string>());
-                    }
-                    if (hs[domain].Add(s))
-                    {
-						d[domain].Add(s);
-                    }
-                }
-            }
-            foreach (var domain in d.Keys)
-            {
-				var found = Items.FirstOrDefault(x => x.Id.Equals(domain));
-                if (found != null)
-                {
-					d[domain].Sort();
-                    foreach (var path in d[domain])
-                    {
-						found.EnsurePath(path);
-                    }
-                }
-            }
-
-        }
-		internal void Build2(List<ContentItem> items)
 		{
 			Dictionary<string, List<string>> d = new Dictionary<string, List<string>>();
 			Dictionary<string, HashSet<string>> hs = new Dictionary<string, HashSet<string>>();

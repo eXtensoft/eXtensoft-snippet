@@ -15,6 +15,67 @@ namespace Bitsmith.Models
 {
     public static class ContentExtensions
     {
+        public static List<string> TagExclusions(this List<string> list)
+        {
+            list.Add("created-at");
+            list.Add("created-by");
+            list.Add("modified-at");
+            list.Add($"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Extension}");
+            list.Add($"{AppConstants.Tags.Prefix}-{AppConstants.Tags.CreatedAt}");
+            list.Add($"{AppConstants.Tags.Prefix}-{AppConstants.Tags.CreatedBy}");
+            list.Add($"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Domain}");
+            list.Add($"{AppConstants.Tags.Prefix}-{AppConstants.Tags.ModifiedAt}");
+            list.Add($"{AppConstants.Tags.Prefix}-{AppConstants.Tags.ViewedAt}");
+            list.Add($"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Credentials}");
+            list.Add($"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Task}");
+            return list;
+        }
+        public static void CleansePaths(this List<ContentItem> contentItems)
+        {
+            var filepath = $"/{AppConstants.Paths.Files}";
+            var contentpath = $"/{AppConstants.Paths.Content}";
+            contentItems.ForEach((c) => {
+                if (c.Paths.Contains(contentpath))
+                {
+                    c.Paths.Remove(contentpath);
+                }
+                if (c.HasFile())
+                {
+                    bool b = false;
+                    for (int i = 0;!b && i < c.Paths.Count; i++)
+                    {
+                        b = c.Paths[i].StartsWith(filepath);
+                        if (b)
+                        {
+                            c.Paths.RemoveAt(i);
+                        }
+                    }
+                }
+            });
+        }
+        public static void EnsurePaths(this List<ContentItem> contentItems)
+        {            
+            var contentpath = $"/{AppConstants.Paths.Content}";
+            contentItems.ForEach((c) => {
+                if (c.Paths == null)
+                {
+                    c.Paths = new List<string>();
+                }
+                if (!c.Paths.Contains(contentpath))
+                {
+                    c.Paths.Add(contentpath);
+                }
+                if (c.HasFile())
+                {
+                    var path = $"/{AppConstants.Paths.Files}/{c.Mime}";
+                    if (!c.Paths.Contains(path))
+                    {
+                        c.Paths.Add(path);
+                    }
+                }
+            });
+        }
+
 
         public static int Total(this List<Counter> list, string domainId = AppConstants.Default)
         {
@@ -97,7 +158,6 @@ namespace Bitsmith.Models
         public static List<TokenQuery> Default(this List<TokenQuery> list)
         {
             list.Add(new TokenQuery() { SearchType = SearchTypeOptions.Tag, Token = "all" });
-            //list.Add(new TokenQuery() { SearchType = SearchTypeOptions.Tag, Token = "ext" });
             return list;
         }
         public static List<MimeMap> Default(this List<MimeMap> list)
@@ -112,8 +172,6 @@ namespace Bitsmith.Models
             DateTime now = DateTime.Now;
             model.Id = Guid.NewGuid().ToString().ToLower();
             model.CreatedAt = now;
-            model.Domains = new List<Domain>();
-            model.Domains.Add(new Domain().Default(now));
             return model;
         }
         public static Content Default(this Content model)
@@ -121,8 +179,6 @@ namespace Bitsmith.Models
             DateTime now = DateTime.Now;
             model.Id = Guid.NewGuid().ToString().ToLower();
             model.CreatedAt = now;
-            model.Domains = new List<Domain>();
-            model.Domains.Add(new Domain().Default(now));
             return model;
         }
 
@@ -178,6 +234,7 @@ namespace Bitsmith.Models
                 }
                 else
                 {
+                    item.Mime = vm.Mime;
                     if (vm.IsLink)
                     {
                         if(!vm.Body.StartsWithAny(new string[] { "http://", "https://" }))
@@ -205,7 +262,7 @@ namespace Bitsmith.Models
                     {
                         item.Body = vm.Body;
                     }                    
-                    item.Mime = vm.Mime;
+                    
                     b = true;
                 }
                 HashSet<string> hs = new HashSet<string>();

@@ -1,0 +1,81 @@
+﻿<UserControl x:Class="Bitsmith.LanguageSettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Bitsmith"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid DataContext="{Binding Path=Indexer}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" MinWidth="100"/>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <GroupBox Grid.Column="0">
+            <GroupBox.Header>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Language" Margin="5,0" VerticalAlignment="Center"/>
+                    <ComboBox ItemsSource="{Binding Path=LanguageSelections}" SelectedItem="{Binding Path=SelectedLanguageOption}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <Label Content="{Binding Path=Value}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <Button Command="{Binding Path=AddLanguageCommand}" Style="{StaticResource AddCommandButton}" VerticalAlignment="Center"/>
+                </StackPanel>
+            </GroupBox.Header>
+            <GroupBox.Content>
+                <ListBox ItemsSource="{Binding Path=Languages}" SelectedItem="{Binding Path=SelectedLanguage}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Style="{StaticResource RemoveCommandButton}" 
+                                    Command="{Binding Path=DataContext.RemoveLanguageCommand, RelativeSource={RelativeSource FindAncestor,AncestorType=Grid}}"
+                                    CommandParameter="{Binding}" Margin="10,0"/>
+                                <Image Source="{Binding Path=Language}"/>
+                                <TextBlock Text="{Binding Path=Display}"/>
+                            </StackPanel>
+
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </GroupBox.Content>
+        </GroupBox>
+        <Grid  DataContext="{Binding Path=SelectedLanguage}"
+            Grid.Column="2" 
+              Margin="40,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" MinWidth="50"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <ComboBox Grid.Column="0" Grid.Row="0" SelectedItem="{Binding Path=SelectedType}"  SelectionChanged="ComboBox_SelectionChanged"
+                          ItemsSource="{Binding Source={StaticResource TokenTypes}}" />
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2">
+                <TextBox MinWidth="100" Text="{Binding Path=Input, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <Button Style="{StaticResource AddCommandButton}" Command="{Binding Path=AddTokenCommand}"/>
+            </StackPanel>
+            <ListBox Grid.Row="2" Grid.Column="2" ItemsSource="{Binding Path=Items}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Style="{StaticResource RemoveCommandButton}" 
+                                    Command="{Binding Path=DataContext.RemoveTokenCommand, RelativeSource={RelativeSource FindAncestor,AncestorType=Grid}}"
+                                    CommandParameter="{Binding}" Margin="10,0"/>
+                            <TextBlock Text="{Binding Path=Content}"/>
+                            
+                        </StackPanel>
+                        
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+    </Grid>
+</UserControl>

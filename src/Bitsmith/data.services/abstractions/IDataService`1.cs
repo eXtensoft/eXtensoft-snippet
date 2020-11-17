@@ -9,6 +9,7 @@ namespace Bitsmith.DataServices.Abstractions
 {
     public interface IDataService
     {
+        DataServiceStrategyOption Key { get; }
         bool TryRead<T>(out List<T> list, out string message, string filepath = "") where T : class, new();
         bool TryRead<T>(string filepath, out T model, out string message) where T : class, new();
         bool TryRead<T>(string filepath, out List<T> list, out string message) where T : class, new();

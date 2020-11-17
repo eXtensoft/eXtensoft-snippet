@@ -21,7 +21,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <GroupBox Grid.Column="0" Grid.RowSpan="5" MinWidth="200" Header="{Binding Path=Project.Display}">
-            <ListBox x:Name="lsbTasks" ItemsSource="{Binding Path=Project.Items}" SelectedItem="{Binding Path=Chronos.SelectedTask}">
+            <ListBox x:Name="lsbTasks" ItemsSource="{Binding Path=Tasks.Items}" SelectedItem="{Binding Path=Chronos.SelectedTask}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid HorizontalAlignment="Stretch">

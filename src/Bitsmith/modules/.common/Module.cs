@@ -3,11 +3,12 @@ using Bitsmith.Models;
 using System;
 using System.CodeDom;
 using System.ComponentModel;
+using System.IO;
 using System.Windows;
 
 namespace Bitsmith.ViewModels
 {
-    public class Module : INotifyPropertyChanged
+    public abstract class Module : INotifyPropertyChanged
     {
         public IDataService DataService { get; set; }
         protected virtual string ModuleKey 
@@ -32,7 +33,7 @@ namespace Bitsmith.ViewModels
             }
         }
 
-        protected virtual void ApplyPreferences(UserSettings userPreferences)
+        protected virtual void ApplyPreferences()
         {
         }
 
@@ -41,13 +42,10 @@ namespace Bitsmith.ViewModels
 
         }
 
-        internal virtual string Filepath { get; set; }
-        //private string _Filepath;
-        //public string Filepath
-        //{
-        //    get { return _Filepath; }
-        //    set { _Filepath = value; }
-        //}
+        protected virtual string Filepath()
+        {
+            return Path.Combine(AppConstants.SettingsDirectory, DataService.Filepath<TypedItem>());
+        }
 
 
         public bool IsInitialized { get; set; }

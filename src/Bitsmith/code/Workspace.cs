@@ -1,4 +1,5 @@
-﻿using Bitsmith.ViewModels;
+﻿using Bitsmith.DataServices;
+using Bitsmith.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -78,6 +79,7 @@ namespace Bitsmith
             }
         }
 
+        public DataServiceStrategyOption DataServiceStrategy { get; set; }
 
     }
 }

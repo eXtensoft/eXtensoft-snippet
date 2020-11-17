@@ -4,6 +4,7 @@ using Bitsmith.Indexing;
 using Bitsmith.Models;
 using Bitsmith.NaturalLanguage;
 using Bitsmith.Search;
+using DocumentFormat.OpenXml.Bibliography;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,6 +18,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Xaml;
 using System.Xml.Linq;
 
 namespace Bitsmith.ViewModels
@@ -34,7 +36,6 @@ namespace Bitsmith.ViewModels
             {
                 _IsRecentQueries = value;
                 OnPropertyChanged("IsRecentQueries");
-                //MessageBox.Show($"Is Recent = {value}");
                 Queries.Refresh();
             }
         }
@@ -244,11 +245,15 @@ namespace Bitsmith.ViewModels
                 return _SelectedTag;
             }
             set
-            {
-                _SelectedTag = value;
-                OnPropertyChanged("SelectedTag");
-                SelectedIndex = 1;
-                ExecuteQuery(_SelectedTag.Key);
+            {// TODO, why did this null check become necessary?
+                if (value != null)
+                {
+                    _SelectedTag = value;
+                    OnPropertyChanged("SelectedTag");
+                    SelectedIndex = 1;
+                    ExecuteQuery(_SelectedTag.Key);
+                }
+
             }
         }
 
@@ -346,7 +351,7 @@ namespace Bitsmith.ViewModels
             var xdoc = XDocument.Load(@"c:\data\snippets.xml", LoadOptions.None);
             foreach (XElement el in xdoc.Descendants("ContentItem"))
             {
-                ContentItem item = new ContentItem();
+                ContentItem item = new ContentItem() { Language = AppConstants.Languages.English };
                 
                 item.Id = el.Attribute("id").Value;
                 var display = el.Element("Title");
@@ -460,7 +465,7 @@ namespace Bitsmith.ViewModels
                 item.Properties.Add(new Property()
                 {
                     Name = $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Domain}",
-                    Value = SelectedDomain.Id
+                    Value = Settings.SelectedDomain.Id
                 });
 
                 item.Properties.AddRange(Resolver.Resolve(tags));
@@ -493,7 +498,7 @@ namespace Bitsmith.ViewModels
         private void ExecuteQuery()
         {
             var searchtype = IsTagSearch ? SearchTypeOptions.Tag : SearchTypeOptions.FullText;
-            var query = new Query().Parse(_QueryText,searchtype,QueryOperatorOption.Or, SelectedDomain.Id);
+            var query = new Query().Parse(_QueryText,searchtype,QueryOperatorOption.Or, Settings.SelectedDomain.Id);
             SearchResults = query.Execute(model.Items, Indexer);
 
         }
@@ -509,7 +514,7 @@ namespace Bitsmith.ViewModels
         internal void ExecuteQuery(IPathNode node)
         {
             
-            var query = new Query().Parse(node,SelectedDomain.Id);
+            var query = new Query().Parse(node,Settings.SelectedDomain.Id);
             SearchResults = query.Execute(model.Items, Indexer);
         }
 
@@ -520,7 +525,7 @@ namespace Bitsmith.ViewModels
             {
                 IsTagsExpanded = true;
             }
-            var query = new Query().Parse(tag, SearchTypeOptions.Tag, QueryOperatorOption.Or, SelectedDomain.Id);
+            var query = new Query().Parse(tag, SearchTypeOptions.Tag, QueryOperatorOption.Or, Settings.SelectedDomain.Id);
             SearchResults = query.Execute(model.Items, Indexer);
         }
 
@@ -553,81 +558,21 @@ namespace Bitsmith.ViewModels
             {
 
             }
-            else
-            {
-
-                var domain = SelectedDomain.Id;
-                if (IsTagSearch) 
-                {
-
-                    var found = model.Items.ForDomain(domain).Where(x => x.Includes((from s in list select new QueryExpression(s)).ToList())).OrderBy(z => z.Display).ToList();
-                    result = new List<ContentItemViewModel>(from f in found select new ContentItemViewModel(f));
-                }
-                else 
-                {
-                    IEnumerable<string> ids = Indexer.Query(list);
-                    var found = model.Items.ForDomain(domain).Where(x => ids.Contains(x.Id)).OrderBy(z => z.Display).ToList();
-                    result = new List<ContentItemViewModel>(from f in found select new ContentItemViewModel(f) { SearchTerm = list[0] });
-                }
-
-            }
-
-            if (result == null)
-            {
-                result = new List<ContentItemViewModel>(from x in model.Items select new ContentItemViewModel(x));
-            }
-
-            return result;
-
 
         }
         */
 
-
-
-        public ObservableCollection<DomainViewModel> Domains { get; set; }
-
-        private DomainViewModel _SelectedDomain;
-        public DomainViewModel SelectedDomain
+        public void HandleDomainSelected(DomainViewModel selected)
         {
-            get
+            if (selected != null)
             {
-                return _SelectedDomain;
+                Resolver.Domain = selected;
+                // clear selected tag
+                // clear results;
+                SearchResults = null;
+                SelectedTag = null;
+                Paths.SelectedDomainId = selected.Id;
             }
-            set
-            {
-                _SelectedDomain = value;
-                Resolver.Domain = _SelectedDomain;
-                OnPropertyChanged("SelectedDomain");
-                
-            }
-        }
-
-        private ICommand _AddDomainCommand;
-        public ICommand AddDomainCommand
-        {
-            get
-            {
-                if (_AddDomainCommand == null)
-                {
-                    _AddDomainCommand = new RelayCommand(
-                    param => AddDomain(),
-                    param => CanAddDomain());
-                }
-                return _AddDomainCommand;
-            }
-        }
-
-
-
-
-        private bool CanAddDomain()
-        {
-            return true;
-        }
-        private void AddDomain()
-        {
-            Domains.Add(new DomainViewModel(new Domain().Default(DateTime.Now,Guid.NewGuid().ToString().ToLower())));
         }
 
         private ICommand _ViewDomainsCommand;
@@ -651,7 +596,8 @@ namespace Bitsmith.ViewModels
         private void ViewDomains()
         {
             Control ctl = new DomainsView();
-            ctl.DataContext = this;
+            //ctl.DataContext = this;
+            ctl.DataContext = Workspace.Instance.ViewModel.Settings;
             dynamic param = new System.Dynamic.ExpandoObject();
             param.Title = "Content Domains";
             param.Control = ctl;
@@ -746,20 +692,23 @@ namespace Bitsmith.ViewModels
         private void AddContent()
         {
             if (Input.TryBuild(Resolver, 
-                SelectedDomain.Model, Mimes, 
+                Settings.SelectedDomain.Model, Mimes, 
                 ContentManager, 
                 out ContentItem newContent))
             {
+                newContent.Language = GetSelectedLanguage();
+                //newContent.Language = SelectedLanguage != null ? SelectedLanguage.Language : AppConstants.Languages.English;
                 AddContent(newContent);
             }
         }
+
 
         public void AddContent(ContentItem item)
         {
             var domain = item.Properties.FirstOrDefault(x => x.Name.Equals($"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Domain}"));
             if (domain == null)
             {
-                item.Properties.Add(new Property() { Name = $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Domain}", Value = SelectedDomain.Id });
+                item.Properties.Add(new Property() { Name = $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Domain}", Value = Settings.SelectedDomain.Id });
             }           
             if (Indexer != null)
             {
@@ -774,7 +723,7 @@ namespace Bitsmith.ViewModels
         }
 
 
-        public TagResolver Resolver { get; set; } = new TagResolver();
+        public TagResolver Resolver { get; set; }
 
         private ICommand _RemoveRecentTagCommand;
         public ICommand RemoveRecentTagCommand
@@ -794,15 +743,17 @@ namespace Bitsmith.ViewModels
         }
         private void RemoveRecentTag(string tag)
         {
-            var found = Resolver.recent.FirstOrDefault(x => x.Key.Equals(tag));
+            var found = Resolver.RecentTags.FirstOrDefault(x => x.Key.Equals(tag));
             if (found != null)
             {
-                var counter = found.Model.Counters.FirstOrDefault(y => y.Domain.Equals(SelectedDomain.Id));
+                var counter = found.Model.Counters.FirstOrDefault(y => y.Domain.Equals(Settings.SelectedDomain.Id));
                 if (counter != null)
                 {
                     found.Model.Counters.Remove(counter);
                 }
-                //Resolver.recent.Remove(found);
+                //Resolver.DomainExclusions[found.Domain].Add(found.Key);
+                Resolver.RecentTags.Remove(found);
+                
             }
         }
 
@@ -822,15 +773,16 @@ namespace Bitsmith.ViewModels
 
         private void RemovePopularTag(string tag)
         {
-            var found = Resolver.popular.FirstOrDefault(x => x.Key.Equals(tag));
+            var found = Resolver.PopularTags.FirstOrDefault(x => x.Key.Equals(tag));
             if (found != null)
             {
-                var counter = found.Model.Counters.FirstOrDefault(y => y.Domain.Equals(SelectedDomain.Id));
+                var counter = found.Model.Counters.FirstOrDefault(y => y.Domain.Equals(Settings.SelectedDomain.Id));
                 if (counter != null)
                 {
                     found.Model.Counters.Remove(counter);
                 }
-                //Resolver.popular.Remove(found);
+                Resolver.Exclusions[found.Domain].Add(found.Key);
+                Resolver.PopularTags.Remove(found);
             }
         }
 
@@ -878,54 +830,62 @@ namespace Bitsmith.ViewModels
         protected override bool LoadData()
         {
 
-            if (!File.Exists(Filepath))
+            if (!File.Exists(Filepath()))
             {
                 Content content = new Content().Default();
-                if(!DataService.TryWrite<Content>(content, out string error, Filepath))
+                if(!DataService.TryWrite<Content>(content, out string error, Filepath()))
                 {
                     OnFailure(error);
                 }               
             }
 
-            bool b = DataService.TryRead<Content>(Filepath, out model, out string message);
+            bool b = DataService.TryRead<Content>(Filepath(), out model, out string message);
             if (!b)
             {
                 OnFailure(message);
             }
+            if (model != null)
+            {
+                model.Items.EnsurePaths();
+            }
 
+            EnsureLanguage(model.Items);
             return b;
         }
 
-        private void Domains_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void EnsureLanguage(List<ContentItem> items)
         {
-            if (e.Action == NotifyCollectionChangedAction.Add)
-            {
-                foreach (var item in e.NewItems)
+            items.ForEach((x) => {
+
+                if (string.IsNullOrWhiteSpace(x.Language))
                 {
-                    var vm = item as DomainViewModel;
-                    if (vm != null)
-                    {
-                        model.Domains.Add(vm.Model);
-                    }
+                    x.Language = AppConstants.Languages.English;
                 }
-            }
-            else if (e.Action == NotifyCollectionChangedAction.Remove)
-            {
-                foreach (var item in e.OldItems)
-                {
-                    var vm = item as DomainViewModel;
-                    if (vm != null)
-                    {
-                        var found = model.Domains.FirstOrDefault(x => x.Id.Equals(vm.Id, StringComparison.OrdinalIgnoreCase));
-                        if (found != null)
-                        {
-                            model.Domains.Remove(found);
-                        }
-                    }
-                }
-            }
+            });
         }
 
+        public SettingsModule Settings { get; set; }
+
+        public ObservableCollection<LanguageSettingsViewModel> Languages { get; set; }
+
+
+        private string GetSelectedLanguage()
+        {
+            var found = Languages.FirstOrDefault(v => v.IsSelected);
+            if (found == null)
+            {
+                found = Languages.First();
+            }
+            return found != null ? found.Language : AppConstants.Languages.English;
+        }
+
+        public bool AreLanguagesVisible
+        {
+            get
+            {
+                return Languages.Count() > 1;
+            }
+        }
 
         public ContentModule(IDataService dataService, 
             SettingsModule settings, 
@@ -933,35 +893,49 @@ namespace Bitsmith.ViewModels
             VirtualPathModule paths)
         {
             DataService = dataService;
-            UserPreferences = settings.UserPreferences;
+            Settings = settings;
+            settings.DomainSelected = HandleDomainSelected;
+            UserPreferences = Settings.UserPreferences;
             Indexer = indexer.Indexer;
+            Languages = indexer.Languages;
+            indexer.LanguageAdded = HandleLanguageAdded;
             Paths = paths;
             ContentManager = new ContentManager(Path.Combine(AppConstants.ContentDirectory, AppConstants.ContentFiles));
-            Filepath = Path.Combine(AppConstants.ContentDirectory, DataService.Filepath<Content>());
-
+        }
+        protected override string Filepath()
+        {
+            return Path.Combine(AppConstants.ContentDirectory, DataService.Filepath<Content>());
         }
 
-        internal void Setup(MimeModule mimes, SettingsModule settings)
+        private void HandleLanguageAdded(LanguageSettings settings)
+        {
+            OnPropertyChanged("AreLanguagesVisible");
+            SetSelectedLanguage(settings.Language);
+        }
+
+        private void SetSelectedLanguage(string language)
+        {
+            var found = Languages.FirstOrDefault(x => x.Language.Equals(language));
+            if (found != null)
+            {
+                found.IsSelected = true;
+            }
+        }
+
+        internal void Setup(MimeModule mimes)
         {
             base.Setup();
 
             if (model.Queries == null || model.Queries.Count == 0)
             {
-                model.Queries = new List<Query>().Default(model.Domains);
+                model.Queries = new List<Query>().Default(Settings.Settings.Domains);
             }
             AllQueries = new ObservableCollection<QueryViewModel>(from x in model.Queries select new QueryViewModel(x));
             AllQueries.CollectionChanged += AllQueries_CollectionChanged;
 
-
             Mimes = mimes.Items;
-            //var list = Path.Ensure(model.Domains, model.Items);
-            var list = Paths.Build(model.Domains, model.Items);
-            Domains = new ObservableCollection<DomainViewModel>(list);
-            
-            Domains.CollectionChanged += Domains_CollectionChanged;
-
-            ApplyPreferences(UserPreferences);
-
+            Paths.Build(Settings, model.Items);
+            ApplyPreferences();
 
             if (Indexer != null &&
                 !Indexer.IsInitialized)
@@ -977,40 +951,94 @@ namespace Bitsmith.ViewModels
             Queries.Refresh();
         }
 
-        protected override void ApplyPreferences(UserSettings userPreferences)
+        protected override void ApplyPreferences()
         {
-            if (userPreferences.TryGet<ContentTypeOption>(ModuleKey,"content-type", out ContentTypeOption option))
+            var exclusions = new Dictionary<string, List<string>>();
+            var global = new List<string>().TagExclusions();
+
+            foreach (var domain in Settings.Domains)
+            {
+                List<string> domainexclusions = new List<string>();
+                domainexclusions.AddRange(global);
+                if (UserPreferences.TryGet<string>(ModuleKey,$"tag-exclusions:{domain.Id}",out string tagExclusions))
+                {
+                    if (!string.IsNullOrWhiteSpace(tagExclusions))
+                    {
+                        
+                        foreach (var tag in tagExclusions.Split(new char[] { ';' },StringSplitOptions.RemoveEmptyEntries))
+                        {
+                            domainexclusions.Add(tag);
+                        }
+                    }
+                }
+                exclusions.Add(domain.Id, domainexclusions);
+            }
+            Resolver = new TagResolver(exclusions);
+
+            if (UserPreferences.TryGet<ContentTypeOption>(ModuleKey,"content-type", out ContentTypeOption option))
             {
                 Input.ContentType = option;
             }
-            if (userPreferences.TryGet<string>(ModuleKey,"selected-domain",out string id))
+            if (UserPreferences.TryGet<string>(ModuleKey,"selected-domain",out string id))
             {
-                var found = Domains.FirstOrDefault(x => x.Model.Id.Equals(id));
+                var found = Settings.Domains.FirstOrDefault(x => x.Id.Equals(id));
                 if (found != null)
                 {
-                    SelectedDomain = found;
+                    Settings.SelectedDomain = found;
                 }
                 else
                 {
-                    SelectedDomain = Domains[0];
+                    Settings.SelectedDomain = Settings.Domains[0];
                 }
             }
             else
             {
-                SelectedDomain = Domains[0];
+                Settings.SelectedDomain = Settings.Domains[0];
+            }
+            if (UserPreferences.TryGet<string>(ModuleKey,"last-opened", out string location) && Directory.Exists(location))
+            {
+                Application.Current.Properties[AppConstants.LastOpenedFileDialogFolderpath] = location;
+            }
+            if (UserPreferences.TryGet<string>(ModuleKey,"selected-language", out string language))
+            {
+                SetSelectedLanguage(language);
             }
         }
 
         internal override void SetPreferences()
         {
+            var global = new List<string>().TagExclusions();
+            foreach (var domain in Settings.Domains)
+            {
+                if (Resolver.Exclusions.ContainsKey(domain.Id))
+                {
+                    var domainexclusions = Resolver.Exclusions[domain.Id].Where(x => !global.Contains(x));
+                    if (domainexclusions.Any())
+                    {
+                        UserPreferences.EnsurePreference(ModuleKey, $"tag-exclusions:{domain.Id}", String.Join(";",domainexclusions));
+                    }
+                }
+            }
+
+
             UserPreferences.EnsurePreference(ModuleKey, "content-type", Input.ContentType);
-            UserPreferences.EnsurePreference(ModuleKey, "selected-domain", SelectedDomain.Model.Id);
+            UserPreferences.EnsurePreference(ModuleKey, "selected-domain", Settings.SelectedDomain.Model.Id);
+            var location = Application.Current.Properties[AppConstants.LastOpenedFileDialogFolderpath] as string;
+            if (!String.IsNullOrWhiteSpace(location) && Directory.Exists(location))
+            {
+                UserPreferences.EnsurePreference(ModuleKey, "last-opened", location);
+            }
+
+            var language = GetSelectedLanguage();
+            UserPreferences.EnsurePreference(ModuleKey, "selected-language", language);
         }
 
         protected override bool SaveData()
         {
+
             if (model !=null)
-            {                
+            {
+                model.Items.CleansePaths();
                 var removals = model.Items.Where(x => x.IsRemove).ToList();
                 if (removals.Count > 0)
                 {
@@ -1032,7 +1060,7 @@ namespace Bitsmith.ViewModels
                     }
                 }
 
-                if (!DataService.TryWrite<Content>(model, out string message, Filepath))
+                if (!DataService.TryWrite<Content>(model, out string message, Filepath()))
                 {
                     OnFailure(message);
                     return false;
@@ -1040,11 +1068,6 @@ namespace Bitsmith.ViewModels
             }
             return true;
         }
-
-        //private void LoadTagResolver()
-        //{
-        //    Resolver.Load(model.Items);
-        //}
 
     }
 }

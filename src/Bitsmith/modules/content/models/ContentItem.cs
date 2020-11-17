@@ -15,6 +15,8 @@ namespace Bitsmith.Models
         public string Mime { get; set; }
         [XmlAttribute("scope")]
         public ScopeOption Scope { get; set; }
+        [XmlAttribute("lang")]
+        public string Language { get; set; }
         [XmlElement("Path")]
         public List<string> Paths { get; set; } = new List<string>() { };
         [XmlElement("Tag")]

@@ -13,5 +13,6 @@ namespace Bitsmith.NaturalLanguage
         Prefix = 2,
         Suffix = 3,
         Stop = 4,
+        Whitelist = 5,
     }
 }

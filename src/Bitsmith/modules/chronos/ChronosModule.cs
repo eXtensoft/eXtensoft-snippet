@@ -1,5 +1,6 @@
 ﻿using Bitsmith.DataServices.Abstractions;
 using Bitsmith.Models;
+using DocumentFormat.OpenXml.Spreadsheet;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -30,7 +31,7 @@ namespace Bitsmith.ViewModels
         
         }
 
-
+        public ObservableCollection<TimeEntryViewModel> TimeEntries { get; set; }
 
         public Chronos Model { get; set; }
 
@@ -180,7 +181,7 @@ namespace Bitsmith.ViewModels
             item.Minutes = Minutes;
             item.Comment = Comment; 
             TimeEntryViewModel vm = new TimeEntryViewModel(item);
-
+            TimeEntries.Add(vm);
             RefreshItem();
             Message = item.ToDisplay();
         }
@@ -281,7 +282,7 @@ namespace Bitsmith.ViewModels
         public ChronosModule(IDataService dataService)
         {
             DataService = dataService;
-            Filepath = Path.Combine(AppConstants.ChronosDirectory, DataService.Filepath<Chronos>());
+            //Filepath = Path.Combine(AppConstants.ChronosDirectory, DataService.Filepath<Chronos>());
         }
 
 
@@ -290,11 +291,15 @@ namespace Bitsmith.ViewModels
             Activities = new List<TagIdentifier>().Activities();
             _Minutes = 60;
             BuildWorkEfforts();
-            //TimeEntries = new ObservableCollection<TimeEntryViewModel>(from x in Model.Items select new TimeEntryViewModel(x));
-            //TimeEntries.CollectionChanged += TimeEntries_CollectionChanged;
+            TimeEntries = new ObservableCollection<TimeEntryViewModel>(from x in Model.Items select new TimeEntryViewModel(x));
+            TimeEntries.CollectionChanged += TimeEntries_CollectionChanged;
             //_View = (CollectionView)CollectionViewSource.GetDefaultView(TimeEntries);
             //_View.Filter = FilterEntry;
 
+        }
+        protected override string Filepath()
+        {
+            return Path.Combine(AppConstants.ChronosDirectory, DataService.Filepath<Chronos>());
         }
 
         private void BuildWorkEfforts()
@@ -376,7 +381,7 @@ namespace Bitsmith.ViewModels
 
         protected override bool LoadData()
         {
-            string filepath = Filepath;
+            string filepath = Filepath();
             if (!File.Exists(filepath))
             {
                 Chronos chronos = new Chronos().Default();
@@ -385,7 +390,7 @@ namespace Bitsmith.ViewModels
                     OnFailure(error);
                 }
             }
-            bool b = DataService.TryRead<Chronos>(Filepath, out Chronos model, out string message);
+            bool b = DataService.TryRead<Chronos>(filepath, out Chronos model, out string message);
             if (!b)
             {
                 OnFailure(message);
@@ -403,7 +408,7 @@ namespace Bitsmith.ViewModels
             bool b = true;
             if (Model != null)
             {
-                if (!DataService.TryWrite<Chronos>(Model,out string message, Filepath))
+                if (!DataService.TryWrite<Chronos>(Model,out string message, Filepath()))
                 {
                     OnFailure(message);
                     b = false;

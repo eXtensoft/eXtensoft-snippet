@@ -9,6 +9,16 @@ namespace Bitsmith.ViewModels
 {
     public class ListItemViewModel : ViewModel<ListItem>
     {
+        private bool _IsSelected;
+        public bool IsSelected
+        {
+            get { return _IsSelected; }
+            set
+            {
+                _IsSelected = value;
+                OnPropertyChanged("IsSelected");
+            }
+        }
 
         public string DatastoreId
         {

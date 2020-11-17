@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,21 @@ namespace Bitsmith.FullText
 {
     public static class FullTextExtensions
     {
+
+        public static DataTable ToProfile(this TextIndexes indexes)
+        {
+            DataTable dt = new DataTable() { TableName = "Index Profile" };
+            dt.Columns.Add("Count", typeof(int));
+            dt.Columns.Add("Word", typeof(string));
+            foreach (var item in indexes.OrderByDescending(i=>i.Count).ThenBy(x=>x.Value))
+            {
+                var r = dt.NewRow();
+                r[0] = item.Count;
+                r[1] = item.Value;
+                dt.Rows.Add(r);
+            }
+            return dt;
+        }
         //public static ContentModule IndexContent(this ContentModule module)
         //{
         //    string directory = System.IO.Path.Combine(AppConstants.ContentDirectory, AppConstants.ContentFiles);

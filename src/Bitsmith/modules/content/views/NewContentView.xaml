@@ -16,7 +16,6 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="*"/>
-
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -66,6 +65,18 @@
                     <RadioButton Content="Encrypt" GroupName="Scope"/>
                 </StackPanel>
             </GroupBox>-->
+            <GroupBox Header="Language" 
+                      Visibility="{Binding Path=AreLanguagesVisible, Converter={StaticResource cvtBool2Visibility}}">
+                <ItemsControl ItemsSource="{Binding Path=Languages}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <RadioButton GroupName="languages" Content="{Binding Path=Display}" IsChecked="{Binding Path=IsSelected}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </GroupBox>
+
+
 
         </StackPanel>
 

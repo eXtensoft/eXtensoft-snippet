@@ -10,8 +10,6 @@ namespace Bitsmith.Models
         public string Id { get; set; }
         [XmlAttribute("createdAt")]
         public DateTime CreatedAt { get; set; }
-        [XmlElement("Domain")]
-        public List<Domain> Domains { get; set; }
         [XmlElement("Query")]
         public List<Query> Queries { get; set; }
         [XmlElement("ContentItem")]

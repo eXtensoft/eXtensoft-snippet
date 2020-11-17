@@ -7,12 +7,16 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="10"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <GroupBox Grid.Column="0">
+        <GroupBox Grid.Column="0" Grid.RowSpan="2">
             <GroupBox.Header>
                 <StackPanel Orientation="Horizontal">
                     <Button Style="{StaticResource AddCommandButton}" Command="{Binding AddDomainCommand}"/>
@@ -45,6 +49,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="5"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="5"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" Content="Id"/>
@@ -60,6 +65,32 @@
                       SelectedItem="{Binding Path=Scope}" 
                       ItemsSource="{Binding Source={StaticResource Scopes}}"/>
             <TextBox Grid.Column="2" Grid.Row="8" Text="{Binding Path=MinimumTagCount}"/>
+
         </Grid>
+        <TabControl DataContext="{Binding ElementName=lsbDomains, Path=SelectedItem}"
+            Grid.Column="2" Grid.Row="2" 
+                    TabStripPlacement="Top" Margin="40,10">
+            <TabItem Header="Workflows">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <ItemsControl ItemsSource="{Binding Path=DomainWorkflowSelections}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <CheckBox Content="{Binding Path=Display}" Unchecked="CheckBox_Unchecked" Checked="CheckBox_Checked" Tag="{Binding Path=Id}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+                <!--<ComboBox ItemsSource="{Binding Path=Settings.Workflows}" 
+                          SelectedItem="{Binding Path=SelectedWorkflow}" 
+                          DisplayMemberPath="Display"/>-->
+            </TabItem>
+
+        </TabControl>
     </Grid>
 </UserControl>

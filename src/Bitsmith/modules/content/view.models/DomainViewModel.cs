@@ -1,5 +1,7 @@
 ﻿using Bitsmith.Models;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Bitsmith.ViewModels
@@ -107,7 +109,11 @@ namespace Bitsmith.ViewModels
         }
         public DomainPathMapViewModel Paths { get; internal set; }
 
-        public DomainViewModel(Domain model)
+		private List<ListItem> _DomainWorkflowSelections = new List<ListItem>();
+		public ObservableCollection<ListItemViewModel> DomainWorkflowSelections { get; set; } = new ObservableCollection<ListItemViewModel>();
+
+
+		public DomainViewModel(Domain model)
 		{
 			Model = model;
 		}

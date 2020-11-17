@@ -10,5 +10,59 @@
         <TabItem Header="Workflows">
             <local:WorkflowsView/>
         </TabItem>
+        <!--
+        <TabItem Header="Full Text Search">
+            <Grid DataContext="{Binding Path=Settings}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <GroupBox Grid.Column="0">
+                    <GroupBox.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox Text="{Binding Path=NewExclusion, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="125" Margin="5">
+                                <TextBox.InputBindings>
+                                    <KeyBinding Key="Return" Command="{Binding Path=AddExclusionCommand}"/>
+                                </TextBox.InputBindings>
+                            </TextBox>
+                            <Button Style="{StaticResource AddCommandButton}" 
+                                    Command="{Binding Path=AddExclusionCommand}"/>
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <GroupBox.Content>
+                        <ListBox ItemsSource="{Binding Path=Exclusions}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Path=Display}">
+                                           
+                                        </TextBlock>
+                                        <Button Style="{StaticResource RemoveCommandButton}" 
+                                                Command="{Binding Path=DataContext.RemoveExclusionCommand, RelativeSource={RelativeSource FindAncestor,AncestorType=Grid}}"
+                                                CommandParameter="{Binding}"/>
+                                    </StackPanel>
+                                    
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </GroupBox.Content>
+                </GroupBox>
+            </Grid>
+        </TabItem>
+        -->
+        <TabItem Header="Language Settings">
+            <local:LanguageSettingsView/>
+        </TabItem>
+        <TabItem Header="Indexer">
+
+            <DataGrid  ItemsSource="{Binding Path=Indexer.IndexProfile}" AutoGenerateColumns="True" Margin="20"/>
+
+        </TabItem>
+        <TabItem Header="Preferences">
+    
+        </TabItem>
+        <TabItem Header="Data">
+            <local:DataSettingsView/>
+        </TabItem>
     </TabControl>
 </UserControl>

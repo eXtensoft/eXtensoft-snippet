@@ -2,8 +2,11 @@
 using Bitsmith.DataServices.Abstractions;
 using Bitsmith.Models;
 using Bitsmith.NaturalLanguage;
+using DocumentFormat.OpenXml.Office2013.Drawing.ChartStyle;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,11 +14,39 @@ using System.Windows.Controls;
 
 namespace Bitsmith.ViewModels
 {
-    public class WorkspaceViewModel
+    public class WorkspaceViewModel : INotifyPropertyChanged
     {
         public Grid Root { get; set; }
 
-        public IDataService DataService { get; set; }
+        private IDataService _DataService;
+        public IDataService DataService 
+        {
+            get { return _DataService; }
+            set
+            {
+                _DataService = value;
+                OnPropertyChanged("DataService");
+            }
+        }
+
+        public ObservableCollection<IDataService> DataServices { get; set; } = new ObservableCollection<IDataService>();
+
+        private DataServiceStrategyOption _DataServiceStrategy;
+
+        #region INotifyPropertyChanged Members
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public virtual void OnPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        #endregion
+
 
 
         private StyxModule _Styx;
@@ -52,7 +83,8 @@ namespace Bitsmith.ViewModels
 
         public IndexerModule Indexer { get; set; }
 
-        public TasksModule Project { get; set; }
+
+        public TasksModule Tasks  { get; set; }
 
         public WorkflowModule Workflow { get; set; }
 
@@ -81,12 +113,23 @@ namespace Bitsmith.ViewModels
 
         public WorkspaceViewModel(Workspace model)
         {
-            DataService = new XmlDataService();
-            //DataService = new JsonDataService();
+            _DataServiceStrategy = model.DataServiceStrategy;
+
+            DataServices.Add(new XmlDataService());
+            DataServices.Add(new JsonDataService());
+
+            var found = DataServices.FirstOrDefault(x => x.Key.Equals(model.DataServiceStrategy));
+            if (found != null)
+            {
+                _DataService = found;
+            }
 
             Overlay.RegisterOverlay(AppConstants.OverlayContent, ShowContentOverlay);
             Settings = new SettingsModule(DataService );
             Settings.Setup();
+
+            Tasks = new TasksModule(DataService, Settings);
+            Tasks.Setup();
 
             Paths = new VirtualPathModule(DataService);
             Paths.Setup();
@@ -98,38 +141,46 @@ namespace Bitsmith.ViewModels
             Indexer.Setup();
 
             Content = new ContentModule(DataService, Settings, Indexer, Paths);
-            Content.Setup(Mimes,Settings);
+            Content.Setup(Mimes);
 
             Credentials = new CredentialsModule(DataService) { };
             Credentials.Setup();
 
-            Project = new TasksModule(DataService) { UserPreferences = Settings.UserPreferences};
-            Project.Setup();
 
             Workflow = new WorkflowModule();
-
 
         }
 
         internal void Save()
         {
+            if (!DataService.Key.Equals(_DataServiceStrategy))
+            {
+                Bootstrapper.SetDataStrategy(DataService.Key);
+                Settings.DataService = _DataService;
+                Tasks.DataService = _DataService;
+                Paths.DataService = _DataService;
+                Mimes.DataService = _DataService;
+                Content.DataService = _DataService;
+                Credentials.DataService = _DataService;
+                Indexer.DataService = _DataService;
+                Mimes.DataService = _DataService;
+                Mimes.SaveWorkspace();
+            }
             if (Content.CanSaveWorkspace())
             {
                 Content.SetPreferences();
                 Content.SaveWorkspace();
             }
+
             if (Indexer.CanSaveWorkspace())
             {
                 Indexer.SaveWorkspace();
             }
-            if (Settings.CanSaveWorkspace())
-            {                
-                Settings.SaveWorkspace();
-            }
-            if (Project.CanSaveWorkspace())
+
+            if (Tasks.CanSaveWorkspace())
             {
-                Project.SetPreferences();
-                Project.SaveWorkspace();
+                Tasks.SetPreferences();
+                Tasks.SaveWorkspace();
             }
             if (_Chronos != null && Chronos.CanSaveWorkspace())
             {
@@ -139,7 +190,11 @@ namespace Bitsmith.ViewModels
             {
                 Styx.SaveWorkspace();
             }
-
+            // must be last so that preferences are persisted
+            if (Settings.CanSaveWorkspace())
+            {                
+                Settings.SaveWorkspace();
+            }
         }
     }
 }

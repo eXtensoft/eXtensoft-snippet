@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using Bitsmith.DataServices.Abstractions;
 using Bitsmith.Models;
+using Microsoft.Win32;
+using Newtonsoft.Json;
 
 namespace Bitsmith.ViewModels
 {
@@ -46,6 +50,42 @@ namespace Bitsmith.ViewModels
             Items.Add(vm);
         }
 
+
+        private ICommand _ExportToCommand;
+        public ICommand ExportToCommand
+        {
+            get
+            {
+                if (_ExportToCommand == null)
+                {
+                    _ExportToCommand = new RelayCommand(
+                    param => ExportTo(),
+                    param => CanExportTo());
+                }
+                return _ExportToCommand;
+            }
+        }
+        private bool CanExportTo()
+        {
+            return Items != null && Items.Count > 0;
+        }
+        private void ExportTo()
+        {
+            var json = (from x in Items select new {
+                Display = x.Display,
+                Location = x.Location,
+                Identifier = x.Identifier,
+                Secret = x.Secret,
+                Note = x.Note
+            }).ToJson();
+
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.FileName = "credentials.json";
+            if (dialog.ShowDialog() == true)
+            {
+                File.WriteAllText(dialog.FileName, json);
+            }
+        }
 
         private ObservableCollection<CredentialViewModel> _Items;
         public ObservableCollection<CredentialViewModel> Items
@@ -93,9 +133,7 @@ namespace Bitsmith.ViewModels
         public CredentialsModule(IDataService dataService)
         {
             DataService = dataService;
-
         }
-
 
     }
 }

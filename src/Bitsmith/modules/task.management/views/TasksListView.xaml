@@ -9,23 +9,23 @@
     <UserControl.Resources>
         <local:TruncateStringConverter x:Key="cvtTruncate" MaxLength="35" Suffix="..."/>
     </UserControl.Resources>
-    <GroupBox>
+    <GroupBox DataContext="{Binding Path=Tasks}">
         <GroupBox.Header>
             <StackPanel Orientation="Horizontal">
 
-                <Button Command="{Binding Path=Project.AddItemCommand}" Style="{StaticResource AddCommandButton}"/>
-                <Label Content="{Binding Path=Project.Display}"/>
-                <ComboBox ItemsSource="{Binding Path=Settings.Workflows}" 
-                          SelectedItem="{Binding Path=Project.SelectedWorkflow}" 
+                <Button Command="{Binding Path=AddItemCommand}" Style="{StaticResource AddCommandButton}"/>
+                <Label Content="{Binding Path=Display}"/>
+                <ComboBox ItemsSource="{Binding Path=DomainWorkflows}" 
+                          SelectedItem="{Binding Path=SelectedWorkflow}" 
                           DisplayMemberPath="Display"/>
-                <Button Command="{Binding Path=Project.SaveWorkspaceCommand}" Style="{StaticResource SaveCommandButton}"/>
+                <Button Command="{Binding Path=SaveWorkspaceCommand}" Style="{StaticResource SaveCommandButton}"/>
                 <Button Style="{StaticResource DetailsCommandButton}" Command="{Binding Path=Project.ViewDomainsCommand}"/>
-                <Label Content="{Binding Path=Project.SelectedDomain.Name}"/>            
+                <Label Content="{Binding Path=SelectedDomain.Name}"/>            
             
             </StackPanel>
         </GroupBox.Header>
         <GroupBox.Content>
-            <DockPanel LastChildFill="True" DataContext="{Binding Path=Project}">
+            <DockPanel LastChildFill="True">
                 <Expander DockPanel.Dock="Bottom" IsExpanded="{Binding Path=IsExpandFilters}">
                     <Expander.Header>
                         <TextBlock/>
@@ -44,12 +44,12 @@
 
                     </Expander.Content>
                 </Expander>
-                <Expander DockPanel.Dock="Bottom" IsExpanded="True" DataContext="{Binding Path=SelectedItem}">
+                <Expander DockPanel.Dock="Bottom" IsExpanded="True" IsEnabled="{Binding Path=IsItemSelected}">
                     <Expander.Header>
-                        <TextBlock Text="{Binding Path=Identifier}"/>
+                        <TextBlock Text="{Binding Path=SelectedItem.Identifier}"/>
                     </Expander.Header>
                     <Expander.Content>
-                        <local:TaskItemView/>
+                        <local:TaskItemView  DataContext="{Binding Path=SelectedItem}"/>
                     </Expander.Content>
                 </Expander>
                 <ListBox ItemsSource="{Binding Path=Items}" SelectedItem="{Binding Path=SelectedItem}">

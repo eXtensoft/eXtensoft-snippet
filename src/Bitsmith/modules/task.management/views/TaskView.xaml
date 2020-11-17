@@ -13,7 +13,7 @@
     </UserControl.Resources>
 
 
-    <Grid DataContext="{Binding Path=Project.SelectedItem}">
+    <Grid DataContext="{Binding Path=Tasks.SelectedItem}">
         
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>

@@ -14,7 +14,25 @@ namespace Bitsmith
 
         public static string ShellTitle { get { return GetConfigValueAs<string>("Shell.Title", "Bitsmith CMS"); } }
 
-        private static T GetConfigValueAs<T>(string key, T defaultValue) where T : IConvertible
+        internal static bool TryGetConfigValueAs<T>(string key, out T t) where T : IConvertible
+        {
+            bool b = false;
+            t = default(T);
+            string s = ConfigurationManager.AppSettings[key];
+            if (!string.IsNullOrWhiteSpace(s))
+            {
+                try
+                {
+                    t = Parse<T>(s);
+                }
+                catch (Exception ex)
+                {
+                }
+            }
+
+            return b;
+        }
+        internal static T GetConfigValueAs<T>(string key, T defaultValue) where T : IConvertible
         {
             T t = defaultValue;
             string s = ConfigurationManager.AppSettings[key];
@@ -25,7 +43,7 @@ namespace Bitsmith
             return t;
         }
 
-        private static T GetConfigValueAs<T>(string key) where T : IConvertible
+        internal static T GetConfigValueAs<T>(string key) where T : IConvertible
         {
             T t = default(T);
             string s = ConfigurationManager.AppSettings[key];

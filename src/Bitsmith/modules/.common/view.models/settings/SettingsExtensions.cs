@@ -1,5 +1,7 @@
 ﻿using Bitsmith.BusinessProcess;
+using Bitsmith.Models;
 using Bitsmith.NaturalLanguage;
+using DocumentFormat.OpenXml.Drawing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,44 +23,114 @@ namespace Bitsmith
         }
         public static Settings Default(this Settings model)
         {
+            model.Domains = new List<Domain>();
+            model.Domains.Add(new Domain().Default(DateTime.Now));
             model.Workflows = new List<Workflow>().Default();
             HashSet<string> hs = new HashSet<string>();
-            var list = Resources.indexer_exclusions.Split(new char[] { '\r','\n',',',';',':' },StringSplitOptions.RemoveEmptyEntries);
-            foreach (var item in list)
-            {
-                string s = item.Trim().ToLowerInvariant();
-                if (hs.Add(s))
-                {
-                    model.IndexExclusions.Add(s);
-                }
-            }
+
             return model;
         }
 
-        public static LanguageSettings Default(this LanguageSettings settings)
+        public static LanguageSettings Default(this LanguageSettings settings, string language = AppConstants.Languages.English)
         {
-            settings.Language = "en-US";
-            var list = Resources.indexer_exclusions.Split(new char[] { }, StringSplitOptions.RemoveEmptyEntries);
+            settings.Language = language;
+            settings.Display = BuildDisplay(language);
+
+            List<string> stopwords = BuildLanguageStopwords(language); 
             HashSet<string> hs = new HashSet<string>();
-            foreach (var item in list)
+            foreach (var item in stopwords)
             {
                 var s = item.Trim().ToLower();
                 if (hs.Add(s))
                 {
-                    settings.Tokens.Add(new Token() { Language = "en-US", Content = s, Type = TokenTypeOption.Stop });
+                    settings.Tokens.Add(new Token()
+                    {
+                        Language = AppConstants.Languages.English,
+                        Content = s,
+                        Type = TokenTypeOption.Stop
+                    });
                 }
             }
+            string whitelist = BuildLanguageWhitelist(language);
+
+            settings.Tokens.Add(new Token()
+            {
+                Language = language,
+                Content = whitelist,
+                Type = TokenTypeOption.Whitelist
+            });
             return settings;
+        }
+
+        private static string BuildDisplay(string language)
+        {
+            string key = languagedisplays.ContainsKey(language) ? language : AppConstants.Languages.English;
+            return languagedisplays[key];
+        }
+
+        private static List<string> BuildLanguageStopwords(string language)
+        {
+            
+            var key = stopwords.ContainsKey(language) ? language : AppConstants.Languages.English;
+            var words = stopwords[key].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+            List<string> list = new List<string>();
+            HashSet<string> hs = new HashSet<string>();
+            foreach (var word in words)
+            {
+                if (hs.Add(word))
+                {
+                    list.Add(word);
+                }
+            }
+            return list;
+        }
+
+        private static Dictionary<string, string> languagedisplays = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            {AppConstants.Languages.French,AppConstants.Languages.Display.French},
+            {AppConstants.Languages.Spanish,AppConstants.Languages.Display.Spanish },
+            {AppConstants.Languages.German,AppConstants.Languages.Display.German },
+            {AppConstants.Languages.Italian,AppConstants.Languages.Display.Italian },
+            {AppConstants.Languages.English,AppConstants.Languages.Display.English },
+            {AppConstants.Languages.Greek,AppConstants.Languages.Display.Greek },
+        };
+
+        private static Dictionary<string, string> stopwords = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) 
+        {
+            {AppConstants.Languages.French,Resources.stop_words_french },
+            {AppConstants.Languages.Spanish,Resources.stop_words_spanish },
+            {AppConstants.Languages.German,Resources.stop_words_german },
+            {AppConstants.Languages.Italian,Resources.stop_words_italian },
+            {AppConstants.Languages.English,Resources.stop_words_english },
+            {AppConstants.Languages.Greek,Resources.stop_words_greek },
+        };
+
+        private static Dictionary<string, string> whitelists = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            {AppConstants.Languages.French,"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzÀàÂâÆæÇçÈèÉéÊêËëÎîÏïÔôŒœÙùÛûÜü€₣"},
+            {AppConstants.Languages.Spanish,"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzÁÉÍÑÓÚÜáéíñóúü"},
+            {AppConstants.Languages.German,"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzÄÖÜßäöü"},
+            {AppConstants.Languages.Italian,"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzÀÈÉÌÒÙàèéìòù"},
+            {AppConstants.Languages.English,"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" },
+            {AppConstants.Languages.Greek,"ΑαΒβΓγΔδΕεΖζΗηΘθΙιΚκΛλΜμΝνΞξΟοΠπΡρΣσςΤτΥυΦφΧχΨψΩω" },
+        };
+
+
+        private static string BuildLanguageWhitelist(string language)
+        {
+            var key = whitelists.ContainsKey(language) ? language : AppConstants.Languages.English;
+            return whitelists[key].Trim();
         }
 
         private static List<Workflow> Default(this List<Workflow> list)
         {
-            list.Add( new Workflow() 
-            { 
-                Id = AppConstants.Defaults.WorkflowId, 
-                Name = "Software Task Long", 
-                Display = "Task (long)", 
-                Machine = new StateMachine().three() 
+            list.Add(new Workflow()
+            {
+                Id = Guid.NewGuid().ToString().ToLower(),
+                Name = "Task",
+                Display = "Simple Task",
+                Machine = new StateMachine().one()
             });
             list.Add(new Workflow()
             {
@@ -67,14 +139,13 @@ namespace Bitsmith
                 Display = "Task (short)",
                 Machine = new StateMachine().two()
             });
-            list.Add(new Workflow()
-            {
-                Id = Guid.NewGuid().ToString().ToLower(),
-                Name = "Task",
-                Display = "Simple Task",
-                Machine = new StateMachine().one()
+            list.Add( new Workflow() 
+            { 
+                Id = AppConstants.Defaults.WorkflowId, 
+                Name = "Software Task Long", 
+                Display = "Task (long)", 
+                Machine = new StateMachine().three() 
             });
-
             return list;
         }
 

@@ -11,6 +11,7 @@ namespace Bitsmith.DataServices
 {
     public class JsonDataService : FilesystemDataService, IDataService
     {
+        public DataServiceStrategyOption Key => DataServiceStrategyOption.Json;
         public string Filepath<T>(string suffix = "") where T : class, new()
         {
             return  FileSystemDataProvider.Filepath<T>( FileFormat.Json);
@@ -25,14 +26,13 @@ namespace Bitsmith.DataServices
             {
                 if (File.Exists(filepath))
                 {
-                    list = GenericObjectManager.ReadGenericList<T>(filepath);
                     string filecontents = File.ReadAllText(filepath);
                     if (!string.IsNullOrWhiteSpace(filecontents))
                     {
 
                         list = JsonConvert.DeserializeObject<List<T>>(filecontents);
+                        b = true;
                     }
-                    //b = list.Count > 0;
                 }
             }
             catch (Exception ex)
@@ -58,13 +58,10 @@ namespace Bitsmith.DataServices
                         model = JsonConvert.DeserializeObject<T>(filecontents);
                         b = true;
                     }
-                    //model = GenericObjectManager.ReadGenericItem<T>(filepath);
-                    //b = true;
                 }
             }
             catch (Exception ex)
             {
-
                 message = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
             }
 
@@ -86,16 +83,12 @@ namespace Bitsmith.DataServices
                     if (!string.IsNullOrWhiteSpace(filecontents))
                     {
                         list = JsonConvert.DeserializeObject<List<T>>(filecontents);
-
                         b = true;
                     }
-                    //list = GenericObjectManager.ReadGenericList<T>(filepath);
-                    //b = true;
                 }
             }
             catch (Exception ex)
             {
-
                 message = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
             }
 
@@ -120,7 +113,6 @@ namespace Bitsmith.DataServices
 
                 var json = JsonConvert.SerializeObject(list, settings);
                 File.WriteAllText(filepath, json);
-                //GenericObjectManager.WriteGenericList<T>(list, filepath);
                 b = true;
             }
             catch (Exception ex)
@@ -146,7 +138,6 @@ namespace Bitsmith.DataServices
 
                 var json = JsonConvert.SerializeObject(model, Formatting.Indented);
                 File.WriteAllText(filepath, json);
-                //GenericObjectManager.WriteGenericItem<T>(model, filepath);
                 b = true;
             }
             catch (Exception ex)

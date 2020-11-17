@@ -61,25 +61,12 @@ namespace Bitsmith {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to of
+        ///   Looks up a localized string similar to a
+        ///an
         ///the
-        ///and
+        ///it
         ///when
-        ///if
-        ///or
-        ///not
-        ///to
-        ///in
-        ///with
-        ///each
-        ///item
-        ///where
-        ///shall
-        ///will
-        ///have
-        ///when
-        ///how
-        ///why.
+        ///where.
         /// </summary>
         public static string indexer_exclusions {
             get {
@@ -134,6 +121,60 @@ namespace Bitsmith {
         public static string statemachine {
             get {
                 return ResourceManager.GetString("statemachine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to a,able,about,across,after,all,almost,also,am,among,an,and,any,are,as,at,be,because,been,but,by,can,cannot,could,dear,did,do,does,either,else,ever,every,for,from,get,got,had,has,have,he,her,hers,him,his,how,however,i,if,in,into,is,it,its,just,least,let,like,likely,may,me,might,most,must,my,neither,no,nor,not,of,off,often,on,only,or,other,our,own,rather,said,say,says,she,should,since,so,some,than,that,the,their,them,then,there,these,they,this,tis,to,too,twas,us,wants,was,we,were,what,when,where,which,while,wh [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string stop_words_english {
+            get {
+                return ResourceManager.GetString("stop_words_english", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to a,abord,absolument,afin,ah,ai,aie,aient,aies,ailleurs,ainsi,ait,allaient,allo,allons,allô,alors,anterieur,anterieure,anterieures,apres,après,as,assez,attendu,au,aucun,aucune,aucuns,aujourd,aujourd&apos;hui,aupres,auquel,aura,aurai,auraient,aurais,aurait,auras,aurez,auriez,aurions,aurons,auront,aussi,autant,autre,autrefois,autrement,autres,autrui,aux,auxquelles,auxquels,avaient,avais,avait,avant,avec,avez,aviez,avions,avoir,avons,ayant,ayez,ayons,b,bah,bas,basee,bat,beau,beaucoup,bien,bigre,bon,boum,bravo,brrr,c, [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string stop_words_french {
+            get {
+                return ResourceManager.GetString("stop_words_french", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to a,ab,aber,ach,acht,achte,achten,achter,achtes,ag,alle,allein,allem,allen,aller,allerdings,alles,allgemeinen,als,also,am,an,ander,andere,anderem,anderen,anderer,anderes,anderm,andern,anderr,anders,au,auch,auf,aus,ausser,ausserdem,außer,außerdem,b,bald,bei,beide,beiden,beim,beispiel,bekannt,bereits,besonders,besser,besten,bin,bis,bisher,bist,c,d,d.h,da,dabei,dadurch,dafür,dagegen,daher,dahin,dahinter,damals,damit,danach,daneben,dank,dann,daran,darauf,daraus,darf,darfst,darin,darum,darunter,darüber,das,dasein, [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string stop_words_german {
+            get {
+                return ResourceManager.GetString("stop_words_german", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ένα,έναν,ένας,αι,ακομα,ακομη,ακριβως,αληθεια,αληθινα,αλλα,αλλαχου,αλλες,αλλη,αλλην,αλλης,αλλιως,αλλιωτικα,αλλο,αλλοι,αλλοιως,αλλοιωτικα,αλλον,αλλος,αλλοτε,αλλου,αλλους,αλλων,αμα,αμεσα,αμεσως,αν,ανα,αναμεσα,αναμεταξυ,ανευ,αντι,αντιπερα,αντις,ανω,ανωτερω,αξαφνα,απ,απεναντι,απο,αποψε,από,αρα,αραγε,αργα,αργοτερο,αριστερα,αρκετα,αρχικα,ας,αυριο,αυτα,αυτες,αυτεσ,αυτη,αυτην,αυτης,αυτο,αυτοι,αυτον,αυτος,αυτοσ,αυτου,αυτους,αυτουσ,αυτων,αφοτου,αφου,αἱ,αἳ,αἵ,αὐτόσ,αὐτὸς,αὖ,α∆ιακοπα,βεβαια,βεβαιοτατα,γάρ,γα,γα^,γε,γι,γ [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string stop_words_greek {
+            get {
+                return ResourceManager.GetString("stop_words_greek", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to a,abbastanza,abbia,abbiamo,abbiano,abbiate,accidenti,ad,adesso,affinché,agl,agli,ahime,ahimè,ai,al,alcuna,alcuni,alcuno,all,alla,alle,allo,allora,altre,altri,altrimenti,altro,altrove,altrui,anche,ancora,anni,anno,ansa,anticipo,assai,attesa,attraverso,avanti,avemmo,avendo,avente,aver,avere,averlo,avesse,avessero,avessi,avessimo,aveste,avesti,avete,aveva,avevamo,avevano,avevate,avevi,avevo,avrai,avranno,avrebbe,avrebbero,avrei,avremmo,avremo,avreste,avresti,avrete,avrà,avrò,avuta,avute,avuti,avuto,basta,ben,b [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string stop_words_italian {
+            get {
+                return ResourceManager.GetString("stop_words_italian", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to a,actualmente,acuerdo,adelante,ademas,además,adrede,afirmó,agregó,ahi,ahora,ahí,al,algo,alguna,algunas,alguno,algunos,algún,alli,allí,alrededor,ambos,ampleamos,antano,antaño,ante,anterior,antes,apenas,aproximadamente,aquel,aquella,aquellas,aquello,aquellos,aqui,aquél,aquélla,aquéllas,aquéllos,aquí,arriba,arribaabajo,aseguró,asi,así,atras,aun,aunque,ayer,añadió,aún,b,bajo,bastante,bien,breve,buen,buena,buenas,bueno,buenos,c,cada,casi,cerca,cierta,ciertas,cierto,ciertos,cinco,claro,comentó,como,con,conmigo,co [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string stop_words_spanish {
+            get {
+                return ResourceManager.GetString("stop_words_spanish", resourceCulture);
             }
         }
     }

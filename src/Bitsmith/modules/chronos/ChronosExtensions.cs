@@ -1,4 +1,5 @@
-﻿using Bitsmith.ViewModels;
+﻿using Bitsmith.DataServices.Abstractions;
+using Bitsmith.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -50,7 +51,7 @@ namespace Bitsmith.Models
 
         public static string WeekOfYear(this DateTime target)
         {
-            CultureInfo culture = new CultureInfo("en-US");
+            CultureInfo culture = new CultureInfo(AppConstants.Languages.English);
             Calendar calendar = culture.Calendar;
             CalendarWeekRule weekrule = culture.DateTimeFormat.CalendarWeekRule;
             DayOfWeek firstdayofweek = culture.DateTimeFormat.FirstDayOfWeek;
@@ -60,22 +61,22 @@ namespace Bitsmith.Models
 
        
 
-        public static void Save(this TimeEntry model)
+        public static void Save(this TimeEntry model, IDataService dataService)
         {
             Chronos chronos = null;
-            FileInfo info = model.EnsureFile();
-            if(!FileSystemDataProvider.TryRead<Chronos>(info.FullName, out chronos, out string message))
+            FileInfo info = model.EnsureFile(dataService);
+            if(!dataService.TryRead<Chronos>(info.FullName, out chronos, out string message))
             { 
                 chronos = new Chronos().Default();
             }
             chronos.Items.Add(model);
-            if(!FileSystemDataProvider.TryWrite<Chronos>(chronos,out string writeerror, info.FullName))
+            if(!dataService.TryWrite<Chronos>(chronos,out string writeerror, info.FullName))
             {
                 MessageBox.Show(writeerror);
             }
         }
 
-        public static FileInfo EnsureFile(this TimeEntry model)
+        public static FileInfo EnsureFile(this TimeEntry model, IDataService dataService)
         {
             DirectoryInfo directory = new DirectoryInfo(AppConstants.ChronosDirectory);
             if (!directory.Exists)
@@ -87,7 +88,7 @@ namespace Bitsmith.Models
             if (!info.Exists)
             {
                 Chronos chronos = new Chronos().Default();
-                if(!FileSystemDataProvider.TryWrite(chronos, out string message, info.FullName))
+                if(!dataService.TryWrite(chronos, out string message, info.FullName))
                 {
                     MessageBox.Show(message);
                 }

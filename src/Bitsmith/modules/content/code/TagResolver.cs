@@ -23,7 +23,7 @@ namespace Bitsmith
 
                 _Domain = value;
                 _SelectedDomain = _Domain.Id;
-            foreach (var item in items)
+            foreach (var item in TagItems)
             {
                 item.Model.Counters.Total(_SelectedDomain);
             }
@@ -46,7 +46,7 @@ namespace Bitsmith
             {
                 if (_Items == null)
                 {
-                    _Items = CollectionViewSource.GetDefaultView(items);
+                    _Items = CollectionViewSource.GetDefaultView(TagItems);
                     _Items.SortDescriptions.Add(new SortDescription("Count", ListSortDirection.Descending));
                     _Items.Filter = FilterForDomain;
                 }
@@ -61,7 +61,7 @@ namespace Bitsmith
             {
                 if (_Recent == null)
                 {
-                    _Recent = CollectionViewSource.GetDefaultView(recent);
+                    _Recent = CollectionViewSource.GetDefaultView(RecentTags);
                     _Recent.Filter = FilterForDomain;
                 }
                 return _Recent;
@@ -75,33 +75,34 @@ namespace Bitsmith
             {
                 if (_Popular == null)
                 {
-                    _Popular = CollectionViewSource.GetDefaultView(popular);
+                    _Popular = CollectionViewSource.GetDefaultView(PopularTags);
                     _Popular.Filter = FilterForDomain;
                 }
                 return _Popular;
             }
         }
 
-
         private bool FilterForDomain(object o)
         {
             bool b = false;
 
             var vm = o as TagMapViewModel;
-            if (vm != null)
+            if (vm != null && !DomainExcludes(vm.Key))
             {
-                b = vm.SetFilter(_SelectedDomain) && vm.Count > Domain.MinimumTagCount;
-                
+                b = vm.SetFilter(_SelectedDomain) && vm.Count > Domain.MinimumTagCount;               
             }
-
             return b;
+        }
+        private bool DomainExcludes(string key)
+        {
+            return Exclusions[_SelectedDomain].Contains(key);
         }
 
 
-        private ObservableCollection<TagMapViewModel> items { get; set; } = new ObservableCollection<TagMapViewModel>();
+        private ObservableCollection<TagMapViewModel> TagItems { get; set; } = new ObservableCollection<TagMapViewModel>();
 
-        public ObservableCollection<TagMapViewModel> recent { get; set; } = new ObservableCollection<TagMapViewModel>();
-        public ObservableCollection<TagMapViewModel> popular { get; set; } = new ObservableCollection<TagMapViewModel>();
+        public ObservableCollection<TagMapViewModel> RecentTags { get; set; } = new ObservableCollection<TagMapViewModel>();
+        public ObservableCollection<TagMapViewModel> PopularTags { get; set; } = new ObservableCollection<TagMapViewModel>();
 
 
         public void RefreshFiltering()
@@ -110,20 +111,7 @@ namespace Bitsmith
             Popular.Refresh();
             Recent.Refresh();
         }
-        public List<string> Exclusions { get; set; } = new List<string>() 
-        { 
-            "created-at",
-            "created-by",
-            "modified-at",
-            $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Extension}",
-            $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.CreatedAt}",
-            $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.CreatedBy}",
-            $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Domain}",
-            $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.ModifiedAt}",
-            $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.ViewedAt}",
-            $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Credentials}",
-            $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Task}",
-        };
+        public Dictionary<string,List<string>> Exclusions { get; set; }
 
         public List<Property> Resolve(string tags)
         {
@@ -142,7 +130,7 @@ namespace Bitsmith
                 foreach (var tag in tags)
                 {
                     var parts = tag.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-                    if (!Exclusions.Contains(parts[0]))
+                    if (!Exclusions[_SelectedDomain].Contains(parts[0]))
                     {
                         Property property = new Property();
                         if (parts.Length > 1)
@@ -152,12 +140,12 @@ namespace Bitsmith
 
                         string key = parts[0].Trim();
 
-                        var found = items.FirstOrDefault(x => x.Key.Equals(key, StringComparison.OrdinalIgnoreCase));
+                        var found = TagItems.FirstOrDefault(x => x.Key.Equals(key, StringComparison.OrdinalIgnoreCase));
                         if (found == null)
                         {
                             
                             found = new TagMapViewModel(new TagMap() { Key = key });
-                            items.Add(found);
+                            TagItems.Add(found);
                         }
                         property.Name = found.Key;
                         var counter = found.Model.Counters.FirstOrDefault(y => y.Key.Equals(y.Key, StringComparison.OrdinalIgnoreCase) &&
@@ -171,7 +159,7 @@ namespace Bitsmith
 
                         if (recenttags.Add(found.Key))
                         {
-                            recent.Add(found);
+                            RecentTags.Add(found);
                         }
                         list.Add(property);
                     }
@@ -179,6 +167,12 @@ namespace Bitsmith
             }
             RefreshFiltering();
             return list;
+        }
+
+
+        public TagResolver(Dictionary<string, List<string>> exclusions)
+        {
+            Exclusions = exclusions;
         }
 
         internal void Load(List<ContentItem> contentItems)
@@ -189,7 +183,7 @@ namespace Bitsmith
                 var domaintag = item.Properties.FirstOrDefault(x => x.Name.Equals("x-domain", StringComparison.OrdinalIgnoreCase));
                 string domain = domaintag != null ? domaintag.Value.ToString() : AppConstants.Default;
 
-                foreach (var tag in item.Properties.Where(t => !Exclusions.Contains(t.Name)))
+                foreach (var tag in item.Properties.Where(t => !Exclusions[_SelectedDomain].Contains(t.Name)))
                 {
                     string key = tag.Name;
                     var tagmap = maps.FirstOrDefault(x => x.Key.Equals(key, StringComparison.OrdinalIgnoreCase) );
@@ -221,9 +215,9 @@ namespace Bitsmith
             {
                 if (i++ < max)
                 {
-                    popular.Add(item);
+                    PopularTags.Add(item);
                 }
-                items.Add(item);
+                TagItems.Add(item);
             }
         }
     }

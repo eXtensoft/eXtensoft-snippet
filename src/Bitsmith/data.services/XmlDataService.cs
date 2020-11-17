@@ -10,6 +10,7 @@ namespace Bitsmith.DataServices
 {
     public class XmlDataService : FilesystemDataService, IDataService
     {
+        public DataServiceStrategyOption Key => DataServiceStrategyOption.Xml;
         public string Filepath<T>(string suffix = "") where T : class, new()
         {
             return  FileSystemDataProvider.Filepath<T>(FileFormat.Xml,suffix);

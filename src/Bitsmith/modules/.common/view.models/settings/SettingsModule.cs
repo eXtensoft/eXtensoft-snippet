@@ -1,5 +1,6 @@
 ﻿using Bitsmith.BusinessProcess;
 using Bitsmith.DataServices.Abstractions;
+using Bitsmith.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,6 +16,57 @@ namespace Bitsmith.ViewModels
     {
 
         public string Display => "App Settings";
+
+        public Action<DomainViewModel> DomainSelected { get; set; }
+
+        public ObservableCollection<DomainViewModel> Domains { get; set; }
+
+        private DomainViewModel _SelectedDomain;
+        public DomainViewModel SelectedDomain
+        {
+            get
+            {
+                return _SelectedDomain;
+            }
+            set
+            {
+                _SelectedDomain = value;
+                OnPropertyChanged("SelectedDomain");
+                if (DomainSelected != null)
+                {
+                    DomainSelected(_SelectedDomain);
+                }
+            }
+        }
+
+
+        private ICommand _AddDomainCommand;
+        public ICommand AddDomainCommand
+        {
+            get
+            {
+                if (_AddDomainCommand == null)
+                {
+                    _AddDomainCommand = new RelayCommand(
+                    param => AddDomain(),
+                    param => CanAddDomain());
+                }
+                return _AddDomainCommand;
+            }
+        }
+
+
+
+
+        private bool CanAddDomain()
+        {
+            return true;
+        }
+        private void AddDomain()
+        {
+            Domains.Add(new DomainViewModel(new Domain().Default(DateTime.Now, Guid.NewGuid().ToString().ToLower())));
+        }
+
 
         private ICommand _AddWorkflowCommand;
         public ICommand AddWorkflowCommand
@@ -84,6 +136,7 @@ namespace Bitsmith.ViewModels
         public ObservableCollection<WorkflowViewModel> Workflows { get; set; }
 
 
+
         private Settings _Settings;
         public Settings Settings
         { 
@@ -97,25 +150,27 @@ namespace Bitsmith.ViewModels
         public SettingsModule(IDataService dataService)
         {
             DataService = dataService;
-            Filepath = Path.Combine(AppConstants.SettingsDirectory, base.Filepath);
+            //Filepath = Path.Combine(AppConstants.SettingsDirectory, base.Filepath);
         }
 
-
+        public override string Filepath()
+        {
+            return Path.Combine(AppConstants.SettingsDirectory, DataService.Filepath<Settings>());
+        }
         protected override bool LoadData()
         {
 
-            string filepath = Filepath;
+            string filepath = Filepath();
             if (!File.Exists(filepath))
             {
                 Models.Add(new Settings().Default());
-                
-                if (!FileSystemDataProvider.TryWrite<Settings>(Models, out string error, filepath))
+                if (!DataService.TryWrite<Settings>(Models, out string error, filepath))
                 {
                     OnFailure(error);
                 }
             }
 
-            bool b = FileSystemDataProvider.TryRead<Settings>(Filepath, out List<Settings> list, out string message);
+            bool b = DataService.TryRead<Settings>(filepath, out List<Settings> list, out string message);
             if (b)
             {
                 Models = list;
@@ -148,9 +203,13 @@ namespace Bitsmith.ViewModels
         {
             Workflows = new ObservableCollection<WorkflowViewModel>(from x in _Settings.Workflows select new WorkflowViewModel(x));
             Workflows.CollectionChanged += Workflows_CollectionChanged;
+        }
 
 
-
+        public void Initialize(List<DomainViewModel> domains)
+        {
+            Domains = new ObservableCollection<DomainViewModel>(domains);
+            Domains.CollectionChanged += Domains_CollectionChanged;
         }
 
         private void Workflows_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -174,6 +233,36 @@ namespace Bitsmith.ViewModels
                     if (vm != null)
                     {
                         _Settings.Workflows.Remove(vm.Model);
+                    }
+                }
+            }
+        }
+
+        private void Domains_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add)
+            {
+                foreach (var item in e.NewItems)
+                {
+                    var vm = item as DomainViewModel;
+                    if (vm != null)
+                    {
+                        _Settings.Domains.Add(vm.Model);
+                    }
+                }
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                foreach (var item in e.OldItems)
+                {
+                    var vm = item as DomainViewModel;
+                    if (vm != null)
+                    {
+                        var found = _Settings.Domains.FirstOrDefault(x => x.Id.Equals(vm.Id, StringComparison.OrdinalIgnoreCase));
+                        if (found != null)
+                        {
+                            _Settings.Domains.Remove(found);
+                        }
                     }
                 }
             }

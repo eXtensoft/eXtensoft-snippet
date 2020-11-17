@@ -108,7 +108,7 @@
             </Grid>
         </TabItem>
         <TabItem Header="Paths" Style="{StaticResource ResourceKey=viewTabItem}">
-            <local:ContentPathsView/>
+            <local:ContentPathsView />
         </TabItem>
     </TabControl>
 

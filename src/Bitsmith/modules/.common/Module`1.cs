@@ -9,7 +9,7 @@ using System.Windows.Input;
 namespace Bitsmith.ViewModels
 {
 
-    public class Module<T>  where T : class, new()
+    public abstract class Module<T>  where T : class, new()
     {
         public IDataService DataService { get; set; }
 
@@ -47,18 +47,23 @@ namespace Bitsmith.ViewModels
 
         protected List<T> Models { get; set; } = new List<T>();
 
-        private string _Filepath;
-        public virtual string Filepath 
-        { 
-            get
-            {
-                if (String.IsNullOrWhiteSpace(_Filepath) && DataService != null)
-                {
-                    _Filepath = DataService.Filepath<T>();
-                }
-                return _Filepath;
-            }
-            set { _Filepath = value; } 
+        //private string _Filepath;
+        //public virtual string Filepath 
+        //{ 
+        //    get
+        //    {
+        //        if (String.IsNullOrWhiteSpace(_Filepath) && DataService != null)
+        //        {
+        //            _Filepath = DataService.Filepath<T>();
+        //        }
+        //        return _Filepath;
+        //    }
+        //    set { _Filepath = value; } 
+        //}
+
+        public virtual string Filepath()
+        {
+            return DataService.Filepath<T>();
         }
 
         private ICommand _SaveItemsCommand;
@@ -97,15 +102,19 @@ namespace Bitsmith.ViewModels
 
         protected virtual void SaveData()
         {
-            if(!FileSystemDataProvider.TryWrite<T>(Models, out string message, Filepath))
+            if (!DataService.TryWrite<T>(Models, out string message, Filepath()))
             {
                 OnFailure("save-data", message);
             }
+            //if(!FileSystemDataProvider.TryWrite<T>(Models, out string message, Filepath))
+            //{
+            //    OnFailure("save-data", message);
+            //}
         }
 
         protected virtual bool LoadData()
         {
-            bool b = FileSystemDataProvider.TryRead<T>(out List<T> items, out string message, Filepath);
+            bool b = DataService.TryRead<T>(out List<T> items, out string message, Filepath());
             if(!b)
             {
                 OnFailure("load-data",message);

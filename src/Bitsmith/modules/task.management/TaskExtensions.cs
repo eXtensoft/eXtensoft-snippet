@@ -24,12 +24,12 @@ namespace Bitsmith.ProjectManagement
             DateTime now = DateTime.Now;
             var id = Guid.NewGuid().ToString();
             model.Id = id;
+            model.DomainId = domain.Id;
             model.Display = "new task";
             model.Identifier = new TagIdentifier() { Id = id, MasterId = domain.Id };
             model.CreatedOn = now;
             model.DueOn = DateTime.Now.AddDays(3);
             model.Dispositions = new List<Disposition>().Default(now,ScaleOption.None);
-            model.Dispositions.Add(new Disposition() { StartedAt = now, Key = "domain", Id = domain.Id });
             return model;
         }
 

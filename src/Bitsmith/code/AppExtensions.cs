@@ -23,7 +23,7 @@ namespace Bitsmith
 
             return sb.ToString();
         }
-        public static void EnsureDirectories(this IEnumerable<string> list)
+        public static void EnsureDirectories(this IEnumerable<string> list, bool isRemoveFiles = false)
         {
             foreach (var item in list)
             {
@@ -31,6 +31,13 @@ namespace Bitsmith
                 if (!info.Exists)
                 {
                     info.Create();
+                }
+                else if(isRemoveFiles)
+                {
+                    foreach (var file in info.GetFiles())
+                    {
+                        file.Delete();
+                    }
                 }
             }
         }

@@ -2,13 +2,17 @@
 using Bitsmith.DataServices.Abstractions;
 using Bitsmith.Models;
 using Bitsmith.ProjectManagement;
+using DocumentFormat.OpenXml.Bibliography;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Windows.Data;
 using System.Windows.Input;
+using System.Xaml;
 
 namespace Bitsmith.ViewModels
 {
@@ -16,47 +20,36 @@ namespace Bitsmith.ViewModels
     {
         public string Display { get; set; } = "Projectus Maximus";
 
+        public SettingsModule Settings { get; set; }
+
         public ObservableCollection<TaskItemViewModel> Items { get; set; }
-        public ObservableCollection<DomainViewModel> Domains { get; set; }
 
-
-        private DomainViewModel _SelectedDomain;
-        public DomainViewModel SelectedDomain
+        private ICollectionView _DomainWorkflows;
+        public ICollectionView DomainWorkflows
         {
             get
             {
-                return _SelectedDomain;
-            }
-            set
-            {
-                _SelectedDomain = value;
-                OnPropertyChanged("SelectedDomain");
-            }
-        }
-
-        private ICommand _AddDomainCommand;
-        public ICommand AddDomainCommand
-        {
-            get
-            {
-                if (_AddDomainCommand == null)
+                if (_DomainWorkflows == null)
                 {
-                    _AddDomainCommand = new RelayCommand(
-                    param => AddDomain(),
-                    param => CanAddDomain());
+                    _DomainWorkflows = CollectionViewSource.GetDefaultView(Workflows);
+                    _DomainWorkflows.Filter = FilterForDomain;
                 }
-                return _AddDomainCommand;
+                return _DomainWorkflows;
             }
         }
 
-        private bool CanAddDomain()
+        private bool FilterForDomain(object o)
         {
-            return true;
+            bool b = false;
+            var vm = o as WorkflowViewModel;
+            if (vm != null)
+            {
+                b = true;
+            }
+            return b;
         }
-        private void AddDomain()
-        {
-            Domains.Add(new DomainViewModel(new Domain().Default(DateTime.Now, Guid.NewGuid().ToString().ToLower())));
-        }
+
+        public ObservableCollection<WorkflowViewModel> Workflows { get; set; }
 
         private WorkflowViewModel _SelectedWorkflow;
         public WorkflowViewModel SelectedWorkflow
@@ -76,6 +69,13 @@ namespace Bitsmith.ViewModels
             }
         }
 
+        public bool IsItemSelected
+        {
+            get
+            {
+                return _SelectedItem != null;
+            }
+        }
 
         private TaskItemViewModel _SelectedItem;
         public TaskItemViewModel SelectedItem
@@ -88,6 +88,7 @@ namespace Bitsmith.ViewModels
             {
                 _SelectedItem = value;
                 OnPropertyChanged("SelectedItem");
+                OnPropertyChanged("IsItemSelected");
             }
         }
 
@@ -114,7 +115,7 @@ namespace Bitsmith.ViewModels
         }
         private void AddItem()
         {
-            var model = new TaskItem().Default(SelectedDomain.Model);
+            var model = new TaskItem().Default(Settings.SelectedDomain.Model);
             if (SelectedWorkflow != null)
             {
                 model.WorkflowId = _SelectedWorkflow.Id;
@@ -142,7 +143,7 @@ namespace Bitsmith.ViewModels
 
         protected override bool LoadData()
         {
-            string filepath = Filepath;
+            string filepath = Filepath();
             if (!File.Exists(filepath))
             {
                 TaskManager project = new TaskManager().Default();
@@ -152,7 +153,7 @@ namespace Bitsmith.ViewModels
                 }
             }
 
-            bool b = DataService.TryRead<TaskManager>(Filepath, out model, out string message);
+            bool b = DataService.TryRead<TaskManager>(filepath, out model, out string message);
             if (!b)
             {
                 OnFailure(message);
@@ -164,7 +165,7 @@ namespace Bitsmith.ViewModels
         protected override bool SaveData()
         {
             bool b = true;
-            var filepath = DataService.Filepath<TaskItem>("archive");
+            var filepath = Path.Combine(AppConstants.TasksDirectory, DataService.Filepath<TaskItem>("archive"));
             var removals = (from x in Items where x.Status.Token.Equals("archived") select x.Model.Id).ToList();
             
             if (removals.Count > 0)
@@ -191,7 +192,7 @@ namespace Bitsmith.ViewModels
 
             if (model != null)
             {
-                if (!DataService.TryWrite<TaskManager>(model, out string message,Filepath))
+                if (!DataService.TryWrite<TaskManager>(model, out string message,Filepath()))
                 {
                     OnFailure(message);
                     return false;
@@ -200,21 +201,76 @@ namespace Bitsmith.ViewModels
             return true;
         }
 
-        public override void Initialize()
+        protected override void ApplyPreferences()
+        {
+            if (UserPreferences.TryGet<string>(ModuleKey, "selected-workflow", out string workflow))
+            {
+                var found = Workflows.FirstOrDefault(x => x.Id.Equals(workflow));
+                if (found != null)
+                {
+                    SelectedWorkflow = found;
+                }
+                else
+                {
+                    SelectedWorkflow = Workflows.FirstOrDefault();
+                }
+            }
+            // tasks-domain-workflow FOR EACH DOMAIN
+            RefreshDomainWorkflows();
+        }
+
+        private void RefreshDomainWorkflows()
         {
             
-            
-            if (model != null)
-            {
-                Domains = new ObservableCollection<DomainViewModel>(from x in model.Domains select new DomainViewModel(x));
-                SelectedDomain = Domains.FirstOrDefault();
-                Items = new ObservableCollection<TaskItemViewModel>(from x in model.Items select new TaskItemViewModel(x));
-                Items.CollectionChanged += Items_CollectionChanged;
+            //if (UserPreferences.TryGetAny<string>($"{ModuleKey}.domain-workflow",SelectedDomain.Id, out List<string> list))
+            //{
 
-            }
+            //}
+            //HashSet<string> hs = new HashSet<string>();
+            //foreach (var item in list)
+            //{
+            //    string[] parts = item.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+            //    if (parts.Length == 2)
+            //    { 
+            //        var workflow = Workflows.FirstOrDefault(x => x.Id.Equals(parts[1]));
+            //        var domain = Domains.FirstOrDefault(x => x.Id.Equals(parts[0]));
+            //        if (workflow != null && domain != null && hs.Add(item))
+            //        {
+            //            domain.DomainWorkflowSelections.Add(new ListItemViewModel(new ListItem() { Identifier = new TagIdentifier() { Display = workflow.Display, Id = workflow.Id, MasterId = domain.Id, Token = $"{domain.Id}|{workflow.Id}" }  }) { IsSelected = true }); ;
+            //        }
+            //    }               
+            //}
+
+            //foreach (var domain in Domains)
+            //{
+            //    foreach (var workflow in Workflows)
+            //    {
+            //        var found = domain.DomainWorkflowSelections.FirstOrDefault(x => x.MasterId.Equals(domain.Id) && x.Id.Equals(workflow.Id));
+            //        if (found == null)
+            //        {
+            //            domain.DomainWorkflowSelections.Add(new ListItemViewModel(new ListItem() { Identifier = new TagIdentifier() { Display = workflow.Display, Id = workflow.Id, MasterId = domain.Id, Token = $"{domain.Id}|{workflow.Id}" } }));
+            //        }
+            //    }
+            //}
+
         }
 
 
+        internal override void SetPreferences()
+        {
+            UserPreferences.EnsurePreference(ModuleKey, "selected-workflow", SelectedWorkflow.Id);
+            UserPreferences.EnsurePreference(ModuleKey, "selected-domain", Settings.SelectedDomain.Model.Id);
+        }
+
+        public override void Initialize()
+        {                        
+            if (model != null)
+            {
+                Items = new ObservableCollection<TaskItemViewModel>(from x in model.Items select new TaskItemViewModel(x));
+                Items.CollectionChanged += Items_CollectionChanged;
+            }
+            ApplyPreferences();
+        }
 
         private void Items_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -265,11 +321,17 @@ namespace Bitsmith.ViewModels
         }
 
 
-        public TasksModule(IDataService dataService)
+        public TasksModule(IDataService dataService, SettingsModule settings)
         {
             DataService = dataService;
-            Filepath = Path.Combine(AppConstants.TasksDirectory, DataService.Filepath<TaskManager>());
+            UserPreferences = settings.UserPreferences;
+            Workflows = settings.Workflows;
+            Settings = settings;
         }
 
+        protected override string Filepath()
+        {
+            return Path.Combine(AppConstants.TasksDirectory, DataService.Filepath<TaskManager>());
+        }
     }
 }

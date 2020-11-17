@@ -55,11 +55,15 @@ namespace Bitsmith.ViewModels
         public MimeModule(IDataService dataService)
         {
             DataService = dataService;
-            Filepath = Path.Combine(AppConstants.SettingsDirectory, base.Filepath);
+        }
+
+        public override string Filepath()
+        {
+            return Path.Combine(AppConstants.SettingsDirectory, DataService.Filepath<MimeMap>());
         }
         protected override bool LoadData()
         {
-            if (!File.Exists(Filepath))
+            if (!File.Exists(Filepath()))
             {
                 List<MimeMap> list = new List<MimeMap>();
 
@@ -90,7 +94,7 @@ namespace Bitsmith.ViewModels
                 list.Add(new MimeMap() { Id = "url", Extension = ".url", Display = "url", Name = "Url", Mime = "text/x-url", View = "Bitsmith.ContentItemUrlView" });
 
 
-                FileSystemDataProvider.TryWrite<MimeMap>(list, out string message, Filepath);
+                DataService.TryWrite<MimeMap>(list, out string message, Filepath());
             }
 
             return base.LoadData();

@@ -8,6 +8,7 @@ using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Principal;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -542,6 +543,7 @@ namespace Bitsmith.ViewModels
             {
                 Id = Guid.NewGuid().ToString().ToLower(),
                 Scope = ScopeOption.Private,
+                Language = AppConstants.Languages.English
             };
             item.Properties.DefaultTags();
             if (!string.IsNullOrWhiteSpace(Identifier))
@@ -665,7 +667,8 @@ namespace Bitsmith.ViewModels
                 Display = "display",
                 Scope = ScopeOption.Private,
                 Mime = "text", 
-                Body = "note"
+                Body = "note",
+                Language = AppConstants.Languages.English
             };
             item.Properties.DefaultTags();
             item.Properties.Add(new Property() { Name = $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Task}", Value = Model.Id });

@@ -130,4 +130,22 @@
   <data name="statemachine" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>data\statemachine.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="stop_words_english" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>data\stop-words-english.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="stop_words_french" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>data\stop-words-french.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="stop_words_german" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>data\stop-words-german.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="stop_words_greek" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>data\stop-words-greek.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="stop_words_italian" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>data\stop-words-italian.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="stop_words_spanish" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>data\stop-words-spanish.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
 </root>

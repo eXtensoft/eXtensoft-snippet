@@ -16,13 +16,18 @@ using System.Windows.Shapes;
 namespace Bitsmith
 {
     /// <summary>
-    /// Interaction logic for ProjectsView.xaml
+    /// Interaction logic for LanguageSettingsView.xaml
     /// </summary>
-    public partial class ProjectsView : UserControl
+    public partial class LanguageSettingsView : UserControl
     {
-        public ProjectsView()
+        public LanguageSettingsView()
         {
             InitializeComponent();
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

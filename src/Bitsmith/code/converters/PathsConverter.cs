@@ -30,7 +30,7 @@ namespace Bitsmith
             }
             if (string.IsNullOrEmpty(s))
             {
-                s = $"/content/{Environment.UserName}";
+                s = $"/content";
             }
 
             return s;

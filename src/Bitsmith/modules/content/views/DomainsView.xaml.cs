@@ -24,5 +24,16 @@ namespace Bitsmith
         {
             InitializeComponent();
         }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            var source = e.Source;
+            var orig_source = e.OriginalSource;
+        }
+
+        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

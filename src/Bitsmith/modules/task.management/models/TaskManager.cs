@@ -12,8 +12,8 @@ namespace Bitsmith.ProjectManagement
         public string Id { get; set; }
         [XmlAttribute("createdAt")]
         public DateTime CreatedAt { get; set; }
-        [XmlElement("Domain")]
-        public List<Domain> Domains { get; set; } = new List<Domain>();
+        //[XmlElement("Domain")]
+        //public List<Domain> Domains { get; set; } = new List<Domain>();
         [XmlElement("Workflow")]
         public List<Workflow> Workflows { get; set; } = new List<Workflow>();
         [XmlElement("Task")]

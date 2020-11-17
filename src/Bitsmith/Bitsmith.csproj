@@ -71,6 +71,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="code\converters\ImageMapConverter.cs" />
     <Compile Include="code\converters\PathsConverter.cs" />
     <Compile Include="code\FileFormat.cs" />
     <Compile Include="code\pdf\PdfTextExtractor.cs" />
@@ -80,11 +81,26 @@
     <Compile Include="code\query\QueryTypeOption.cs" />
     <Compile Include="code\query\SearchTypeOptions.cs" />
     <Compile Include="code\query\TokenQuery.cs" />
+    <Compile Include="code\SelectItem.cs" />
+    <Compile Include="code\text-search\file-parsers\MSWordFileParser.cs" />
+    <Compile Include="code\text-search\file-parsers\PdfFileReader.cs" />
+    <Compile Include="code\text-search\file-parsers\TextFileParser.cs" />
     <Compile Include="code\text-search\FullTextIndex.cs" />
     <Compile Include="code\text-search\indexing\IContentIndexer.cs" />
     <Compile Include="code\text-search\indexing\IContentProvider.cs" />
+    <Compile Include="code\text-search\file-parsers\IFileReader.cs" />
     <Compile Include="code\text-search\indexing\Indexer.cs" />
-    <Compile Include="code\text-search\simple-text-indexer\SimpleTextIndexer.cs" />
+    <Compile Include="code\text-search\multi-lingual\ILanguageIndexer.cs" />
+    <Compile Include="code\text-search\multi-lingual\LanguageIndexer.cs" />
+    <Compile Include="data.services\DataServiceStrategyOption.cs" />
+    <Compile Include="modules\.common\views\DataSettingsView.xaml.cs">
+      <DependentUpon>DataSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\.common\view.models\indexer\LanguageSettingsViewModel.cs" />
+    <Compile Include="modules\.common\view.models\indexer\LanguageTokenViewModel.cs" />
+    <Compile Include="modules\.common\views\LanguageSettingsView.xaml.cs">
+      <DependentUpon>LanguageSettingsView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="modules\.common\models\IPathNode.cs" />
     <Compile Include="modules\.common\view.models\indexer\IndexerModule.cs" />
     <Compile Include="code\text-search\natural-language-processing\LanguageOption.cs" />
@@ -94,6 +110,7 @@
     <Compile Include="code\text-search\natural-language-processing\Token.cs" />
     <Compile Include="code\text-search\natural-language-processing\Processor.cs" />
     <Compile Include="code\text-search\natural-language-processing\TokenTypeOption.cs" />
+    <Compile Include="modules\.common\view.models\indexer\IndexExclusionViewModel.cs" />
     <Compile Include="modules\.common\view.models\settings\Stopword.cs" />
     <Compile Include="modules\.common\view.models\settings\StopwordSetting.cs" />
     <Compile Include="modules\content\view.models\QueryViewModel.cs" />
@@ -115,7 +132,6 @@
     <Compile Include="code\finite.state.machine\StateMachineExtensions.cs" />
     <Compile Include="code\json\JsonExtensions.cs" />
     <Compile Include="code\style.selectors\NavMenuItemStyleSelector.cs" />
-    <Compile Include="code\ViewManager.cs" />
     <Compile Include="data.services\FilesystemDataService.cs" />
     <Compile Include="data.services\JsonDataService.cs" />
     <Compile Include="data.services\XmlDataService.cs" />
@@ -126,7 +142,7 @@
     <Compile Include="modules\content\code\Counter.cs" />
     <Compile Include="modules\styx\models\designer\GraphTemplate.cs" />
     <Compile Include="modules\styx\models\Estimate.cs" />
-    <Compile Include="modules\project.management\models\ProjectTask.cs" />
+    <Compile Include="modules\task.management\models\ProjectTask.cs" />
     <Compile Include="modules\chronos\view.models\aggregation\WorkEffortViewModel.cs" />
     <Compile Include="modules\chronos\views\ChronosView.xaml.cs">
       <DependentUpon>ChronosView.xaml</DependentUpon>
@@ -155,7 +171,7 @@
     <Compile Include="modules\.common\view.models\workflow\WorkflowExtensions.cs" />
     <Compile Include="modules\.common\view.models\workflow\WorkflowStep.cs" />
     <Compile Include="modules\.common\view.models\workflow\WorkflowViewModel.cs" />
-    <Compile Include="modules\credentials\view.models\CredentialsModule.cs" />
+    <Compile Include="modules\credentials\CredentialsModule.cs" />
     <Compile Include="modules\styx\models\designer\GraphDesign.cs" />
     <Compile Include="modules\styx\models\designer\GraphDesigner.cs" />
     <Compile Include="modules\styx\models\graph\Direction.cs" />
@@ -175,8 +191,8 @@
     <Compile Include="modules\styx\models\navgraph\StepContextParser.cs" />
     <Compile Include="modules\styx\models\Project.cs" />
     <Compile Include="modules\styx\models\ScaleOption.cs" />
-    <Compile Include="modules\project.management\ProjectManagementExtensions.cs" />
-    <Compile Include="modules\project.management\views\DashboardView.xaml.cs">
+    <Compile Include="modules\task.management\TaskExtensions.cs" />
+    <Compile Include="modules\task.management\views\DashboardView.xaml.cs">
       <DependentUpon>DashboardView.xaml</DependentUpon>
     </Compile>
     <Compile Include="modules\.common\models\ListItem.cs" />
@@ -184,22 +200,19 @@
     <Compile Include="modules\.common\models\TagIdentifier.cs" />
     <Compile Include="modules\.common\view.models\shared\lists\ListItemViewModel.cs" />
     <Compile Include="modules\.common\view.models\UserSettingsModule.cs" />
-    <Compile Include="modules\project.management\models\FileTypeOption.cs" />
-    <Compile Include="modules\project.management\models\Link.cs" />
-    <Compile Include="modules\project.management\models\LinkTypeOption.cs" />
-    <Compile Include="modules\project.management\models\TaskManager.cs" />
-    <Compile Include="modules\project.management\models\Disposition.cs" />
-    <Compile Include="modules\project.management\models\TaskItem.cs" />
-    <Compile Include="modules\project.management\view.models\NewTaskViewModel.cs" />
-    <Compile Include="modules\project.management\TasksModule.cs" />
-    <Compile Include="modules\project.management\view.models\TaskItemViewModel.cs" />
-    <Compile Include="modules\project.management\views\ProjectsView.xaml.cs">
-      <DependentUpon>ProjectsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="modules\project.management\views\TasksListView.xaml.cs">
+    <Compile Include="modules\task.management\models\FileTypeOption.cs" />
+    <Compile Include="modules\task.management\models\Link.cs" />
+    <Compile Include="modules\task.management\models\LinkTypeOption.cs" />
+    <Compile Include="modules\task.management\models\TaskManager.cs" />
+    <Compile Include="modules\task.management\models\Disposition.cs" />
+    <Compile Include="modules\task.management\models\TaskItem.cs" />
+    <Compile Include="modules\task.management\view.models\NewTaskViewModel.cs" />
+    <Compile Include="modules\task.management\TasksModule.cs" />
+    <Compile Include="modules\task.management\view.models\TaskItemViewModel.cs" />
+    <Compile Include="modules\task.management\views\TasksListView.xaml.cs">
       <DependentUpon>TasksListView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="modules\project.management\views\TaskView.xaml.cs">
+    <Compile Include="modules\task.management\views\TaskView.xaml.cs">
       <DependentUpon>TaskView.xaml</DependentUpon>
     </Compile>
     <Compile Include="modules\styx\models\site\Link.cs" />
@@ -214,13 +227,13 @@
     <Compile Include="modules\.common\view.models\workflow\Workflow.cs" />
     <Compile Include="modules\workflow\view.models\StateViewModel.cs" />
     <Compile Include="modules\workflow\view.models\TransitionViewModel.cs" />
-    <Compile Include="modules\workflow\view.models\WorkflowModule.cs" />
+    <Compile Include="modules\workflow\WorkflowModule.cs" />
     <Compile Include="modules\workflow\view.models\BuilderViewModel.cs" />
     <Compile Include="modules\workflow\WorkflowExtensions.cs" />
     <Compile Include="modules\.common\views\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="modules\project.management\views\TaskItemView.xaml.cs">
+    <Compile Include="modules\task.management\views\TaskItemView.xaml.cs">
       <DependentUpon>TaskItemView.xaml</DependentUpon>
     </Compile>
     <Compile Include="modules\chronos\views\NewTimeEntryView.xaml.cs">
@@ -241,16 +254,13 @@
     <Compile Include="modules\chronos\views\TimeEntryWeekView.xaml.cs">
       <DependentUpon>TimeEntryWeekView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="modules\project.management\views\ProjectView.xaml.cs">
-      <DependentUpon>ProjectView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="modules\project.management\views\TasksView.xaml.cs">
+    <Compile Include="modules\task.management\views\TasksView.xaml.cs">
       <DependentUpon>TasksView.xaml</DependentUpon>
     </Compile>
     <Compile Include="modules\styx\views\StyxView.xaml.cs">
       <DependentUpon>StyxView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="modules\project.management\views\TaskItemDetailsView.xaml.cs">
+    <Compile Include="modules\task.management\views\TaskItemDetailsView.xaml.cs">
       <DependentUpon>TaskItemDetailsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="modules\content\views\TagSelectorView.xaml.cs">
@@ -405,7 +415,7 @@
     <Compile Include="modules\.common\view.models\MimeModule.cs" />
     <Compile Include="modules\.common\view.models\PathNodeViewModel.cs" />
     <Compile Include="modules\.common\view.models\VirtualPathModule.cs" />
-    <Compile Include="modules\.common\view.models\WorkspaceViewModel.cs" />
+    <Compile Include="modules\.common\WorkspaceViewModel.cs" />
     <Compile Include="modules\.common\views\FilesView.xaml.cs">
       <DependentUpon>FilesView.xaml</DependentUpon>
     </Compile>
@@ -483,12 +493,20 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="_App.config" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="data\statemachine.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="modules\.common\views\DataSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\.common\views\LanguageSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="modules\content\views\content-views\ContentItemPdfView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -509,19 +527,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="modules\project.management\views\DashboardView.xaml">
+    <Page Include="modules\task.management\views\DashboardView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="modules\project.management\views\ProjectsView.xaml">
+    <Page Include="modules\task.management\views\TasksListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="modules\project.management\views\TasksListView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="modules\project.management\views\TaskView.xaml">
+    <Page Include="modules\task.management\views\TaskView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -529,7 +543,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="modules\project.management\views\TaskItemView.xaml">
+    <Page Include="modules\task.management\views\TaskItemView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -557,11 +571,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="modules\project.management\views\ProjectView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="modules\project.management\views\TasksView.xaml">
+    <Page Include="modules\task.management\views\TasksView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -569,7 +579,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="modules\project.management\views\TaskItemDetailsView.xaml">
+    <Page Include="modules\task.management\views\TaskItemDetailsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -756,10 +766,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="code\state\" />
-    <Folder Include="code\text-search\multi-lingual\" />
     <Folder Include="code\xf\" />
     <Folder Include="model\" />
-    <Folder Include="modules\project.management\dataprovider\" />
+    <Folder Include="modules\task.management\dataprovider\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="content\images\circle.black.png" />
@@ -795,10 +804,10 @@
     <Resource Include="content\images\shadow_tr.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="modules\project.management\models\design.txt" />
+    <Resource Include="modules\task.management\models\design.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="modules\project.management\data\design.txt" />
+    <Resource Include="modules\task.management\data\design.txt" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="modules\styx\code\design.txt" />
@@ -834,6 +843,33 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="code\text-search\natural-language-processing\notes.natural-language-processing.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\flags\china-flag-xs.png" />
+    <Resource Include="images\flags\france-flag-xs.png" />
+    <Resource Include="images\flags\germany-flag-xs.png" />
+    <Resource Include="images\flags\italy-flag-xs.png" />
+    <Resource Include="images\flags\spain-flag-xs.png" />
+    <Resource Include="images\flags\united-kingdom-flag-xs.png" />
+    <Resource Include="images\flags\united-states-of-america-flag-xs.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="data\stop-words-french.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="data\stop-words-greek.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="data\stop-words-german.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="data\stop-words-spanish.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="data\stop-words-italian.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="data\stop-words-chinese-simplified.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

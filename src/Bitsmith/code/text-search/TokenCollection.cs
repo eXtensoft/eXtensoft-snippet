@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DocumentFormat.OpenXml.Drawing.ChartDrawing;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -28,5 +29,7 @@ namespace Bitsmith.FullText
             }
             return sb.ToString();
         }
+
+
     }
 }

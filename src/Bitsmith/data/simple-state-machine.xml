@@ -5,7 +5,7 @@
   <State name="Content" display="Content" isNavigate="true" order="0" />
   <State name="Tasks" display="Tasks" isNavigate="true" order="1" />
   <State name="TimeEntry" display="TimeEntry" isNavigate="true" order="2" />
-  <State name="Settings" display="Settings" isNavigate="false" order="3" />
+  <State name="Settings" display="Settings" isNavigate="true" order="3" />
   <State name="Credentials" display="Credentials" isNavigate="false" order="4" />
   <Transition name="Login" origin="LoggedOff" destination="Authenticated" order="0" />
   <Transition name="Content" origin="Authenticated" destination="Content" order="0" />

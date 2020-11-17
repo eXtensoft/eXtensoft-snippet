@@ -24,7 +24,7 @@ namespace Bitsmith
         public AuthenticationView()
         {
             InitializeComponent();
-            _Timer = new System.Timers.Timer(1500.00);
+            _Timer = new System.Timers.Timer(500.00);
             _Timer.Elapsed += new System.Timers.ElapsedEventHandler(Timer_Elapsed);
         }
 

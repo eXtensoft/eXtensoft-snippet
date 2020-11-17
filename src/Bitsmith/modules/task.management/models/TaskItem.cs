@@ -9,10 +9,12 @@ namespace Bitsmith.ProjectManagement
     {
         [XmlAttribute("id")]
         public string Id { get; set; }
-        [XmlAttribute("groupId")]
+        [XmlAttribute("group")]
         public string GroupId { get; set; }
-        [XmlAttribute("workflowId")]
+        [XmlAttribute("workflow")]
         public string WorkflowId { get; set; }
+        [XmlAttribute("domain")]
+        public string DomainId { get; set; }
         [XmlAttribute("dueOn")]
         public DateTime CreatedOn { get; set; }
         public TagIdentifier Identifier { get; set; }
@@ -21,6 +23,7 @@ namespace Bitsmith.ProjectManagement
         public string Description { get; set; }
 
         public List<Disposition> Dispositions { get; set; }
+
 
     }
 }

@@ -7,29 +7,33 @@
              xmlns:vm="clr-namespace:Bitsmith.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="250">
-    <GroupBox DataContext="{Binding Path=Content}">
+    <GroupBox DataContext="{Binding Path=Settings}">
         <GroupBox.Header>
             <StackPanel Orientation="Horizontal">
-                <Label Content="{Binding Path=SelectedDomain.Name}"/>
-                <Button Style="{StaticResource DetailsCommandButton}" Command="{Binding Path=ViewPathDomainsCommand}"/>
+                <Label Content="{Binding Path=SelectedDomain.Display}"/>
+                <!--<Button Style="{StaticResource DetailsCommandButton}" Command="{Binding Path=ViewPathDomainsCommand}"/>-->
             </StackPanel>
         </GroupBox.Header>
         <GroupBox.Content>
-            <TreeView ItemsSource="{Binding Path=SelectedDomain.Item.Items}"  SelectedItemChanged="TreeView_SelectedItemChanged">
-                <TreeView.Resources>
-                    <HierarchicalDataTemplate DataType="{x:Type vm:DomainPathMapViewModel}" ItemsSource="{Binding Path=Items}">
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="{Binding Path=Display}"/>
-                            <Label Content="{Binding Path=Path}" Margin="10,0,0,0"/>
-                        </StackPanel>
-                    </HierarchicalDataTemplate>
-                    <HierarchicalDataTemplate DataType="{x:Type vm:PathNodeViewModel}" ItemsSource="{Binding Path=Items}">
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="{Binding Path=Display}"/>
-                        </StackPanel>
-                    </HierarchicalDataTemplate>
-                </TreeView.Resources>
-            </TreeView>
+            <Grid>
+                <TreeView ItemsSource="{Binding Path=SelectedDomain.Item.Items}" 
+                          SelectedItemChanged="TreeView_SelectedItemChanged">
+                    <TreeView.Resources>
+                        <HierarchicalDataTemplate DataType="{x:Type vm:DomainPathMapViewModel}" ItemsSource="{Binding Path=Items}">
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="{Binding Path=Display}"/>
+                                <Label Content="{Binding Path=Path}" Margin="10,0,0,0"/>
+                            </StackPanel>
+                        </HierarchicalDataTemplate>
+                        <HierarchicalDataTemplate DataType="{x:Type vm:PathNodeViewModel}" ItemsSource="{Binding Path=Items}">
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="{Binding Path=Display}"/>
+                            </StackPanel>
+                        </HierarchicalDataTemplate>
+                    </TreeView.Resources>
+                </TreeView>                
+            </Grid>
+
         </GroupBox.Content>
     </GroupBox>
 </UserControl>

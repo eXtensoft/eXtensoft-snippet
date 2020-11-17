@@ -125,8 +125,8 @@ namespace Bitsmith.Search
 
         public static void PathQuery(this TokenQuery tokenQuery, List<ContentItem> contentItems, string domain)
         {
-            tokenQuery.Ids = contentItems.ForDomain(domain).Where(x => x.HasPathStartingWith(tokenQuery.Token)).Select(y => y.Id).ToList();
-            //tokenQuery.Ids = contentItems.ForDomain(domain).Where(x => x.Paths.Contains(tokenQuery.Token)).Select(y => y.Id).ToList();
+            //tokenQuery.Ids = contentItems.ForDomain(domain).Where(x => x.HasPathStartingWith(tokenQuery.Token)).Select(y => y.Id).ToList();
+            tokenQuery.Ids = contentItems.ForDomain(domain).Where(x => x.Paths.Contains(tokenQuery.Token)).Select(y => y.Id).ToList();
         } 
 
         public static bool HasPathStartingWith(this ContentItem contentItem, string pathPart)

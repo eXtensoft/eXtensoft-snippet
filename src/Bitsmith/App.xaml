@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Bitsmith" 
              xmlns:model="clr-namespace:Bitsmith.Models"
+             xmlns:nl="clr-namespace:Bitsmith.NaturalLanguage"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              StartupUri="Shell.xaml">
     <Application.Resources>
@@ -17,7 +18,8 @@
             <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
             <local:BoolToVisibilityConverter x:Key="cvtBool2Visibility"/>
             <local:BoolToVisibilityConverter x:Key="ReverseVisibility" IsReverse="true" />
-                <local:BooleanToBrushConverter x:Key="Bool2Brush"/>
+            <local:ImageMapConverter x:Key="cvtImageMaps"/>
+            <local:BooleanToBrushConverter x:Key="Bool2Brush"/>
             <local:TagsConverter x:Key="cvtTags"/>
             <ObjectDataProvider x:Key="Scopes" MethodName="GetValues" ObjectType="{x:Type sys:Enum }">
                 <ObjectDataProvider.MethodParameters>
@@ -37,6 +39,11 @@
             <ObjectDataProvider x:Key="ChronosViews" MethodName="GetValues" ObjectType="{x:Type sys:Enum }">
                 <ObjectDataProvider.MethodParameters>
                     <x:Type TypeName="model:ChronosViewTypeOptions"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+            <ObjectDataProvider x:Key="TokenTypes" MethodName="GetValues" ObjectType="{x:Type sys:Enum }">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="nl:TokenTypeOption"/>
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
         </ResourceDictionary>

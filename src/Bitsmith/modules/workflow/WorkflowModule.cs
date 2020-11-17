@@ -62,7 +62,7 @@ namespace Bitsmith.ViewModels
         private void UploadStateMachine()
         {
             bool b = false;
-            if (FileSystemDataProvider.TryLocateFile(out FileInfo info))
+            if (DataService.TryLocateFile(out FileInfo info))
             {
                 try
                 {
@@ -115,7 +115,7 @@ namespace Bitsmith.ViewModels
         private void InloadStateMachine()
         {
             bool b = false;
-            if (FileSystemDataProvider.TryLocateFile(out FileInfo info))
+            if (DataService.TryLocateFile(out FileInfo info))
             {
                 try
                 {

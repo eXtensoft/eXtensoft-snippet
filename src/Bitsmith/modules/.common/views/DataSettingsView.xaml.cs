@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Bitsmith
 {
     /// <summary>
-    /// Interaction logic for ProjectView.xaml
+    /// Interaction logic for DataSettingsView.xaml
     /// </summary>
-    public partial class ProjectView : UserControl
+    public partial class DataSettingsView : UserControl
     {
-        public ProjectView()
+        public DataSettingsView()
         {
             InitializeComponent();
         }
