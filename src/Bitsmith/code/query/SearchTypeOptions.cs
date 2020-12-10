@@ -11,10 +11,11 @@ namespace Bitsmith.Models
     {
         None = 0,
         Tag = 1,
-        FullText = 2,
-        Path = 4,
-        File = 8,
-        Fuzzy = 16,
-        Recent = 32,
+        TagValue = 2,
+        FullText = 4,
+        Path = 8,
+        File = 16,
+        Fuzzy = 32,
+        Recent = 64,
     }
 }

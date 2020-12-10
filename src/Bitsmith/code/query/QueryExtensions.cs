@@ -61,6 +61,7 @@ namespace Bitsmith.Search
             //var pos = node.Path.IndexOf('/', 1);
             //token = pos > 0 ? node.Path.Substring(pos) : node.Path;
             query.TokenQueries.Add(new TokenQuery() { SearchType = searchType, Token = token  });
+            
             return query;
         }
 
@@ -82,6 +83,16 @@ namespace Bitsmith.Search
             return query;
         }
 
+        private static IList<char> _Evaluators = new List<char>() { '<', '>', '=', '!' };
+        private static bool ContainsEvaluator(this string input)
+        {
+            bool b = false;
+            for (int i = 0; !b && i < input.Length; i++)
+            {
+                b = _Evaluators.Contains(input[i]);
+            }
+            return b;
+        }
 
         public static List<ContentItemViewModel> Execute(this Query query, 
             List<ContentItem> contentItems, 

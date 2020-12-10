@@ -113,6 +113,7 @@
     <Compile Include="modules\.common\view.models\indexer\IndexExclusionViewModel.cs" />
     <Compile Include="modules\.common\view.models\settings\Stopword.cs" />
     <Compile Include="modules\.common\view.models\settings\StopwordSetting.cs" />
+    <Compile Include="modules\content\code\BibleManager.cs" />
     <Compile Include="modules\content\view.models\QueryViewModel.cs" />
     <Compile Include="modules\content\views\content-views\ContentItemPdfView.xaml.cs">
       <DependentUpon>ContentItemPdfView.xaml</DependentUpon>
@@ -870,6 +871,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="data\stop-words-chinese-simplified.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="data\kjvdat.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="data\workflows.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="content\images\heart.red.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

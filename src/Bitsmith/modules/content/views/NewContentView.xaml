@@ -195,7 +195,7 @@
                     </ListBox>
                     <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center">
                         <RadioButton Content="Popular" Name="rdoPopular" GroupName="tags" IsChecked="True"/>
-                        <RadioButton Content="Recent" Name="rdoRecent" GroupName="tags" Margin="5,0"/>
+                        <RadioButton Content="Recent" Name="rdoRecent" GroupName="tags" Margin="5,0" IsChecked="{Binding Path=IsTagsRecentChecked}"/>
                     </StackPanel>
                 </Grid>
             </Expander.Content>

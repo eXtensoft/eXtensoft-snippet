@@ -148,47 +148,6 @@ namespace Bitsmith.ViewModels
 
         public string Display { get; set; } = "workflow-module";
 
-        private string _DslBody;
-        public string DslBody
-        {
-            get
-            {
-                return _DslBody;
-            }
-            set
-            {
-                _DslBody = value;
-                OnPropertyChanged("DslBody");
-            }
-        }
-
-        private ICommand _ToDslCommand;
-        public ICommand ToDslCommand
-        {
-            get
-            {
-                if (_ToDslCommand == null)
-                {
-                    _ToDslCommand = new RelayCommand(
-                    param => ToDsl(),
-                    param => CanToDsl());
-                }
-                return _ToDslCommand;
-            }
-        }
-        private bool CanToDsl()
-        {
-            return Item != null && Item.Validate();
-        }
-        private void ToDsl()
-        {
-            //Machine = Item.Build();
-            //Workflow = new WorkflowViewModel(Machine);
-            //DslBody = Newtonsoft.Json.JsonConvert.SerializeObject(Machine, Newtonsoft.Json.Formatting.Indented);
-            //GenericObjectManager.WriteGenericItem<StateMachine>(Machine, $"sm.{Guid.NewGuid().ToString().Substring(0,4)}.xml");
-            //File.WriteAllText($"sm.{Guid.NewGuid().ToString().Substring(0,4)}.json", DslBody);
-        }
-
 
         private BuilderViewModel _Item;
         public BuilderViewModel Item 

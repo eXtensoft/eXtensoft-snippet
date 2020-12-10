@@ -26,7 +26,48 @@ namespace Bitsmith.ViewModels
     public class ContentModule : Module
     {
 
+        private ICommand _AddBibleCommand;
+        public ICommand AddBibleCommand
+        {
+            get
+            {
+                if (_AddBibleCommand == null)
+                {
+                    _AddBibleCommand = new RelayCommand(
+                    param => AddBible(),
+                    param => CanAddBible());
+                }
+                return _AddBibleCommand;
+            }
+        }
+        private bool CanAddBible()
+        {
+            return true;
+        }
+        private void AddBible()
+        {
+            var verses = BibleManager.Ingest(Settings.SelectedDomain.Id, "kjvdat");
+            foreach (var verse in verses)
+            {
+                AddContent(verse);
+            }
+        }
+
+
         public VirtualPathModule Paths { get; set; }
+
+        public ObservableCollection<QueryViewModel> AllQueries { get; set; }
+
+        private void PublishQuery(Query query)
+        {
+            query.QueryType = QueryTypeOption.Recent;
+            var hash = query.GetHash();
+            if (!AllQueries.Any(x => x.Hash.Equals(hash)))
+            {
+                AllQueries.Insert(0, new QueryViewModel(query));
+                //AllQueries.Add(new QueryViewModel(query));
+            }
+        }
 
         private bool _IsRecentQueries = true;
         public bool IsRecentQueries
@@ -62,19 +103,21 @@ namespace Bitsmith.ViewModels
             var vm = o as QueryViewModel;
             if (vm != null)
             {
-                if (_IsRecentQueries)
+                if (_IsRecentQueries && vm.Model.QueryType == QueryTypeOption.Recent)
                 {
-                    if (vm.Model.QueryType == QueryTypeOption.Recent)
-                    {
-                        b = true;
-                    }
+                    b = true;
                 }
-                else if(vm.Model.QueryType != QueryTypeOption.Recent)
+                else if(!_IsRecentQueries && vm.Model.QueryType != QueryTypeOption.Recent)
                 {
                     b = true;
                 }
             }
             return b;
+        }
+
+        private void AllQueries_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            Queries.Refresh();
         }
 
 
@@ -90,7 +133,6 @@ namespace Bitsmith.ViewModels
                 {
                     SetSearch(_SelectedQuery);                   
                     ExecuteQuery();
-                    MessageBox.Show(_SelectedQuery.Model.Id());
                 }
             }
         }
@@ -120,7 +162,6 @@ namespace Bitsmith.ViewModels
             }
         }
 
-        public ObservableCollection<QueryViewModel> AllQueries { get; set; }
 
         public IContentIndexer Indexer { get; set; }
 
@@ -210,8 +251,7 @@ namespace Bitsmith.ViewModels
                 else
                 {
                     return string.Empty;
-                }
-                
+                }               
             }
             set { }
         }
@@ -229,6 +269,7 @@ namespace Bitsmith.ViewModels
                 OnPropertyChanged("SelectedItem");
                 if (value != null)
                 {
+                    _SelectedItem.Model.LastViewed();
                     dynamic param = new ExpandoObject();
                     param.Title = _SelectedItem.Display;
                     param.Control = Mimes.Resolve(value);
@@ -499,34 +540,30 @@ namespace Bitsmith.ViewModels
         {
             var searchtype = IsTagSearch ? SearchTypeOptions.Tag : SearchTypeOptions.FullText;
             var query = new Query().Parse(_QueryText,searchtype,QueryOperatorOption.Or, Settings.SelectedDomain.Id);
-            SearchResults = query.Execute(model.Items, Indexer);
-
+            ExecuteQuery(query);
         }
-
-        public List<ContentItemViewModel> ExecuteTaskSearch(string taskId)
-        {
-            var list = new List<string> { $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Task}:{taskId}" };
-            var found = model.Items.Where(x => x.Includes((from s in list select new QueryExpression(s)).ToList())).OrderBy(z => z.Display).ToList();
-            return  new List<ContentItemViewModel>(from f in found select new ContentItemViewModel(f));
-        }
-
 
         internal void ExecuteQuery(IPathNode node)
         {
             
             var query = new Query().Parse(node,Settings.SelectedDomain.Id);
-            SearchResults = query.Execute(model.Items, Indexer);
+            ExecuteQuery(query);
         }
-
 
         private void ExecuteQuery(string tag)
         {
-            if (!IsTagSearch)
-            {
-                IsTagsExpanded = true;
-            }
+            //if (!IsTagSearch && !IsTagsExpanded)
+            //{
+            //    IsTagsExpanded = true;
+            //}
             var query = new Query().Parse(tag, SearchTypeOptions.Tag, QueryOperatorOption.Or, Settings.SelectedDomain.Id);
+            ExecuteQuery(query);
+        }
+
+        private void ExecuteQuery(Query query)
+        {
             SearchResults = query.Execute(model.Items, Indexer);
+            PublishQuery(query);
         }
 
         /*
@@ -561,6 +598,13 @@ namespace Bitsmith.ViewModels
 
         }
         */
+
+        public List<ContentItemViewModel> ExecuteTaskSearch(string taskId)
+        {
+            var list = new List<string> { $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Task}:{taskId}" };
+            var found = model.Items.Where(x => x.Includes((from s in list select new QueryExpression(s)).ToList())).OrderBy(z => z.Display).ToList();
+            return new List<ContentItemViewModel>(from f in found select new ContentItemViewModel(f));
+        }
 
         public void HandleDomainSelected(DomainViewModel selected)
         {
@@ -786,6 +830,22 @@ namespace Bitsmith.ViewModels
             }
         }
 
+        private bool _IsTagsRecentChecked;
+        public bool IsTagsRecentChecked
+        {
+            get
+            {
+                return _IsTagsRecentChecked;
+            }
+            set
+            {
+                _IsTagsRecentChecked = value;
+                OnPropertyChanged("IsTagsRecentChecked");
+            }
+        }
+
+
+
 
         public string Id
         {
@@ -866,6 +926,15 @@ namespace Bitsmith.ViewModels
 
         public SettingsModule Settings { get; set; }
 
+        private void HandleDomainAdded(Domain model)
+        {            
+            if(!Resolver.Exclusions.ContainsKey(model.Id))
+            {
+                var global = new List<string>().TagExclusions();
+                Resolver.Exclusions.Add(model.Id, global);
+            }
+        }
+
         public ObservableCollection<LanguageSettingsViewModel> Languages { get; set; }
 
 
@@ -895,6 +964,7 @@ namespace Bitsmith.ViewModels
             DataService = dataService;
             Settings = settings;
             settings.DomainSelected = HandleDomainSelected;
+            settings.DomainAdded = HandleDomainAdded;
             UserPreferences = Settings.UserPreferences;
             Indexer = indexer.Indexer;
             Languages = indexer.Languages;
@@ -931,7 +1001,6 @@ namespace Bitsmith.ViewModels
                 model.Queries = new List<Query>().Default(Settings.Settings.Domains);
             }
             AllQueries = new ObservableCollection<QueryViewModel>(from x in model.Queries select new QueryViewModel(x));
-            AllQueries.CollectionChanged += AllQueries_CollectionChanged;
 
             Mimes = mimes.Items;
             Paths.Build(Settings, model.Items);
@@ -944,12 +1013,14 @@ namespace Bitsmith.ViewModels
             }
 
             Resolver.Load(model.Items);
+            
+            if (UserPreferences.TryGet<string>(ModuleKey, "recent-tags", out string recentTags))
+            {
+                var tags = recentTags.Split(new char[] { ';', '|' }, StringSplitOptions.RemoveEmptyEntries);
+                Resolver.SetRecentTags(tags);
+            }
         }
 
-        private void AllQueries_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            Queries.Refresh();
-        }
 
         protected override void ApplyPreferences()
         {
@@ -1003,6 +1074,16 @@ namespace Bitsmith.ViewModels
             {
                 SetSelectedLanguage(language);
             }
+
+            if (UserPreferences.TryGet<bool>(ModuleKey,"tags-expanded", out bool isTagsExpanded))
+            {
+                IsTagsExpanded = isTagsExpanded;
+            }
+            if (UserPreferences.TryGet<bool>(ModuleKey, "recent-tags-checked", out bool isRecentTagsChecked))
+            {
+                IsTagsRecentChecked = isRecentTagsChecked;
+            }
+            
         }
 
         internal override void SetPreferences()
@@ -1019,6 +1100,11 @@ namespace Bitsmith.ViewModels
                     }
                 }
             }
+            if (Resolver.RecentTags.Count > 0)
+            {
+                var recenttags = string.Join(";", Resolver.RecentTags.Select(t => t.Model.Key));
+                UserPreferences.EnsurePreference(ModuleKey, "recent-tags", recenttags);
+            }
 
 
             UserPreferences.EnsurePreference(ModuleKey, "content-type", Input.ContentType);
@@ -1028,9 +1114,13 @@ namespace Bitsmith.ViewModels
             {
                 UserPreferences.EnsurePreference(ModuleKey, "last-opened", location);
             }
+            UserPreferences.EnsurePreference(ModuleKey, "tags-expanded", IsTagsExpanded);
+            UserPreferences.EnsurePreference(ModuleKey, "recent-tags-checked", IsTagsRecentChecked);
 
             var language = GetSelectedLanguage();
             UserPreferences.EnsurePreference(ModuleKey, "selected-language", language);
+
+
         }
 
         protected override bool SaveData()

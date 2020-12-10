@@ -75,6 +75,20 @@ namespace Bitsmith {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Gen|1|1| In the beginning God created the heaven and the earth.~
+        ///Gen|1|2| And the earth was without form, and void; and darkness was upon the face of the deep. And the Spirit of God moved upon the face of the waters.~
+        ///Gen|1|3| And God said, Let there be light: and there was light.~
+        ///Gen|1|4| And God saw the light, that it was good: and God divided the light from the darkness.~
+        ///Gen|1|5| And God called the light Day, and the darkness he called Night. And the evening and the morning were the first day.~
+        ///Ge [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string kjvdat {
+            get {
+                return ResourceManager.GetString("kjvdat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
         ///&lt;StateMachine xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; beginState=&quot;LoggedOff&quot; endState=&quot;LoggedOff&quot;&gt;
         ///  

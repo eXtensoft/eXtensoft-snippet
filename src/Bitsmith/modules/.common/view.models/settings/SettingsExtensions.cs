@@ -128,22 +128,22 @@ namespace Bitsmith
             list.Add(new Workflow()
             {
                 Id = Guid.NewGuid().ToString().ToLower(),
-                Name = "Task",
+                Name = "simple-task",
                 Display = "Simple Task",
                 Machine = new StateMachine().one()
             });
             list.Add(new Workflow()
             {
                 Id = Guid.NewGuid().ToString().ToLower(),
-                Name = "Software Task Short",
-                Display = "Task (short)",
+                Name = "software-task-short",
+                Display = "Software Task (short)",
                 Machine = new StateMachine().two()
             });
             list.Add( new Workflow() 
             { 
                 Id = AppConstants.Defaults.WorkflowId, 
-                Name = "Software Task Long", 
-                Display = "Task (long)", 
+                Name = "software-task-long", 
+                Display = "Software Task (long)", 
                 Machine = new StateMachine().three() 
             });
             return list;
@@ -164,7 +164,7 @@ namespace Bitsmith
             model.States.Add(new State() { Display = "Abandoned", Name = "abandoned" });
 
             model.Transitions.Add(new Transition() { OriginState = "ready", DestinationState = "in-progress", Name = "in-progress", Display = "Begin work" });
-            model.Transitions.Add(new Transition() { OriginState = "in-progress", DestinationState = "completed", Name = "Completed", Display = "Work done" });
+            model.Transitions.Add(new Transition() { OriginState = "in-progress", DestinationState = "completed", Name = "completed", Display = "Work done" });
             model.Transitions.Add(new Transition() { OriginState = "in-progress", DestinationState = "abandoned", Name = "abandoned", Display = "Abandon" });
 
             model.EndStates = new List<string>() { "completed", "abandoned" };

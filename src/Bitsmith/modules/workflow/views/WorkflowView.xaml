@@ -96,14 +96,15 @@
                             <TabItem >
                                 <TabItem.Header>
                                     <StackPanel Orientation="Horizontal">
-                                        <Button Style="{StaticResource RefreshCommandButton}" Command="{Binding Path=ToDslCommand}"/>
+                                <Button Style="{StaticResource RefreshCommandButton}" Command="{Binding Path=ToDslCommand}"/>
                                         <Label Content="DSL" Margin="5,0"/>
                                     </StackPanel>
                                 </TabItem.Header>
                                 <TabItem.Content>
                                     <TextBox TextWrapping="NoWrap" 
                                      AcceptsReturn="True" AcceptsTab="True" 
-                                     VerticalScrollBarVisibility="Visible" Text="{Binding Path=DslBody}"  
+                                     VerticalScrollBarVisibility="Visible" 
+                                             Text="{Binding Path=DslBody}"  
                                      HorizontalScrollBarVisibility="Auto"/>
                                 </TabItem.Content>
 

@@ -15,6 +15,93 @@ namespace Bitsmith.ViewModels
     public class WorkflowViewModel : ViewModel<Workflow>
     {
 
+        private string _DslBody;
+        public string DslBody
+        {
+            get
+            {
+                return _DslBody;
+            }
+            set
+            {
+                _DslBody = value;
+                OnPropertyChanged("DslBody");
+            }
+        }
+
+        private ICommand _ToDslCommand;
+        public ICommand ToDslCommand
+        {
+            get
+            {
+                if (_ToDslCommand == null)
+                {
+                    _ToDslCommand = new RelayCommand(
+                    param => ToDsl(),
+                    param => CanToDsl());
+                }
+                return _ToDslCommand;
+            }
+        }
+        private bool CanToDsl()
+        {
+            return true;
+        }
+        private void ToDsl()
+        {
+            if (Validate())
+            {
+
+            }
+            DslBody = Model.Machine.ToDsl(Model);
+        }
+
+        private ICommand _FromDslCommand;
+        public ICommand FromDslCommand
+        {
+            get
+            {
+                if (_FromDslCommand == null)
+                {
+                    _FromDslCommand = new RelayCommand(
+                    param => FromDsl(),
+                    param => CanFromDsl());
+                }
+                return _FromDslCommand;
+            }
+        }
+        private bool CanFromDsl()
+        {
+            return !string.IsNullOrWhiteSpace(_DslBody);
+        }
+        private void FromDsl()
+        {
+            if (DslBody.TryBuildWorkflow(out Workflow workflow))
+            {
+
+            }
+
+
+        }
+
+        //private WorkflowBuilder TryParse(string textToParse)
+        //{
+        //    WorkflowBuilder builder = new WorkflowBuilder() { TextToParse = "" , IsSuccess = false};
+
+        //    builder.Workflow = new Workflow();
+        //    return builder;
+        //}
+
+
+        //public class WorkflowBuilder
+        //{
+        //    public bool IsSuccess { get; set; }
+        //    public Workflow Workflow { get; set; }
+        //    public string TextToParse { get; set; }
+
+           
+        //}
+
 
         public ObservableCollection<StateViewModel> States { get; set; }
 

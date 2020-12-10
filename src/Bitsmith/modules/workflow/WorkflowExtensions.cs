@@ -38,6 +38,52 @@ namespace Bitsmith.BusinessProcess
             return model;
         }
 
+        public static string ToDsl(this StateMachine machine, Workflow workflow)
+        {
+            StringBuilder sb = new StringBuilder();
+            StringBuilder sbWorkflow = new StringBuilder();
+            sb.AppendLine("workflow");
+            sb.AppendLine($"\t[name: {workflow.Name}] [display: {workflow.Display}]");
+            sb.AppendLine($"\t[id: {workflow.Id}]");
+            sb.AppendLine($"\t[begin: {machine.BeginState}]");
+            sb.AppendLine($"\t[end: {string.Join(", ",machine.EndStates)}]");
+
+            foreach (var state in machine.States)
+            {
+                sb.AppendLine($"state");
+                sb.AppendLine($"\t[name: {state.Name}] [display: {state.Display}]");
+
+                foreach (var transition in machine.Transitions.Where(x => x.OriginState.Equals(state.Name, StringComparison.OrdinalIgnoreCase)))
+                {
+                    sb.AppendLine($"\ttransition [name: {transition.Name}] [display: {transition.Display}]");
+                }
+            }
+            return sb.ToString();
+        }
+
+
+       
+
+        public static bool TryBuildWorkflow(this string dslBody, out Workflow workflow)
+        {
+            bool b = true;
+            workflow = null;
+            // has at least three states
+
+
+            
+            // has workflow marker followed by name, begin, and end
+            // begin has one valid state
+            // end has at least one valid state
+
+            // end states have no transitions
+            // all non-end states have at least one transition
+
+
+            return b;
+        }
+
+
         public static StateMachine Build(this BuilderViewModel builder)
         {
             StateMachine machine = new StateMachine();

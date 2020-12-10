@@ -95,7 +95,7 @@ namespace Bitsmith
         }
         private bool DomainExcludes(string key)
         {
-            return Exclusions[_SelectedDomain].Contains(key);
+            return Exclusions.ContainsKey(_SelectedDomain) && Exclusions[_SelectedDomain].Contains(key);
         }
 
 
@@ -130,7 +130,7 @@ namespace Bitsmith
                 foreach (var tag in tags)
                 {
                     var parts = tag.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-                    if (!Exclusions[_SelectedDomain].Contains(parts[0]))
+                    if (!Exclusions.ContainsKey(_SelectedDomain) || !Exclusions[_SelectedDomain].Contains(parts[0]))
                     {
                         Property property = new Property();
                         if (parts.Length > 1)
@@ -169,11 +169,24 @@ namespace Bitsmith
             return list;
         }
 
+        internal void SetRecentTags(IEnumerable<string> tags)
+        {
+            foreach (var tag in tags)
+            {
+                var found = TagItems.FirstOrDefault(x => x.Key.Equals(tag, StringComparison.OrdinalIgnoreCase));
+                if (found != null && recenttags.Add(tag))
+                {
+                    RecentTags.Add(found);
+                }
+            }
+        }
 
         public TagResolver(Dictionary<string, List<string>> exclusions)
         {
             Exclusions = exclusions;
         }
+
+
 
         internal void Load(List<ContentItem> contentItems)
         {

@@ -70,12 +70,16 @@ namespace Bitsmith
         {
             List<Tuple<string, string>> list = new List<Tuple<string, string>>();
 
-            list.Add(new Tuple<string, string>("zh", "images/flags/china-flag.xs.png"));
-            list.Add(new Tuple<string, string>("fr", "images/flags/france-flag.xs.png"));
-            list.Add(new Tuple<string, string>("de", "images/flags/germany-flag.xs.png"));
-            list.Add(new Tuple<string, string>("it", "images/flags/italy-flag.xs.png"));
-            list.Add(new Tuple<string, string>("es", "images/flags/spain-flag.xs.png"));
-            list.Add(new Tuple<string, string>("en", "images/flags/united-kingdom-flag.xs.png"));
+            list.Add(new Tuple<string, string>("zh", "content/images/flags/china-flag.xs.png"));
+            list.Add(new Tuple<string, string>("fr", "content/images/flags/france-flag.xs.png"));
+            list.Add(new Tuple<string, string>("de", "content/images/flags/germany-flag.xs.png"));
+            list.Add(new Tuple<string, string>("it", "content/images/flags/italy-flag.xs.png"));
+            list.Add(new Tuple<string, string>("es", "content/images/flags/spain-flag.xs.png"));
+            list.Add(new Tuple<string, string>("en", "content/images/flags/united-kingdom-flag.xs.png"));
+            list.Add(new Tuple<string, string>("querytype-named","content/images/circle.red.png"));
+            list.Add(new Tuple<string, string>("querytype-recent", "content/images/circle.red.png"));
+            list.Add(new Tuple<string, string>("query-type-favorite", "content/images/circle.red.png"));
+
 
             Application.Current.Properties[AppConstants.ImageMaps] = list;
         }

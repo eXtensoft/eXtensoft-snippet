@@ -59,6 +59,14 @@
 
         </TabItem>
         <TabItem Header="Preferences">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Button Style="{StaticResource RefreshCommandButton}" Command="{Binding Path=Content.AddBibleCommand}"/>
+            </Grid>
     
         </TabItem>
         <TabItem Header="Data">

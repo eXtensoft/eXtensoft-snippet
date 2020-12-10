@@ -8,6 +8,7 @@
              d:DesignHeight="450" d:DesignWidth="260">
     <UserControl.Resources>
         <local:BooleanToStringConverter x:Key="cvtSearchType" TrueText="Tag Search" FalseText="Full Text Search"/>
+        <local:ImageMapConverter x:Key="cvtImageMap"/>
     </UserControl.Resources>
 
     <TabControl Grid.Column="0" Grid.Row="0" Style="{StaticResource ResourceKey=viewTab}" >
@@ -70,15 +71,13 @@
                                             <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
-                                        <TextBlock Text="{Binding Path=Title}" Grid.Column="1"/>
+                                        <TextBlock Text="{Binding Path=QueryText}" Grid.Column="1"/>
                                         <Button Grid.Column="0" Tag="{Binding}" 
-                                            Content="query-type"
                                             Style="{StaticResource ResourceKey=CommandButton}" 
                                                 Margin="5,2,10,2">
-                                            <!--<Button.Content>
-                                                
-                                                <Image Grid.Column="2" Height="12" Width="12" Source="{Binding Path=QueryType, Converter={StaticResource ResourceKey=ImageConverter},ConverterParameter=../../}"/>
-                                            </Button.Content>-->
+                                            <Button.Content>
+                                                <Image Grid.Column="2" Height="12" Width="12" Source="{Binding Path=QueryType, Converter={StaticResource ResourceKey=cvtImageMap},ConverterParameter=../../../}"/>
+                                            </Button.Content>
                                         </Button>
                                         <Label Grid.Column="1" Content="{Binding Path=Display}"/>
                                     </Grid>

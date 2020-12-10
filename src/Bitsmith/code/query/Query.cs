@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 namespace Bitsmith.Models
 {
     public class Query
-    {
+    {       
         [XmlAttribute("type")]
         public QueryTypeOption QueryType { get; set; }
         [XmlAttribute("domain")]

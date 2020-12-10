@@ -17,6 +17,8 @@ namespace Bitsmith.ViewModels
 
         public string Display => "App Settings";
 
+        public Action<Domain> DomainAdded { get; set; }
+
         public Action<DomainViewModel> DomainSelected { get; set; }
 
         public ObservableCollection<DomainViewModel> Domains { get; set; }
@@ -64,6 +66,7 @@ namespace Bitsmith.ViewModels
         }
         private void AddDomain()
         {
+            
             Domains.Add(new DomainViewModel(new Domain().Default(DateTime.Now, Guid.NewGuid().ToString().ToLower())));
         }
 
@@ -248,6 +251,10 @@ namespace Bitsmith.ViewModels
                     if (vm != null)
                     {
                         _Settings.Domains.Add(vm.Model);
+                        if (DomainAdded != null)
+                        {
+                            DomainAdded(vm.Model);
+                        }
                     }
                 }
             }
@@ -262,6 +269,8 @@ namespace Bitsmith.ViewModels
                         if (found != null)
                         {
                             _Settings.Domains.Remove(found);
+                            // ContentModule could remove Exclusions mapping
+                            // for the domain.
                         }
                     }
                 }

@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -15,6 +16,32 @@ namespace Bitsmith.Models
 {
     public static class ContentExtensions
     {
+        public static string GetHash(this Query query)
+        {
+            var name = query.Name;
+            var querytype = query.QueryType;
+            query.QueryType = QueryTypeOption.None;
+            var hash = query.ComputeHash();
+            query.Name = name;
+            query.QueryType = querytype;
+            return hash;
+        }
+        public static string ComputeHash<T>(this T data) where T : class
+        {
+            var json = Newtonsoft.Json.JsonConvert.SerializeObject(data);
+            return json.ComputeHash();
+        }
+
+        public static string ComputeHash(this string data)
+        {
+            StringBuilder sb = new StringBuilder();
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(data)).ToList();
+                bytes.ForEach(b => { sb.Append(b.ToString("x2")); });
+            }
+            return sb.ToString();
+        }
         public static List<string> TagExclusions(this List<string> list)
         {
             list.Add("created-at");
@@ -144,7 +171,7 @@ namespace Bitsmith.Models
                 sb.AppendLine(item.Token);
             }
 
-            return sb.ToString();
+            return sb.ToString().TrimEnd();
         }
 
         public static Query Default(this Query model, Domain domain)
@@ -373,6 +400,32 @@ namespace Bitsmith.Models
             list.AddRange(toCoalesce);
             existing.Clear();
             existing.AddRange(list);
+        }
+
+        public static void LastViewed(this ContentItem model)
+        {
+            var name = $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.ViewedAt}";
+            model.LastAt(name);           
+        }
+
+        public static void LastUpdated(this ContentItem model)
+        {
+            var name = $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.ModifiedAt}";
+            model.LastAt(name);
+        }
+
+        private static void LastAt(this ContentItem model, string name)
+        {
+            var now = DateTime.Now;
+            var found = model.Properties.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            if (found == null)
+            {
+                model.Properties.Add(new Property() { Name = name, Value = now });
+            }
+            else
+            {
+                found.Value = now;
+            }
         }
 
         public static void DefaultTags(this List<Property> properties, Domain domain)

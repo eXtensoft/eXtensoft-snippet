@@ -1,0 +1,92 @@
+﻿
+workflow
+	[name: simple-task] [display: Simple Task]
+	[id: f74dc2df-906b-49fb-97f6-aa2e708b0a6e]
+	[begin: ready]
+	[end: completed, abandoned]
+state
+	[name: ready] [display: Ready]
+	transition [name: in-progress] [display: Begin work]
+state
+	[name: in-progress] [display: In Progress]
+	transition [name: completed] [display: Work done]
+	transition [name: abandoned] [display: Abandon]
+state
+	[name: completed] [display: Completed]
+state
+	[name: abandoned] [display: Abandoned]
+
+workflow
+	[name: software-task-short] [display: Software Task (short)]
+	[id: 8ccad90e-1637-431d-9d74-acdef3bc8fbe]
+	[begin: ready]
+	[end: abandoned, completed]
+state
+	[name: ready] [display: Ready]
+	transition [name: in-progress] [display: Begin work]
+state
+	[name: in-progress] [display: In Progress]
+	transition [name: completed] [display: Work done]
+	transition [name: on-hold] [display: On hold]
+	transition [name: abandoned] [display: Abandon]
+	transition [name: blocked] [display: Blocked]
+state
+	[name: on-hold] [display: On Hold]
+	transition [name: in-progress] [display: Back to work]
+	transition [name: abandoned] [display: Abandon]
+state
+	[name: blocked] [display: Blocked]
+	transition [name: in-progress] [display: Unblock]
+	transition [name: abandoned] [display: Abandon]
+state
+	[name: completed] [display: Completed]
+state
+	[name: abandoned] [display: Abandoned]
+
+workflow
+	[name: software-task-long] [display: Software Task (long)]
+	[id: 05cfd309-c090-43b4-958f-96d3652cd797]
+	[begin: requirements]
+	[end: abandoned, completed]
+state
+	[name: requirements] [display: Requirements]
+	transition [name: estimation] [display: Estimate]
+	transition [name: abandoned] [display: Abandon]
+state
+	[name: estimation] [display: Estimation]
+	transition [name: ready] [display: Ready]
+state
+	[name: ready] [display: Ready]
+	transition [name: analysis] [display: Analyze]
+state
+	[name: analysis] [display: Analysis]
+	transition [name: in-progress] [display: Begin work]
+state
+	[name: in-progress] [display: In Progress]
+	transition [name: work-done] [display: Work done]
+	transition [name: on-hold] [display: On hold]
+	transition [name: abandoned] [display: Abandon]
+	transition [name: blocked] [display: Block]
+state
+	[name: work-done] [display: Work Done]
+	transition [name: ready-for-val] [display: Ready for Validation]
+state
+	[name: ready-for-val] [display: Ready for Validation]
+	transition [name: validation] [display: Move to Validation]
+state
+	[name: validation] [display: Validation]
+	transition [name: completed] [display: Pass Validation]
+	transition [name: in-progress] [display: Fail Validation]
+	transition [name: requirements] [display: Back to Requirements]
+state
+	[name: on-hold] [display: On Hold]
+	transition [name: in-progress] [display: Back to work]
+	transition [name: abandoned] [display: Abandon]
+state
+	[name: blocked] [display: Blocked]
+	transition [name: in-progress] [display: Unblock]
+	transition [name: abandoned] [display: Abandon]
+state
+	[name: completed] [display: Completed]
+state
+	[name: abandoned] [display: Abandoned]

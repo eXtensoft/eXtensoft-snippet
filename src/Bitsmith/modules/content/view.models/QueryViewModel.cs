@@ -34,7 +34,7 @@ namespace Bitsmith.ViewModels
         {
             get
             {
-                return Model.QueryType.ToString();
+                return $"querytype-{Model.QueryType.ToString().ToLower()}";
             }
             set
             {
@@ -82,13 +82,27 @@ namespace Bitsmith.ViewModels
             }
         }
 
-
-
-        public QueryViewModel(Query model)
+        private string _Hash;
+        
+        public string Hash
         {
-            Model = model;
+            get
+            {
+                return _Hash;
+            }
+            set
+            {
+                _Hash = value;
+                OnPropertyChanged("Hash");
+            }
         }
 
+        public QueryViewModel(Query model)
+        {   
+            Model = model;
+            _Hash = Model.GetHash();
+
+        }
 
     }
 }

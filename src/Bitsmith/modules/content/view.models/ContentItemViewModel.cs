@@ -76,6 +76,7 @@ namespace Bitsmith.ViewModels
 			{
 				Model.Display = value;
 				OnPropertyChanged("Display");
+				Model.LastUpdated();
 			}
 		}
 
@@ -103,6 +104,7 @@ namespace Bitsmith.ViewModels
 			{
 				Model.Scope = value;
 				OnPropertyChanged("Scope");
+				Model.LastUpdated();
 			}
 		}
 
@@ -116,6 +118,7 @@ namespace Bitsmith.ViewModels
 			{
 				Model.Body = value;
 				OnPropertyChanged("Body");
+				Model.LastUpdated();
 			}
 		}
 
@@ -129,26 +132,27 @@ namespace Bitsmith.ViewModels
             {
 				Model.Paths = value;
 				OnPropertyChanged("Paths");
-            }
-        }
-
-
-		private DateTime _UpdatedAt;
-		public DateTime UpdatedAt
-		{
-			get
-			{
-				return _UpdatedAt;
-			}
-			set
-			{
-
-				OnPropertyChanged("UpdatedAt");
+				Model.LastUpdated();
 			}
 		}
 
 
-		public List<Property> Tags
+        private DateTime _UpdatedAt;
+        public DateTime UpdatedAt
+        {
+            get
+            {
+                return _UpdatedAt;
+            }
+            set
+            {
+
+                OnPropertyChanged("UpdatedAt");
+            }
+        }
+
+
+        public List<Property> Tags
 		{
 			get
 			{
@@ -158,10 +162,22 @@ namespace Bitsmith.ViewModels
 			{
 				Model.Properties.Coalesce(value);
 				OnPropertyChanged("Tags");
+				Model.LastUpdated();
 			}
 		}
 
 
+		//private string _HoverDisplay;
+		public string HoverDisplay
+        {
+            get
+            {
+				StringBuilder sb = new StringBuilder();
+				Model.Properties.ForEach(p => { sb.AppendLine(p.ToString()); });
+				return sb.ToString();
+            }
+            set { }
+        }
 
 		public ContentItemViewModel(ContentItem model)
         {
@@ -178,8 +194,6 @@ namespace Bitsmith.ViewModels
 				_UpdatedAt = DateTime.Now;
             }
 			//var found = model.Properties.FirstOrDefault(x => x.Name.Equals($"{AppConstants.Tags.Prefix}-{AppConstants.Tags.CreatedAt}"));
-
 		}
-
     }
 }

@@ -214,9 +214,64 @@ namespace Bitsmith
             }
             else
             {
-
+                for (int i = 0;!b && i < list.Count; i++)
+                {
+                    var prop = list[i];                    
+                    if(prop.Name.Equals(_KeyValue[0], StringComparison.OrdinalIgnoreCase) && prop.Value != null)
+                    {
+                        var key = prop.Datatype();
+                        switch (prop.Datatype())
+                        {
+                            case "DateTime":
+                                break;
+                            case "Int32":
+                                break;
+                            case "Double":
+                                break;
+                            case "String":
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
             }
             return b;
+        }
+
+        private bool CompareTo<T>(string x, string y, OperatorType operatorType) where T : IConvertible
+        {
+            bool b = false;
+
+            try
+            {
+                var xx = Parse<T>(x);
+                var yy = Parse<T>(y);
+                switch (operatorType)
+                {
+                    case OperatorType.LessThan:
+                        //b = xx < yy;
+                        break;
+                    case OperatorType.GreaterThan:
+                        break;
+                    case OperatorType.LessThanEquals:
+                        break;
+                    case OperatorType.GreaterThanEquals:
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            return b;
+        }
+        private static T Parse<T>(string valueToConvert) where T : IConvertible
+        {
+            return (T)Convert.ChangeType(valueToConvert, typeof(T));
         }
     }
 }
