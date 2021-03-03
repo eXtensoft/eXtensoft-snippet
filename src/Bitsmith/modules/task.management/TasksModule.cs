@@ -2,7 +2,6 @@
 using Bitsmith.DataServices.Abstractions;
 using Bitsmith.Models;
 using Bitsmith.ProjectManagement;
-using DocumentFormat.OpenXml.Bibliography;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,13 +11,12 @@ using System.IO;
 using System.Linq;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Xaml;
 
 namespace Bitsmith.ViewModels
 {
     public class TasksModule : Module
     {
-        public string Display { get; set; } = "Projectus Maximus";
+        public string Display { get; set; } = "";
 
         public SettingsModule Settings { get; set; }
 
@@ -44,7 +42,11 @@ namespace Bitsmith.ViewModels
             var vm = o as WorkflowViewModel;
             if (vm != null)
             {
-                b = true;
+                var found = Settings.SelectedDomain.DomainWorkflowSelections.FirstOrDefault(x => x.Id.Equals(vm.Id, StringComparison.OrdinalIgnoreCase));
+                if (found != null && found.IsSelected)
+                {
+                    b = true;
+                }               
             }
             return b;
         }
@@ -91,6 +93,8 @@ namespace Bitsmith.ViewModels
                 OnPropertyChanged("IsItemSelected");
             }
         }
+
+
 
         public NewTaskViewModel Input { get; set; } = new NewTaskViewModel();
 

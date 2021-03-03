@@ -1,0 +1,39 @@
+﻿	considerations
+		release expectations of product owner (feature & delivery) been met?
+		deployment instructions in place?
+		project meets enterprise-accepted quality level?
+			code coverage, cyclomatic-complexity
+		scope
+			project/release scope sufficiently defined?
+				project scope changed during phase?
+			high-level definition changed in this phase?
+				what it will do
+				what it won't do
+		risk
+			all inter-system dependencies identified and handled?
+			planned deployment schedule for release?
+			risks for moving to next phase? (transition)
+				additional risks identified?
+				risk not addressed in current phase?
+		feasibility
+			technical
+				'make sense' from technical perspective?
+				project fully testable and deployable?
+				expertise to complete project in place?
+			operational
+				operational requirements met?
+				additional training of operations staff required?
+			transition
+				personel in place for next phase? (transition)
+				projected staffing requirements and plans
+				delivery team has sufficient workspace/environment for next phase? (transition)
+				software licenses in place?
+				project environment in place for transition -> production?
+			system & requirements stability
+				completed and demonstrable product backlog for release
+				code and system quality metric threshlolds met
+			estimate acceptance, risk acceptance, plan for transition
+				updated release schedule
+				updated risk list
+				updated deployment plan
+				specific sprint goals identified for current phase (transition)

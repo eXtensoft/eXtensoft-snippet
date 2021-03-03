@@ -1,0 +1,30 @@
+﻿considerations
+	scope
+	
+	cost
+
+	risk
+
+	feasibility
+		technical
+		operational
+	
+	elaboration
+		resources
+		project environment
+		security
+
+business case, scope, initial requirements
+	top level user-stories, use-cases
+	initial product backlog
+	high-level architectural diagram
+	context-diagram
+
+[next phase preview]
+plan, risk, plan for elaboration
+	high level estimatation
+	release schedule
+	risk management plan
+	risk list
+	specific sprints and architectural risks identified for elaboration
+

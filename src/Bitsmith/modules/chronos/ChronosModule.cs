@@ -1,16 +1,13 @@
 ﻿using Bitsmith.DataServices.Abstractions;
 using Bitsmith.Models;
-using DocumentFormat.OpenXml.Spreadsheet;
+using Bitsmith.Models.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 
@@ -18,6 +15,9 @@ namespace Bitsmith.ViewModels
 {
     public class ChronosModule : Module
     {
+
+        public ObservableCollection<TaskViewItem> TaskViewItems { get; set; }
+
 
         private ObservableCollection<WorkEffortViewModel> _Groupings;
         public ObservableCollection<WorkEffortViewModel> Groupings 
@@ -46,7 +46,7 @@ namespace Bitsmith.ViewModels
             }
         }
 
-        private Dictionary<ChronosViewTypeOptions, Func<TimeEntryViewModel, string, bool>> _Filters = new Dictionary<ChronosViewTypeOptions, Func<TimeEntryViewModel, string, bool>>() 
+        private readonly Dictionary<ChronosViewTypeOptions, Func<TimeEntryViewModel, string, bool>> _Filters = new Dictionary<ChronosViewTypeOptions, Func<TimeEntryViewModel, string, bool>>() 
         {
             {ChronosViewTypeOptions.None,FilterByNone},
             {ChronosViewTypeOptions.Actor,FilterByActor},
@@ -282,9 +282,27 @@ namespace Bitsmith.ViewModels
         public ChronosModule(IDataService dataService)
         {
             DataService = dataService;
-            //Filepath = Path.Combine(AppConstants.ChronosDirectory, DataService.Filepath<Chronos>());
         }
 
+        public void RefreshWorkEffort(List<ProjectManagement.TaskItem> tasks)
+        {
+            TaskViewItems = new ObservableCollection<TaskViewItem>(tasks.Build(Model.Items));
+        }
+
+
+        private ICollectionView _View;
+        public ICollectionView View
+        {
+            get
+            {
+                if (TimeEntries != null && _View == null)
+                {
+                    _View = CollectionViewSource.GetDefaultView(TimeEntries);
+                    _View.Filter = FilterEntry;
+                }
+                return _View;
+            }
+        }
 
         public override void Initialize()
         {
@@ -293,8 +311,8 @@ namespace Bitsmith.ViewModels
             BuildWorkEfforts();
             TimeEntries = new ObservableCollection<TimeEntryViewModel>(from x in Model.Items select new TimeEntryViewModel(x));
             TimeEntries.CollectionChanged += TimeEntries_CollectionChanged;
-            //_View = (CollectionView)CollectionViewSource.GetDefaultView(TimeEntries);
-            //_View.Filter = FilterEntry;
+            _View = (CollectionView)CollectionViewSource.GetDefaultView(TimeEntries);
+            _View.Filter = FilterEntry;
 
         }
         protected override string Filepath()

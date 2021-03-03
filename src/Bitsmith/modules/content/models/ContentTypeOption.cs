@@ -6,5 +6,7 @@
         File,
         Link,
         Text,
+        Schema,
+        TabularData,
     }
 }

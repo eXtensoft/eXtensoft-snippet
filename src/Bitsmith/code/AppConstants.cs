@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Office2010.ExcelAc;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Bitsmith
 {
@@ -12,6 +11,9 @@ namespace Bitsmith
         public const string StyxDirectory = "styx";
         public const string SettingsDirectory = "settings";
         public const string ChronosDirectory = "chronos";
+        public const string SchemasDirectory = "schemas";
+        public const string RolodexDirectory = "rolodex";
+        public const string DatatoolDirectory = "datatool";
         public const string Default = "cb883c5d-3141-4a67-97d8-6475527f3179";
         public const string LastOpenedFileDialogFolderpath = "openfile.dialog.folderpath";
         public const string StateMachine = "state-machine";

@@ -10,42 +10,40 @@
         <local:DateTimeConverter x:Key="cvtDateTime"/>
         <local:TruncateStringConverter x:Key="cvtDisplay" MaxLength="40" Suffix="..."/>
         <local:TruncateStringConverter x:Key="cvtTruncateTags" MaxLength="40" Suffix=",..."/>
+        <local:BooleanToStringConverter x:Key="cvtText" TrueText="Text File" FalseText="Text"/>
     </UserControl.Resources>
 
 
-    <Grid DataContext="{Binding Path=Tasks.SelectedItem}">
-        
+    <Grid  Visibility="{Binding Path=Tasks.IsItemSelected, Converter={StaticResource ResourceKey=cvtBool2Visibility}}">
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="10"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <!--<StackPanel Grid.Column="0" Orientation="Horizontal">
-            <Button Command="{Binding Path=AddNoteCommand}" Style="{StaticResource AddCommandButton}"/>
-            <Label Content="Note"/>            
-        </StackPanel>
-        <StackPanel Grid.Column="1" Orientation="Horizontal">
-            <Button Command="{Binding Path=AddFileCommand}" Style="{StaticResource AddCommandButton}"/>
-            <Label Content="File"/>
-        </StackPanel>
-        <StackPanel Grid.Column="2" Orientation="Horizontal">
-            <Button Command="{Binding Path=AddLinkCommand}" Style="{StaticResource AddCommandButton}"/>
-            <Label Content="Link"/>
-        </StackPanel>-->
-        <StackPanel Grid.Column="0">
+        <StackPanel Grid.Column="0" DataContext="{Binding Path=Tasks.SelectedItem}">
             <Button Command="{Binding Path=AddContentCommand}"  Style="{StaticResource ResourceKey=AddCommandButton}" HorizontalAlignment="Center" />
 
-            <GroupBox Header="Type" >
+            <GroupBox>
+                <GroupBox.Header>
+                    <Label Content="Type"/>
+                </GroupBox.Header>
                 <StackPanel>
-                    <RadioButton Content="Link" IsChecked="{Binding Path=IsLink, Mode=TwoWay}" GroupName="ContentType"/>
-                    <RadioButton x:Name="rdoFile" Content="File" IsChecked="{Binding Path=IsFile, Mode=TwoWay}" GroupName="ContentType"/>
-                    <RadioButton x:Name="rdoText" Content="Text" IsChecked="{Binding Path=IsText, Mode=TwoWay}" GroupName="ContentType"/>
+                    <RadioButton x:Name="rdoLink" GroupName="ContentType" Content="Link" IsChecked="{Binding Path=IsLink, Mode=TwoWay}"/>
+                    <RadioButton x:Name="rdoFile" GroupName="ContentType" IsChecked="{Binding Path=IsFile, Mode=TwoWay}" Content="Select File"/>
+                    <RadioButton x:Name="rdoText" GroupName="ContentType" IsChecked="{Binding Path=IsText, Mode=TwoWay}" >
+                        <ToggleButton IsEnabled="{Binding ElementName=rdoText, Path=IsChecked}" 
+                                      IsChecked="{Binding Path=AddAsFile}"
+                                      Content="{Binding Path=AddAsFile, Converter={StaticResource cvtText}}" 
+                                      Style="{StaticResource TaskFileCommandToggleButton}"/>
+                    </RadioButton>
+
                 </StackPanel>
             </GroupBox>
         </StackPanel>
 
-        <ListBox x:Name="lsbResults" BorderThickness="0"  Grid.Column="2" ItemsSource="{Binding Path=Items}" 
-                     SelectedItem="{Binding Path=SelectedItem}"
+        <ListBox x:Name="lsbResults" BorderThickness="0"  Grid.Column="2" ItemsSource="{Binding Path=Tasks.SelectedItem.Items}" 
+                     SelectedItem="{Binding Path=Tasks.SelectedItem.SelectedItem}"
             Background="LightGray" AlternationCount="2">
             <ListBox.GroupStyle>
                 <GroupStyle>

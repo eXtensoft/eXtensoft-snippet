@@ -25,5 +25,7 @@ namespace Bitsmith
         Tasks,
         Styx,
         Settings,
+        Rolodex,
+        Datatool,
     }
 }

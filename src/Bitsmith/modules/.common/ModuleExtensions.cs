@@ -15,6 +15,20 @@ namespace Bitsmith
             return Newtonsoft.Json.JsonConvert.SerializeObject(enumerable, Newtonsoft.Json.Formatting.Indented);
         }
 
+        public static void RemovePreference(this UserSettings settings, string groupName, string key)
+        {
+            var found = settings.Items.FirstOrDefault((x) =>
+            {
+                return x.Group.Equals(groupName, StringComparison.OrdinalIgnoreCase) &&
+                x.Key.Equals(key, StringComparison.OrdinalIgnoreCase);
+            });
+            if (found != null)
+            {
+                settings.Items.Remove(found);
+            }
+            
+
+        }
         public static void EnsurePreference(this UserSettings settings, string groupName, string key, object value)
         {
             var found = settings.Items.FirstOrDefault((x) => 

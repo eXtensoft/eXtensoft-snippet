@@ -5,11 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Bitsmith"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="250">
+             d:DesignHeight="450" d:DesignWidth="250" 
+             >
     <UserControl.Resources>
         <local:TruncateStringConverter x:Key="cvtTruncate" MaxLength="35" Suffix="..."/>
     </UserControl.Resources>
-    <GroupBox DataContext="{Binding Path=Settings}" >
+    <GroupBox DataContext="{Binding Path=Settings}">
         <GroupBox.Header>
             <StackPanel Orientation="Horizontal">
 
@@ -17,9 +18,6 @@
                 <Label Content="{Binding Path=Display}"/>
 
                 <Button Command="{Binding Path=SaveWorkspaceCommand}" Style="{StaticResource SaveCommandButton}"/>
-                <!--<Button Style="{StaticResource DetailsCommandButton}" Command="{Binding Path=Project.ViewDomainsCommand}"/>
-                <Label Content="{Binding Path=Project.SelectedDomain.Name}"/>-->
-
             </StackPanel>
         </GroupBox.Header>
         <GroupBox.Content>

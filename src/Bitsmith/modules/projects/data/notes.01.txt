@@ -1,0 +1,285 @@
+﻿
+
+	Configuration
+		settingProvider
+		zone {local,development,qa,uat,staging,partner,integration,production}
+		region {north-america,europe}
+		application {platform-api, auth-api, platform-web} 
+		scope={microservice-search,platform-webApi-host,platform-web,platform-authApi,microservice-masterData};
+		applicationType {webApi,web,service,job}
+		server {ip,name}
+		connectionString {name=;connectionString=;providerName=;}
+		appSetting {key=;value=;}
+		scopedAppSetting {key=;value=;groupName=;}
+		configurationTemplate
+
+
+User Story (cross-cutting)
+	
+
+User Story (domain)
+	RemoteConfig-101
+	As a [configAdmin] I want to create a new remoteConfig (from scratch or from template or by prototype)		
+		Use Case: create a template, create a config, perform diff between template and config
+
+	RemoteConfig-US102
+	As a [configAdmin] I want to make changes to an existing remoteConfig
+
+	RemoteConfig-US103
+	As a [configAdmin] I want to schedule the release of changes to a remoteConfig
+
+	RemoteConfig-US104
+	As a [configAdmin] I want to compare multiple remoteConfigs (document form, comparison form)
+
+	RemoteConfig-US105
+	As a [configAdmin] I want to compare delivered remoteConfig with serverside remote config (current and scheduled and proposed)
+
+	RemoteConfig-US106
+	As a [configConsumer] I want to fetch configuration from a remote source (based upon dateTime, current)
+
+	RemoteConfig-US107
+	As a [developer] I want to easily view current configuration values (actual in memory, and output to administrative config formats)
+
+
+
+Implementation
+	Api as a micro-service
+	asp.net core 2.0
+	full unit-testing
+
+
+
+Object Model
+	Setting
+		Id
+		TemplateId
+		Name
+		Key
+		Value
+		Datatype
+		TextValue
+
+		Context
+			zone = 
+			scope =
+			region = 
+
+
+	Setting
+		Id=82F915C2-C2515036  [SettingId-TemplateId]
+
+
+	TemplateSetting
+		effectiveOn
+		name
+		key
+		datatype
+
+
+		contextDependant
+		control.required-notrequired
+		control.validation
+		control.defaultValue
+		context.zone
+		context.scope
+		context.region
+
+
+
+
+Inception
+
+Elaboration
+
+Construction
+
+Transition
+
+
+
+[Considerations]
+	[vision]
+		[statement]
+		[value-proposition]
+		[prioritization]
+		[urgency-importance]
+		[cost-estimate]
+		[sunken-cost-threshhold]
+		[opportunity-cost]
+	[security]
+		
+	[scope]
+		[in-out]
+		[will-do,won't-do]
+	[cost]
+		[coarse-grained]
+		[fine-grained]
+		[estimate]
+		[measured]
+		[evm-projected]
+	[feasibility]
+		[make-sense]
+			[technical-perspective]
+			[business-perspective]
+	[resources]
+		[expertise]
+		[environment]
+		[personel]
+		[time]
+		[software]
+	[risk]
+		[risk-list]
+		[risk-level]
+		[risk-remediation]
+		[risk-management-strategy]
+			[avoidance],[proof-of-concept],[deferal]
+		[risk-identification]
+			[architectural]
+				[non-functional-requirements]
+			[technical]
+			[deployment]
+				[infrastructure]
+				[intructions]
+				[software]
+				[licensing]
+			[organizational]
+				[staffing]
+				[culture]
+	[business-case]
+		[user-story]
+			[use-case]
+		[functional-requirements]
+	[next-phase]
+
+	[Artifacts]
+
+	[Buy-in]
+
+	[environment]
+		[development]
+		[in-between]
+		[production]
+
+	[backlog]
+		[product]
+		[sprint]
+	[roles]
+		[product-owner]
+		[architect]
+		[project-manager]
+		[development-lead]
+		[operations-lead]
+
+	[sprint]
+
+	[architecture]
+		[component]
+			[sub-component]
+			[inter-component-interaction]
+			[datastore-interaction]
+		[consistency]
+			[acid] (crud)
+				[shared-model]
+			[eventual]
+				[trimmed-model] + [synchronization]
+				[strategies]
+					[event-message]
+
+	[project]
+		[champion]
+		[vision-statement]
+		[value-proposition]
+		[requirements]
+			[functional]
+			[non-functional]
+			[security]
+			[scope]
+			[business-case]
+				[user-stories]
+				[use-cases]
+		[risk-management]
+			[known-risks]
+			[unknown-risks]
+			[risk-abatement]
+				[architectural-prototype]
+				[technology-prototype]
+				[platform-prototype]
+				[operational-prototype]
+		[architecture]
+			[delta]
+				[current]
+				[target]
+			[platform]
+				[cross-cutting-concerns]
+			[componentization]
+			[standardization]
+			[quality]
+		[planning]
+			[phase]
+			[resources]
+				[infrastructure]
+				[personel]
+		[communication]
+			[instruction]
+			[notification]
+			[buy-in]
+		[stability]
+			[vision]
+			[requirements]
+			[risk-management]
+			[buy-in]
+			[transition]
+			[cost]
+				[estimate]
+				[actual]
+			[scope]
+		[chance-for-success]
+			[estimation]
+			[inhibitors]
+		[stakeholders]
+		[acceptance]
+			[scope]
+			[requirements]
+			[risk-management]
+			[cost]
+			[buy-in]
+			[phase-completion]
+		[roles]
+			[champion]
+			[stakeholder]
+			[architect]
+			[software-engineer]
+			[operations]
+			[network]
+			[project-manager]
+			[facilitator]
+			[quality-engineer]
+		[quality]
+			[code-metrics]
+				[unit-testing]
+				[coverage]
+				[coding-standards]
+				[functional-test]
+					[use-case-test]
+					[integration-test]
+				[non-functional-test]
+		[production-support]
+		[application-support]
+		
+
+
+	[phase]
+		[intent]
+		[milestones]
+		[buy-in]
+		[risk-management]
+			[risk-list]
+			[risk-strategy]
+		[deltas]
+			[scope]
+			[risk]
+		[next-phase-plan]
+
+
+
+

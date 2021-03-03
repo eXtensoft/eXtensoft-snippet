@@ -14,12 +14,89 @@ namespace Bitsmith.ViewModels
 {
     public class SettingsModule : Module<Settings>
     {
+        private void ShiftFlag(TagHelperOptions options, bool isAdd)
+        {
+            if (isAdd)
+            {
+                TagHelpers |= options;
+            }
+            else
+            {
+                TagHelpers &= ~options;
+            }
+        }
+
+        public bool IsPopularEnabled
+        {
+            get
+            {
+                var b = TagHelpers.HasFlag(TagHelperOptions.Popular);
+                return b;
+            }
+            set
+            {
+                ShiftFlag(TagHelperOptions.Popular, value);
+                OnPropertyChanged("IsPopularEnabled");
+            }
+        }
+
+        public bool IsRecentEnabled
+        {
+            get
+            {
+                var b = TagHelpers.HasFlag(TagHelperOptions.Recent);
+                return b;
+            }
+            set
+            {
+
+                ShiftFlag(TagHelperOptions.Recent, value);
+                OnPropertyChanged("IsRecentEnabled");               
+            }
+        }
+
+
+
+        private TagHelperOptions _TagHelpers = TagHelperOptions.None;
+        public TagHelperOptions TagHelpers
+        {
+            get { return _TagHelpers; }
+            set
+            {
+                _TagHelpers = value;
+
+                if (TagHelpersChanged != null)
+                {
+                    TagHelpersChanged(_TagHelpers);
+                }
+
+            }
+        }
+
+        public Action<TagHelperOptions> TagHelpersChanged { get; set; }
+
+        private bool _IsEnableContentSchemas = false;
+        public bool IsEnableContentSchemas
+        {
+            get { return _IsEnableContentSchemas; }
+            set
+            {
+                _IsEnableContentSchemas = value;
+                OnPropertyChanged("IsEnableContentSchemas");
+                if (EnableContentSchema != null)
+                {
+                    EnableContentSchema(value);
+                }
+            }
+        }
 
         public string Display => "App Settings";
 
         public Action<Domain> DomainAdded { get; set; }
 
         public Action<DomainViewModel> DomainSelected { get; set; }
+
+        public Action<bool> EnableContentSchema { get; set; }
 
         public ObservableCollection<DomainViewModel> Domains { get; set; }
 
@@ -153,7 +230,6 @@ namespace Bitsmith.ViewModels
         public SettingsModule(IDataService dataService)
         {
             DataService = dataService;
-            //Filepath = Path.Combine(AppConstants.SettingsDirectory, base.Filepath);
         }
 
         public override string Filepath()
@@ -211,6 +287,31 @@ namespace Bitsmith.ViewModels
 
         public void Initialize(List<DomainViewModel> domains)
         {
+            // this occurs AFTER 'ApplyPreferences' fires
+            foreach (var domain in domains)
+            {
+                var workflowexclusions = new List<string>();
+                if (UserPreferences.TryGet<string>(ModuleKey,$"workflow-exclusions:{domain.Id.ToLower()}", out string exclusions) &&
+                    !string.IsNullOrWhiteSpace(exclusions))
+                {
+                    workflowexclusions = new List<string>(exclusions.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
+                } 
+                
+                foreach (var workflow in Workflows)
+                {
+                    ListItemViewModel vm = new ListItemViewModel(new ListItem() {  
+                        Identifier = new TagIdentifier() 
+                        { 
+                            Id = workflow.Id, 
+                            Display = workflow.Name 
+                        }})
+                    {
+                        IsSelected = !workflowexclusions.Contains(workflow.Id)
+                    };
+                    domain.DomainWorkflowSelections.Add(vm);
+                }
+            }
+
             Domains = new ObservableCollection<DomainViewModel>(domains);
             Domains.CollectionChanged += Domains_CollectionChanged;
         }
@@ -277,8 +378,73 @@ namespace Bitsmith.ViewModels
             }
         }
 
+        internal override void SetPreferences()
+        {
+
+            UserPreferences.RemovePreference(ModuleKey, "enable-content-schemas");
+            if (IsEnableContentSchemas)
+            {
+            UserPreferences.EnsurePreference(ModuleKey, "enable-content-schemas", IsEnableContentSchemas);
+            }
+
+            UserPreferences.EnsurePreference(ModuleKey, "tag-helpers", TagHelpers);
+
+            List<string> disabledContentSchemas = new List<string>();
+            foreach (var domain in Domains)
+            {
+                var exclusions = string.Join(";", domain.DomainWorkflowSelections.Where(x => !x.IsSelected).Select(x=>x.Id));
+                string key = $"workflow-exclusions:{domain.Id.ToLower()}";
+                if (!string.IsNullOrWhiteSpace(exclusions))
+                {
+                    UserPreferences.EnsurePreference(ModuleKey, key, exclusions);
+                }
+                else
+                {
+                    UserPreferences.RemovePreference(ModuleKey, key);
+                }
+                if (!domain.IsShowSchema)
+                {
+                    disabledContentSchemas.Add(domain.Id);
+                }
+            }
+            UserPreferences.RemovePreference(ModuleKey, "disable-domain-content-schemas");
+            if (disabledContentSchemas.Any())
+            {
+                UserPreferences.EnsurePreference(ModuleKey, "disable-domain-content-schemas", String.Join(";", disabledContentSchemas));
+            }
+            
+        }
+
+        protected override void ApplyPreferences(UserSettings userPreferences)
+        {
+            if (UserPreferences.TryGet<TagHelperOptions>(ModuleKey,"tag-helpers",out TagHelperOptions options))
+            {
+                TagHelpers = options;
+            }
+            else
+            {
+                TagHelpers = TagHelperOptions.None;
+            }
+            if (UserPreferences.TryGet<bool>(ModuleKey,"enable-content-schemas",out bool isEnableContentSchemas))
+            {
+                IsEnableContentSchemas = isEnableContentSchemas;
+            }
+            if (UserPreferences.TryGet<string>(ModuleKey,"disable-comain-content-schemas", out string disabled))
+            {
+                foreach (var domain in disabled.Split(new char[] { ';' },StringSplitOptions.RemoveEmptyEntries))
+                {
+                    var found = Domains.FirstOrDefault(x => x.Id.Equals(domain, StringComparison.OrdinalIgnoreCase));
+                    if (found != null)
+                    {
+                        found.IsShowSchema = false;
+                    }
+                }
+            }
+        }
+
         protected override void SaveData()
         {
+            SetPreferences();
             base.SaveData();
         }
 

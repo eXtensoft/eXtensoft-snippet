@@ -1,7 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
                     xmlns:local="clr-namespace:Bitsmith" 
-                    xmlns:model="clr-namespace:Bitsmith.Models"
+                    xmlns:model="clr-namespace:Bitsmith.Models" 
+                    xmlns:chronos="clr-namespace:Bitsmith.Models.Views"
                     xmlns:vm="clr-namespace:Bitsmith.ViewModels">
     <!--<local:ImageMapConverter x:Key="ImageConverter"/>-->
     <Style TargetType="{x:Type GridSplitter}">
@@ -27,6 +28,26 @@
     <DataTemplate DataType="{x:Type vm:CredentialViewModel}">
         <local:CredentialView/>
     </DataTemplate>
+
+    <HierarchicalDataTemplate DataType="{x:Type chronos:TaskViewItem}" ItemsSource="{Binding Path=Tasks}">
+        <StackPanel Orientation="Horizontal">
+            <Label Content="{Binding Path=TaskId}"/>
+            <Label Content="{Binding Path=Display}" Margin="10,0,0,0" ToolTip="{Binding Path=TipDisplay}"/>
+        </StackPanel>
+    </HierarchicalDataTemplate>
+
+    <DataTemplate x:Key="citationSchemaDataTemplate">
+        <Grid Background="Red"/>
+    </DataTemplate>
+
+    <DataTemplate x:Key="personSchemaDataTemplate">
+        <Grid Background="Yellow"/>
+    </DataTemplate>
+
+    <DataTemplate x:Key="dynamicSchemaDataTemplate">
+        <Grid Background="Indigo"/>
+    </DataTemplate>
+
     <!--<DataTemplate DataType="{x:Type local:ContentItemViewModel}">
         <StackPanel Orientation="Horizontal">
             <Image Height="18" Width="18" Source="{Binding Path=Mime, Converter={StaticResource ResourceKey=ImageConverter},ConverterParameter=../}"/>

@@ -1,0 +1,51 @@
+﻿
+	considerations
+		system architecture address high-risk use cases?
+		system reflect overall enterprise architecture?
+		working end-to-end architectural prototype?
+		scope sufficiently defined?
+			scope change in this phase?
+			high-level definition changed in this phase?
+				what it will do
+				what it won't do
+			all high-level features, user-stories/use-cases defined?
+		estimated cost, changed in this phase?
+		risk list, risk remediation plan
+			additional risks identified in this phase
+			architectural prototype addresses highest risk element?
+			feasability
+				technical
+					'make sense' from a technical perspective?
+					can we build and deploy the project?
+				operational
+					operational requirements can be met?
+					will changes be required?
+			construction
+				personnel
+					current staffing plan for next phase
+					projected staffing requirements and resources
+				environment
+					delivery team have workspace?
+					software licenses?
+					project environment plan for construction -> production
+			security
+				risklist
+		vision & requirements stabilization
+			groomed and prioritized product backlog
+			navigation & visual style, coding-standards
+			service level agreement
+		architectural stability
+			architectural diagram with technology choices
+			diagrams (as appropriate)
+				class, component, activity, state, entity-relationship, pow
+			architectural prototype (risk abatement)
+		estimate acceptance, risk acceptance, plan for construction
+			updated estimates
+			uppdate release schedule
+			updated risk list
+			test strategy, functional, load
+			initial deployment plan
+			initial deployment diagram
+			specific sprint goals defined for next phase (construction)
+
+

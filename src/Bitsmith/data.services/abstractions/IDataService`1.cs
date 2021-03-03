@@ -20,8 +20,5 @@ namespace Bitsmith.DataServices.Abstractions
         bool TryCopyTo(FileInfo from, FileInfo to, out string message, bool overwriteExisting = true);
         bool TryMove(FileInfo from, FileInfo to);
         bool TryFindDirectory(out DirectoryInfo info, string selectedPath = "");
-
-
-
     }
 }

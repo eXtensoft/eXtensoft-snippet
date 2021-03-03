@@ -8,9 +8,9 @@ using System.Xml.Serialization;
 namespace Bitsmith.Models
 {
     public class Query
-    {       
+    {
         [XmlAttribute("type")]
-        public QueryTypeOption QueryType { get; set; }
+        public QueryTypeOption QueryType { get; set; } = QueryTypeOption.None;
         [XmlAttribute("domain")]
         public string Domain { get; set; }
         [XmlAttribute("op")]
@@ -41,6 +41,14 @@ namespace Bitsmith.Models
                 }
             }
 
+        }
+
+        internal SearchTypeOptions GetSearchType()
+        {
+
+            SearchTypeOptions options = SearchTypeOptions.None;
+            TokenQueries.ForEach(q => { options = options | q.SearchType; });
+            return options;
         }
     }
 }

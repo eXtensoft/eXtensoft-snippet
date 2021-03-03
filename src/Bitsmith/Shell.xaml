@@ -45,7 +45,3 @@
         Height="{x:Static local:ConfigValueProvider.ShellHeight}"
         Width="{x:Static local:ConfigValueProvider.ShellWidth}"
         -->
-        <!--<local:ContentView/>-->
-        <!-- <local:MimeMapsView/>-->
-        <!--<local:ContentDomainsView/>-->
-        <!--<local:PathsView/>-->

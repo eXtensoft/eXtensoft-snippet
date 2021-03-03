@@ -47,6 +47,10 @@ namespace Bitsmith.ViewModels
             return Path.Combine(AppConstants.SettingsDirectory, DataService.Filepath<TypedItem>());
         }
 
+        internal void SetDataService(IDataService dataService)
+        {
+            DataService = dataService;
+        }
 
         public bool IsInitialized { get; set; }
 

@@ -1,0 +1,97 @@
+﻿
+project
+	name:					remote config micro service
+	champion:				TBD
+	architect:				TBD
+	developers:				TBD
+	analyst:				TBD
+	value-proposition:		micro-service architecture risk abatement
+							platform vendor independence (aws/azure)
+							config management consistency, accuracy, delivery							
+	requirements:
+							functional
+								appSettings, connectionStrings, centrally managed
+							non-functional
+								high-availability
+								implemented as micro-service
+							security
+								secure transport only
+								admin only write
+								api, micro-service only read
+							business-case
+								RemoteConfig-US101
+									As a [configAdmin] I want to create a new remoteConfig (from scratch or from template or by prototype)		
+										Use Cases
+											UC-US101-01: create a template, 
+											UC-US101-02: create a config manually
+											UC-US101-03: create a config from a template
+											UC-US101-04: create a config by prototype
+											UC-US101-05: perform diff between template and config
+								RemoteConfig-US102
+									As a [configAdmin] I want to make changes to an existing remoteConfig
+										Use Cases
+											UC-US102-01: edit existing config, live and value by value
+											UC-US102-02: edit existing config changeset (scheduled effective date)
+											UC-US102-03: roll back scheduled changeset
+
+								RemoteConfig-US103
+									As a [configAdmin] I want to schedule the release of changes to a remoteConfig
+										Use Cases
+											UC-US103-01: update the effective date of a changeset
+								RemoteConfig-US104
+									As a [configAdmin] I want to compare multiple remoteConfigs (document form, comparison form)
+										Use Cases
+											UC-US104-01: select 2->n remoteConfigs and compare as dataset, or document
+								RemoteConfig-US105
+									As a [configAdmin] I want to compare delivered remoteConfig with serverside remote config (current and scheduled and proposed)
+										Use Cases
+											UC-US105-01: perform proxy call against remote-config-server and compare against application-in-memory remote-config
+								RemoteConfig-US106
+									As a [configConsumer] I want to fetch configuration from a remote source (based upon dateTime, current)
+										Use Cases
+											UC-US106-01: perform proxy call against remote-config-server, current, or parameterized for given datetime
+
+								RemoteConfig-US107
+									As a [developer] I want to easily view current configuration values (actual in memory, and output to administrative config formats)
+										Use Cases
+											UC-US107-01: 
+						
+	risk-management:		
+							known-risks
+								new architecture
+								new .NET framework
+								new CI-CD, sdlc, github management
+								github->auto-build->auto-deploy
+								new 100% unit-testing
+								new packaging (docker)
+								hosting platforms (azure/aws)
+								learning curve
+								docker on both azure AND aws
+							risk-abatement
+								architectural-prototype
+									full-stack GET
+									serves up static data
+								technological-prototype
+									asp.net core 2.0, async-await, non-sqlserver (postgres,mariadb,file-system,mongodb)
+								operational-prototype
+									code, unit-test, ci-cd automation, bifurcation to amazon/azure
+
+	scope:
+							in
+								admin application (mvc,spa,wpf)
+								dotnetcore 2.0, asp.netcore 2.0
+								docker for azure, maybe for aws
+								unit-testing,
+							out
+								no Gateway API
+								no Service Bus
+								no micro-service to micro-service communication
+								no .NET Framework
+	architecture:
+								micro-service
+									platform:	asp.net core 2.0 mvc api
+									security:	basic-token, custom
+									datastore:	non-ms-sqlserver (embedded sqlserver,mysql)
+								sdlc
+									github, automated-build, automated-packaging,
+

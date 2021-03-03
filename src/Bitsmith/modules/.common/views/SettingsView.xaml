@@ -59,18 +59,22 @@
 
         </TabItem>
         <TabItem Header="Preferences">
-            <Grid>
+            <local:PreferencesView/>
+            <!--<Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
                 <Button Style="{StaticResource RefreshCommandButton}" Command="{Binding Path=Content.AddBibleCommand}"/>
-            </Grid>
+            </Grid>-->
     
         </TabItem>
         <TabItem Header="Data">
             <local:DataSettingsView/>
+        </TabItem>
+        <TabItem Header="Schemas">
+            <local:SchemasView/>
         </TabItem>
     </TabControl>
 </UserControl>

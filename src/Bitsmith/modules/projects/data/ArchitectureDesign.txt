@@ -1,0 +1,76 @@
+Archetecture and Software Design
+	The recommended Architecture nad Design process is artifact intensive.  Complementing
+	the agile approach, the artifact itself is not the primary deliverable, instead,
+	the collaboration and team interaction that goes into defining and producing the artifact
+	is the value created.
+
+Defining Backlog Items through Visualization and Collaborization Artifacts
+	Project Glossary
+		Describes the critical business and technical terms on the project
+	KJ Analysis
+		Collaborative concensus on focus and priority
+	Scope Diagrams
+		Simple representation of what features are in and out of scope for the project
+	Use Cases
+		Articulation of workflow and actions a user performst to accomplish a particular goal
+	Activity Diagram
+		UML diagram that graphically describes workflow, conditions and actions that the
+		actor(s) perform to accomplish a particular goal
+	Sequence Diagram
+		UML diagram that graphically models the behavior of use cases by describing
+		the way groups of objects interact to complete a task
+	Business Rules and Functional Requirements
+		Business rules define or constrain one aspect of the business to assert its
+		structure or influence its behavior.  Business rules often focus on access
+		controll issues, business calculations, or policies of the organization.  Functional
+		requirements describe the work that people do within the context of the business rules
+	Non-funcitonal Requirements
+		Descirbe non-behavioral attributes of the system such as usability, 
+		security, and performance
+
+Defining and Designing the User Experience
+	Personas and Scenarios
+		Concrete representations of specific user types and specific workflows used
+		to drive and validate designs
+	Use Case
+		Articulation of workflow and actions a user performs to accomplish a particular goal
+	Navigation Diagrams and Wireframes
+		Concrete representations of the flow between screens and the basic layout,
+		function, and data for each screen.
+	Visual Style Guide
+		Specification of the overall visual communication approach, including
+		layout, typobraphy, color schemas, and graphical assets.
+
+Modeling the System Architecture
+	Architecture Diagram
+		A block diagram that shows the high-level system components and relationships among them
+	Context Diagram
+		Defines the scope of the system (what is in the system and what is out of
+		the system), as well as the various terminators or external entities 
+		(people, organizational units, other computer systems, etc.) with whom
+		the system will interact
+	Data Flow Diagram
+		Level-0 Data Flow Diagram describes the overall processing of the system 
+		showing one process for each major processing step or functional requirement
+	Class Diagram
+		UML diagram used to describe or model the entities in the system, their
+		attributes and methods (or actions) that they can perform.  A class diagram
+		is the basisfor establishing a Domain Model for the organization
+	Component Diagram
+		UML diagram used to describe or model the business software architecture
+		and the technical software architecture
+	State Diagram	
+		UML diagram used to describe or model the various states that an object
+		may be in and the transitions between those states.
+	Plain-old-whiteboard Models
+		Design sketches collaboratively produced on a whiteboard.  Often, these
+		sketches retained for a useful period or are captured with a phone camera
+	Prototypes
+		Demonstrable working software to reduce technical risk by solving a 
+		technical or design problem
+	Physical Data Model
+		Describes the physical schema of a datastore, such as a relational database,
+		an XML file, a non-relational persistance model.  It is often created as
+		an Entity Relationship diagram and Data Dictionary.
+	Security Threat Model
+		A model which explores security threats to the system

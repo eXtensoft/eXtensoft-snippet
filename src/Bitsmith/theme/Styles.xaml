@@ -64,6 +64,26 @@
         </Style.Triggers>
     </Style>
 
+    <Style x:Key="TaskFileCommandToggleButton" TargetType="ToggleButton">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <TextBlock><ContentPresenter/></TextBlock>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="true">
+                <Setter Property="Foreground" Value="{StaticResource ResourceKey=CommandHoverEnabled}"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="false">
+                
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <Style x:Key="MenuCommandButton" TargetType="Button">
         <Setter Property="Template">
             <Setter.Value>
@@ -248,7 +268,7 @@
         <Setter Property="Content" Value="&#xE74E;"/>
         <Setter Property="FontWeight" Value="ExtraBold"/>
     </Style>
-    <Style x:Key="CopyCommandButton" TargetType="Button" >
+    <Style x:Key="CopyCommandButton" TargetType="Button" BasedOn="{StaticResource CommandButton}" >
         <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
         <Setter Property="Content" Value="&#xE8C8;"/>
         <Setter Property="FontWeight" Value="ExtraBold"/>

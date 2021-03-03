@@ -8,6 +8,22 @@ namespace Bitsmith.ViewModels
 {
 	public class DomainViewModel : ViewModel<Domain>
     {
+		private bool _IsShowSchema = true;
+        public bool IsShowSchema
+        {
+            get
+            {
+                return _IsShowSchema;
+            }
+            set
+            {
+                _IsShowSchema = value;
+                OnPropertyChanged("IsShowSchema");
+            }
+        }
+
+        public List<TypedItem> WorkflowExclusions { get; set; } = new List<TypedItem>();
+
 		public DomainPathMapViewModel Item { get; set; }
 
 

@@ -35,24 +35,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DocumentFormat.OpenXml, Version=2.11.3.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\DocumentFormat.OpenXml.2.11.3\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json.Schema, Version=3.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.Schema.3.0.13\lib\net45\Newtonsoft.Json.Schema.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
-      <Private>True</Private>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.IO.Packaging, Version=4.0.5.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\System.IO.Packaging.4.7.0\lib\net46\System.IO.Packaging.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -74,6 +66,7 @@
     <Compile Include="code\converters\ImageMapConverter.cs" />
     <Compile Include="code\converters\PathsConverter.cs" />
     <Compile Include="code\FileFormat.cs" />
+    <Compile Include="code\mnemosyne\Profiler.cs" />
     <Compile Include="code\pdf\PdfTextExtractor.cs" />
     <Compile Include="code\query\Query.cs" />
     <Compile Include="code\query\QueryExtensions.cs" />
@@ -82,6 +75,7 @@
     <Compile Include="code\query\SearchTypeOptions.cs" />
     <Compile Include="code\query\TokenQuery.cs" />
     <Compile Include="code\SelectItem.cs" />
+    <Compile Include="code\template-selectors\JsonSchemaTemplateSelector.cs" />
     <Compile Include="code\text-search\file-parsers\MSWordFileParser.cs" />
     <Compile Include="code\text-search\file-parsers\PdfFileReader.cs" />
     <Compile Include="code\text-search\file-parsers\TextFileParser.cs" />
@@ -92,7 +86,98 @@
     <Compile Include="code\text-search\indexing\Indexer.cs" />
     <Compile Include="code\text-search\multi-lingual\ILanguageIndexer.cs" />
     <Compile Include="code\text-search\multi-lingual\LanguageIndexer.cs" />
+    <Compile Include="modules\.common\code\DatatypeOption.cs" />
+    <Compile Include="modules\datatool\code\DataFormatResolver.cs" />
+    <Compile Include="modules\datatool\code\DataParser.cs" />
+    <Compile Include="modules\datatool\code\IDataFormatResolver.cs" />
+    <Compile Include="modules\datatool\code\IDataParser.cs" />
+    <Compile Include="modules\datatool\code\parsing\csv\CsvParser.cs" />
+    <Compile Include="modules\datatool\code\parsing\DataParserFactory.cs" />
+    <Compile Include="modules\datatool\code\parsing\DelimitedParser.cs" />
+    <Compile Include="modules\datatool\code\parsing\IDataParserFactory.cs" />
+    <Compile Include="modules\datatool\code\parsing\mongodbjson\FieldParser.cs" />
+    <Compile Include="modules\datatool\code\parsing\mongodbjson\FieldParserFactory.cs" />
+    <Compile Include="modules\datatool\code\parsing\pipe\PipeDelimitedParser.cs" />
+    <Compile Include="modules\datatool\code\parsing\tab\TabParser.cs" />
+    <Compile Include="modules\datatool\code\parsing\ms-excel\ExcelParser.cs" />
+    <Compile Include="modules\datatool\code\parsing\IParser.cs" />
+    <Compile Include="modules\datatool\code\parsing\JsonParser.cs" />
+    <Compile Include="modules\datatool\code\parsing\mongodbjson\MongoDBJsonParser.cs" />
+    <Compile Include="modules\datatool\code\parsing\Parser.cs" />
+    <Compile Include="modules\datatool\code\parsing\xml\XmlParser.cs" />
+    <Compile Include="modules\datatool\code\profiling\ProfileField.cs" />
+    <Compile Include="modules\datatool\code\profiling\ProfileFields.cs" />
+    <Compile Include="modules\datatool\code\profiling\ProfileItem.cs" />
+    <Compile Include="modules\datatool\code\profiling\Profiler.cs" />
+    <Compile Include="modules\datatool\ParserExtensions.cs" />
+    <Compile Include="modules\datatool\view.models\DataFieldViewModel.cs" />
+    <Compile Include="modules\datatool\views\DataProfileView.xaml.cs">
+      <DependentUpon>DataProfileView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\datatool\views\DataParserView.xaml.cs">
+      <DependentUpon>DataParserView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\datatool\views\DatapadView.xaml.cs">
+      <DependentUpon>DatapadView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\datatool\views\DatatoolView.xaml.cs">
+      <DependentUpon>DatatoolView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\datatool\code\Datatool.cs" />
+    <Compile Include="modules\datatool\DatatoolExtensions.cs" />
+    <Compile Include="modules\datatool\DatatoolModule.cs" />
+    <Compile Include="modules\json.schema\models\DataField.cs" />
+    <Compile Include="modules\rolodex\views\ContentItemCardView.xaml.cs">
+      <DependentUpon>ContentItemCardView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\content\views\content-views\ContentItemCSharpView.xaml.cs">
+      <DependentUpon>ContentItemCSharpView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\content\views\content-views\ContentItemCSHTMLView.xaml.cs">
+      <DependentUpon>ContentItemCSHTMLView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\content\views\content-views\ContentItemCSSView.xaml.cs">
+      <DependentUpon>ContentItemCSSView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\content\views\content-views\ContentItemHTMLView.xaml.cs">
+      <DependentUpon>ContentItemHTMLView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\content\views\content-views\ContentItemJavascriptView.xaml.cs">
+      <DependentUpon>ContentItemJavascriptView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\content\views\content-views\ContentItemJavaView.xaml.cs">
+      <DependentUpon>ContentItemJavaView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\content\views\content-views\ContentItemJsonSchemaView.xaml.cs">
+      <DependentUpon>ContentItemJsonSchemaView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\content\views\content-views\ContentItemSQLView.xaml.cs">
+      <DependentUpon>ContentItemSQLView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\content\views\content-views\ContentItemVueJSView.xaml.cs">
+      <DependentUpon>ContentItemVueJSView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\content\views\content-views\ContentItemSchemaView.xaml.cs">
+      <DependentUpon>ContentItemSchemaView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\content\views\content-views\ContentItemCsvView.xaml.cs">
+      <DependentUpon>ContentItemCsvView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\content\view.models\content.types\DataColumnViewModel.cs" />
+    <Compile Include="modules\content\views\content-views\ContentItemTabularDataView.xaml.cs">
+      <DependentUpon>ContentItemTabularDataView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\content\view.models\content.types\TabularDataViewModel.cs" />
+    <Compile Include="modules\content\views\content-views\ContentItemTableView.xaml.cs">
+      <DependentUpon>ContentItemTableView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="data.services\DataServiceStrategyOption.cs" />
+    <Compile Include="JsonSchemas.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>JsonSchemas.resx</DependentUpon>
+    </Compile>
+    <Compile Include="modules\.common\models\TagHelperOptions.cs" />
     <Compile Include="modules\.common\views\DataSettingsView.xaml.cs">
       <DependentUpon>DataSettingsView.xaml</DependentUpon>
     </Compile>
@@ -113,6 +198,10 @@
     <Compile Include="modules\.common\view.models\indexer\IndexExclusionViewModel.cs" />
     <Compile Include="modules\.common\view.models\settings\Stopword.cs" />
     <Compile Include="modules\.common\view.models\settings\StopwordSetting.cs" />
+    <Compile Include="modules\chronos\models\view\ActivityViewItem.cs" />
+    <Compile Include="modules\chronos\models\view\TaskViewItem.cs" />
+    <Compile Include="modules\chronos\models\view\ViewExtensions.cs" />
+    <Compile Include="modules\chronos\models\view\ViewItem.cs" />
     <Compile Include="modules\content\code\BibleManager.cs" />
     <Compile Include="modules\content\view.models\QueryViewModel.cs" />
     <Compile Include="modules\content\views\content-views\ContentItemPdfView.xaml.cs">
@@ -141,6 +230,18 @@
     <Compile Include="modules\.common\view.models\base\SortableObservableCollection`2.cs" />
     <Compile Include="modules\chronos\models\aggregation\AggregationOption.cs" />
     <Compile Include="modules\content\code\Counter.cs" />
+    <Compile Include="modules\json.schema\models\Schema.cs" />
+    <Compile Include="modules\json.schema\models\TabularData.cs" />
+    <Compile Include="modules\json.schema\SchemaExtensions.cs" />
+    <Compile Include="modules\json.schema\SchemaModule.cs" />
+    <Compile Include="modules\json.schema\view.models\SchemaBuilderViewModel.cs" />
+    <Compile Include="modules\json.schema\view.models\SchemaViewModel.cs" />
+    <Compile Include="modules\projects\ProjectExtensions.cs" />
+    <Compile Include="modules\projects\ProjectsModule.cs" />
+    <Compile Include="modules\rolodex\models\Card.cs" />
+    <Compile Include="modules\rolodex\RolodexExtension.cs" />
+    <Compile Include="modules\rolodex\RolodexModule.cs" />
+    <Compile Include="modules\rolodex\view.models\CardViewModel.cs" />
     <Compile Include="modules\styx\models\designer\GraphTemplate.cs" />
     <Compile Include="modules\styx\models\Estimate.cs" />
     <Compile Include="modules\task.management\models\ProjectTask.cs" />
@@ -226,6 +327,9 @@
     <Compile Include="modules\styx\view.models\GraphTemplateViewModel.cs" />
     <Compile Include="modules\workflow\models\Builder.cs" />
     <Compile Include="modules\.common\view.models\workflow\Workflow.cs" />
+    <Compile Include="modules\workflow\models\visualization\Edge.cs" />
+    <Compile Include="modules\workflow\models\visualization\Graph.cs" />
+    <Compile Include="modules\workflow\models\visualization\Node.cs" />
     <Compile Include="modules\workflow\view.models\StateViewModel.cs" />
     <Compile Include="modules\workflow\view.models\TransitionViewModel.cs" />
     <Compile Include="modules\workflow\WorkflowModule.cs" />
@@ -266,6 +370,15 @@
     </Compile>
     <Compile Include="modules\content\views\TagSelectorView.xaml.cs">
       <DependentUpon>TagSelectorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\.common\views\PreferencesView.xaml.cs">
+      <DependentUpon>PreferencesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\json.schema\views\SchemasView.xaml.cs">
+      <DependentUpon>SchemasView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\rolodex\views\RolodexView.xaml.cs">
+      <DependentUpon>RolodexView.xaml</DependentUpon>
     </Compile>
     <Compile Include="view\NavigationMenu.xaml.cs">
       <DependentUpon>NavigationMenu.xaml</DependentUpon>
@@ -347,6 +460,9 @@
     </Compile>
     <Compile Include="view\controls\RoundedBox.xaml.cs">
       <DependentUpon>RoundedBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="modules\workflow\WFView.xaml.cs">
+      <DependentUpon>WFView.xaml</DependentUpon>
     </Compile>
     <Compile Include="window\WindowBase.cs" />
     <Compile Include="window\WindowCommands.cs" />
@@ -471,6 +587,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="JsonSchemas.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>JsonSchemas.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -500,6 +620,78 @@
     <Resource Include="data\statemachine.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="modules\datatool\views\DataProfileView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\datatool\views\DataParserView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\datatool\views\DatapadView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\datatool\views\DatatoolView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\rolodex\views\ContentItemCardView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\content\views\content-views\ContentItemCSharpView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\content\views\content-views\ContentItemCSHTMLView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\content\views\content-views\ContentItemCSSView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\content\views\content-views\ContentItemHTMLView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\content\views\content-views\ContentItemJavascriptView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\content\views\content-views\ContentItemJavaView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\content\views\content-views\ContentItemJsonSchemaView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\content\views\content-views\ContentItemSQLView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\content\views\content-views\ContentItemVueJSView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\content\views\content-views\ContentItemSchemaView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\content\views\content-views\ContentItemCsvView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\content\views\content-views\ContentItemTabularDataView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\content\views\content-views\ContentItemTableView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="modules\.common\views\DataSettingsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -585,6 +777,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="modules\content\views\TagSelectorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\.common\views\PreferencesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\json.schema\views\SchemasView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="modules\rolodex\views\RolodexView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -764,11 +968,20 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="modules\workflow\WFView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="code\state\" />
     <Folder Include="code\xf\" />
-    <Folder Include="model\" />
+    <Folder Include="modules\datatool\model\" />
+    <Folder Include="modules\json.schema\data\" />
+    <Folder Include="modules\projects\code\" />
+    <Folder Include="modules\projects\models\" />
+    <Folder Include="modules\projects\view.models\" />
+    <Folder Include="modules\projects\views\" />
     <Folder Include="modules\task.management\dataprovider\" />
   </ItemGroup>
   <ItemGroup>
@@ -880,6 +1093,62 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="content\images\heart.red.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="content\images\favorite.red.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="content\icons\search-full-text.png" />
+    <Resource Include="content\icons\search-tag.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="modules\chronos\data\chronos.design.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="modules\projects\data\project.design.notes.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="modules\projects\data\notes.01.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="modules\projects\data\bap.construction.txt" />
+    <Resource Include="modules\projects\data\bap.elaboration.txt" />
+    <Resource Include="modules\projects\data\bap.inception.txt" />
+    <Resource Include="modules\projects\data\bap.project.remoteConfig.txt" />
+    <Resource Include="modules\projects\data\bap.transition.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="modules\projects\data\grand-design.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="modules\projects\data\ArchitectureDesign.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="content\icons\search-path.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="content\icons\search-pathway.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="modules\chronos\data\sprint-view.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="modules\chronos\data\tasks.xml.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="modules\chronos\data\chronos.xml.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="data\schemas\schemas.citation.json.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="data\schemas\schemas.contact.json.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="data\schemas\schemas.person.json.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="modules\datatool\data\design.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

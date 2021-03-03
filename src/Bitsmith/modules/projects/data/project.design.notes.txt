@@ -1,0 +1,94 @@
+﻿project [scope,resource,time-bound,quality] scope, timeline, resources, output/deliverable
+			background, objectives, expense, size/scope, expected-value, expected-cost
+			vision, project-scope, project targets, timelines, project-manaement
+				scope statement
+				critical success factors
+				deiverables
+				work breakdown structure
+				schedule
+				budget
+				quality
+				human resources plan
+
+				executive summary, policy/procedures, schedules, timeline plans, budget/cost-management
+
+				Project Integration Management. ...
+				Project Scope Management. ...
+				Project Time Management. ...
+				Project Cost Management. ...
+				Project Quality Management. ...
+				Project Human Resource Management. ...
+				Project Communication Management. ...
+				Project Risk Management.
+
+
+	projectrole[]	{ name, count, isrequired/isoptional }
+		owner
+		champion
+		analyst
+		architect
+		engineer[]
+	value-proposition
+
+	requirement[]	{name, type[functional,non-functional,security,scope], requirement}
+
+	business-case
+		user-role[]
+		user-story[]
+			user-case[] {user<->system interaction to achieve an outcome}
+			
+	risk[] { type, name, details, risk-management-strategy[avoidance,poc,deferral]}
+
+
+{
+	"name": "My New Project",
+	"owner": "Robert K Nelson",
+	"roles": [
+		{
+			"name": "Champion",
+			"actor": "Ming Nelson"
+		},
+		{
+			"name": "Owner",
+			"actor": "Robert Nelson"
+		}
+	],
+	"valueProposition": "",
+	"requirements": {
+		"functional":[
+			{
+				"requirementName": "",
+				"requirementText": ""
+			},
+			{
+				"requirementName": "",
+				"requirementText": ""
+			}
+		],
+		"nonFunctional":[
+			{
+				"requirementName": "",
+				"requirementText": ""
+			},
+			{
+				"requirementName": "",
+				"requirementText": ""
+			}
+		],
+		"security":[
+			{
+				"requirementName": "",
+				"requirementText": ""
+			},
+			{
+				"requirementName": "",
+				"requirementText": ""
+			}
+		]
+	}
+}
+
+1.	s
+		
+
+		

@@ -1,9 +1,8 @@
 ﻿using Bitsmith.DataServices.Abstractions;
 using Bitsmith.Models;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
+using System.IO;
 using System.Windows.Input;
 
 namespace Bitsmith.ViewModels
@@ -97,6 +96,7 @@ namespace Bitsmith.ViewModels
 
         public virtual void SaveWorkspace()
         {
+            //SetPreferences();
             SaveData();
         }
 
@@ -106,10 +106,6 @@ namespace Bitsmith.ViewModels
             {
                 OnFailure("save-data", message);
             }
-            //if(!FileSystemDataProvider.TryWrite<T>(Models, out string message, Filepath))
-            //{
-            //    OnFailure("save-data", message);
-            //}
         }
 
         protected virtual bool LoadData()

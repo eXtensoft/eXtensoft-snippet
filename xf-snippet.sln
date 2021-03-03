@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bitsmythe", "src\Bitsmythe\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XTool.MongoDb", "src\XTool.MongoDb\XTool.MongoDb.csproj", "{D715DD08-207B-4C25-86B7-50161CEAB853}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Consolas", "Consolas\Consolas.csproj", "{ADE6801D-25EC-4976-8DAB-4DF410FF99B6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{D715DD08-207B-4C25-86B7-50161CEAB853}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D715DD08-207B-4C25-86B7-50161CEAB853}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D715DD08-207B-4C25-86B7-50161CEAB853}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADE6801D-25EC-4976-8DAB-4DF410FF99B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADE6801D-25EC-4976-8DAB-4DF410FF99B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADE6801D-25EC-4976-8DAB-4DF410FF99B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADE6801D-25EC-4976-8DAB-4DF410FF99B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

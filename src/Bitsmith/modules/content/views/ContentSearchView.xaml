@@ -55,36 +55,44 @@
                         </Grid.RowDefinitions>
                         <RadioButton Grid.Column="0" Content="Recent" IsChecked="{Binding Path=IsRecentQueries}"
                                      HorizontalAlignment="Center" GroupName="Queries" />
-                        <RadioButton Grid.Column="1" Content="Favorites"
+                        <RadioButton Grid.Column="1" Content="Favorites" IsChecked="{Binding Path=IsFavoriteQueries}"
                                      HorizontalAlignment="Right" GroupName="Queries" />
-                        
-                        <ListBox Grid.Row="1" Grid.ColumnSpan="2" Margin="10"
-                                 ItemsSource="{Binding Path=Queries}" 
-                                 SelectedItem="{Binding Path=SelectedQuery}"
-                                 BorderThickness="0" Background="LightGray" 
-                                 AlternationCount="2">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Text="{Binding Path=QueryText}" Grid.Column="1"/>
-                                        <Button Grid.Column="0" Tag="{Binding}" 
-                                            Style="{StaticResource ResourceKey=CommandButton}" 
-                                                Margin="5,2,10,2">
-                                            <Button.Content>
-                                                <Image Grid.Column="2" Height="12" Width="12" Source="{Binding Path=QueryType, Converter={StaticResource ResourceKey=cvtImageMap},ConverterParameter=../../../}"/>
-                                            </Button.Content>
-                                        </Button>
-                                        <Label Grid.Column="1" Content="{Binding Path=Display}"/>
-                                    </Grid>
+                        <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Margin="10">
+                            <ListBox
+                                     ItemsSource="{Binding Path=Queries}" 
+                                     SelectedItem="{Binding Path=SelectedQuery}"
+                                     BorderThickness="0" Background="LightGray" 
+                                     AlternationCount="2">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                        
+                                            <Button Grid.Column="0" Tag="{Binding}" 
+                                                Style="{StaticResource ResourceKey=CommandButton}"
+                                                    Command="{Binding Path=CycleQueryTypeCommand}"
+                                                    Margin="5,2,10,2" VerticalAlignment="Center">
+                                                <Button.Content>
+                                                    <Image Grid.Column="2" Height="12" Width="12" Source="{Binding Path=QueryType, Converter={StaticResource ResourceKey=cvtImageMap},ConverterParameter=../../../}"/>
+                                                </Button.Content>
+                                            </Button>
+                                            <Label Grid.Column="1" Content="{Binding Path=QueryText}"/>
+                                            <Image Grid.Column="2" Height="20" Width="20" Margin="-2,-4" Source="{Binding Path=SearchType, Converter={StaticResource ResourceKey=cvtImageMap},ConverterParameter=../../../}"/>
+                                        </Grid>
 
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                            <Button Style="{StaticResource CommandButton}" Content="clear all" Visibility="{Binding Path=HasRecentQueries, Converter={StaticResource cvtBool2Visibility}}"
+                                    Command="{Binding Path=RemoveAllRecentCommand}" 
+                                    HorizontalAlignment="Right"/>
+                        </StackPanel>
+
                     </Grid>
                 </GroupBox>
             </Grid>
@@ -92,17 +100,30 @@
         <TabItem Header="Tags" Style="{StaticResource ResourceKey=viewTabItem}">
             <Grid Background="LightGray">
                 <GroupBox Header="Tags" DataContext="{Binding Path=Content}">
-                    <ListBox Margin="10" BorderThickness="0" Background="LightGray" SelectedItem="{Binding Path=SelectedTag}" 
-                                 ItemsSource="{Binding Path=Resolver.Items}" AlternationCount="2">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding Path=Count}" Margin="3,0" Width="20" TextAlignment="Right" Foreground="#003D79"/>
-                                    <TextBlock Text="{Binding Path=Key}" Margin="10,0"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                    <DockPanel LastChildFill="True">
+                        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
+                            <TextBlock Text="Minimum"/>
+                            <ComboBox ItemsSource="{Binding Path=TagsFilterSelections}" SelectedItem="{Binding Path=SelectedTagsFilter}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Key}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
+                        <ListBox Margin="10" BorderThickness="0" Background="LightGray" SelectedItem="{Binding Path=SelectedTag}" 
+                                     ItemsSource="{Binding Path=Resolver.Items}" AlternationCount="2">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Path=Count}" Margin="3,0" Width="20" TextAlignment="Right" Foreground="#003D79"/>
+                                        <TextBlock Text="{Binding Path=Key}" Margin="10,0"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>                        
+                    </DockPanel>
+
                 </GroupBox>
             </Grid>
         </TabItem>

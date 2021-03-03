@@ -20,6 +20,8 @@ namespace Bitsmith
             { "settings", "\uE713" },
             { "loggedoff", "\uE894" },
             { "credentials", "\uE74E" },
+            { "rolodex","\uEC25"}, //E70A E8CF
+            { "datatool","\uE90F"}, // E90F E80A E943 {}
         };
         public static StateManager Initialize(this StateManager manager, XDocument xdoc)
         {

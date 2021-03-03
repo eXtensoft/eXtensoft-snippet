@@ -1,0 +1,17 @@
+﻿
+Start Project
+	What kind of Project?
+		select from list
+			on-select, call api for blade-runner elicitation of header info
+			present elicitations, wizard or questionaire or form
+
+ProjectManagementApi
+	uses Bladerunner to elicit responses
+	uses custom GUI to elicit responses
+	UI can be spa/wpf/electron/mobile
+
+	however, to start with, let's design the BASIC item.
+		ContentItem	{id,display,mime,scope,language,paths,properties,body}
+			
+			+schema jsonschema
+			+data	namespace,key,value {datatype}

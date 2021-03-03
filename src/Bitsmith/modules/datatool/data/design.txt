@@ -1,0 +1,37 @@
+﻿
+	extract
+		from json into config format
+		from xml into config format
+		from csv
+		from txt: fixed, delimited {with w/o headers}
+
+
+	analyse
+		profile
+
+
+	transform
+
+
+
+
+	load
+
+
+	xtool
+		
+
+
+DataWaypoint
+	Location	Source,Destination,
+	I/O		intput/output
+	Profile
+
+DataProcess
+	Input
+	Output
+	Profile
+	DataFlow
+
+
+Datapad

@@ -7,6 +7,8 @@
   <State name="TimeEntry" display="TimeEntry" isNavigate="true" order="2" />
   <State name="Settings" display="Settings" isNavigate="true" order="3" />
   <State name="Credentials" display="Credentials" isNavigate="false" order="4" />
+  <!--<State name="Rolodex" display="Rolodex" isNavigate="true" order="5"/>
+  <State name="Datatool" display="Datatool" isNavigate="true" order="6"/>-->
   <Transition name="Login" origin="LoggedOff" destination="Authenticated" order="0" />
   <Transition name="Content" origin="Authenticated" destination="Content" order="0" />
   <Transition name="Tasks" origin="Content" destination="Tasks" order="0" />
@@ -22,10 +24,16 @@
   <Transition name="Content" origin="Settings" destination="Content" order="0" />
   <Transition name="TimeEntry" origin="Settings" destination="TimeEntry" order="0" />
   <Transition name="Tasks" origin="Settings" destination="Tasks" order="0" />  
-  <Transition name="Content" origin="Credentials" destination="Content" order="0"/>  
+  <Transition name="Content" origin="Credentials" destination="Content" order="0"/> 
+  <!--<Transition name="Rolodex" origin="Content" destination="Rolodex" order="0"/>
+  <Transition name="Rolodex" origin="Rolodex" destination="Content" order="0"/>
+  <Transition name="Datatool" origin="Content" destination="Datatool" order="0"/>
+  <Transition name="Datatool" origin="Datatool" destination="Content" order="0"/>-->
   <Transition name="LogOff" origin="Content" destination="LoggedOff" order="0" />
   <Transition name="LogOff" origin="Tasks" destination="LoggedOff" order="0"/>
   <Transition name="LogOff" origin="TimeEntry" destination="LoggedOff" order="0" />
   <Transition name="LogOff" origin="Settings" destination="LoggedOff" order="0" />
   <Transition name="LogOff" origin="Credentials" destination="LoggedOff" order="0" />
+  <!--<Transition name="LogOff" origin="Rolodex" destination="LoggedOff" order="0" />
+  <Transition name="LogOff" origin="Datatool" destination="LoggedOff" order="0" />-->
 </StateMachine>

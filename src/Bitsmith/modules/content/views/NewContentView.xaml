@@ -7,6 +7,7 @@
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
+        <local:JsonSchemaTemplateSelector x:Key="SchemaSelector"/>
         <local:TagConverter x:Key="cnvNewTags"/>
         <local:BooleanToIntConverter x:Key="cvtBool2Int"/>
         <local:BoolToVisibilityConverter x:Key="cvtBool2VisibilityReverse" IsReverse="True"/>
@@ -41,10 +42,14 @@
                     <RadioButton Content="Link" IsChecked="{Binding Path=Input.IsLink, Mode=TwoWay}" GroupName="ContentType"/>
                     <RadioButton x:Name="rdoFile" Content="File" IsChecked="{Binding Path=Input.IsFile, Mode=TwoWay}" GroupName="ContentType"/>
                     <RadioButton x:Name="rdoText" Content="Text" IsChecked="{Binding Path=Input.IsText, Mode=TwoWay}" GroupName="ContentType"/>
+                    <RadioButton x:Name="rdoTab" Content="Table" IsChecked="{Binding Path=Input.IsTabular, Mode=TwoWay}" GroupName="ContentType"/>
+                    <RadioButton x:Name="rdoSchema" Content="Schema" IsChecked="{Binding Path=Input.IsSchema, Mode=TwoWay}" GroupName="ContentType" 
+                                 Visibility="{Binding Path=Input.IsShowSchemas, Converter={StaticResource cvtBool2Visibility}}"/>
                 </StackPanel>
             </GroupBox>
 
-            <GroupBox Header="Mime" IsEnabled="{Binding ElementName=rdoText, Path=IsChecked}">
+            <GroupBox Header="Mime" Visibility="{Binding ElementName=rdoSchema, Path=IsChecked, Converter={StaticResource cvtBool2VisibilityReverse}}"
+                      IsEnabled="{Binding ElementName=rdoText, Path=IsChecked}">
                 <StackPanel>
                     <RadioButton Content="text" IsChecked="True"/>
                     <RadioButton Content="c#" IsChecked="{Binding Path=IsFile, Mode=TwoWay}"/>
@@ -54,6 +59,29 @@
                     <RadioButton Content="json" IsChecked="{Binding Path=IsText, Mode=TwoWay}" />
                     <RadioButton Content="html" IsChecked="{Binding Path=IsFile, Mode=TwoWay}"/>
                     <RadioButton Content="css" IsChecked="{Binding Path=IsText, Mode=TwoWay}" />
+                </StackPanel>
+            </GroupBox>
+
+
+            <GroupBox Header="Schemas"
+                      Visibility="{Binding ElementName=rdoSchema, Path=IsChecked, Converter={StaticResource cvtBool2Visibility}}" >
+                <StackPanel>
+                    <!--<ListBox x:Name="lsbSchema" ItemsSource="{Binding Path=JsonSchemas}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Label Content="{Binding Path=Display}"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>-->
+                    <ItemsControl ItemsSource="{Binding Path=JsonSchemas}" RadioButton.Checked ="ItemsControl_Checked">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <RadioButton Content="{Binding Path=Display}" 
+                                             GroupName="JsonSchemas" Tag="{Binding}"
+                                             IsChecked="{Binding Path=IsSelectedContentSchema}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </StackPanel>
             </GroupBox>
 
@@ -145,7 +173,7 @@
 -->
 
 
-        <Expander x:Name="expTags" 
+        <Expander x:Name="expTags" Visibility="{Binding Path=IsShowTagsHelper, Converter={StaticResource cvtBool2Visibility}}"
                   Grid.Column="2"  Grid.Row="0" 
                   ExpandDirection="Right" IsExpanded="{Binding Path=IsTagsExpanded}">
             <Expander.Content>
@@ -194,8 +222,8 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
                     <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center">
-                        <RadioButton Content="Popular" Name="rdoPopular" GroupName="tags" IsChecked="True"/>
-                        <RadioButton Content="Recent" Name="rdoRecent" GroupName="tags" Margin="5,0" IsChecked="{Binding Path=IsTagsRecentChecked}"/>
+                        <RadioButton Content="Popular" Name="rdoPopular" GroupName="tags" IsChecked="True" Visibility="{Binding Path=IsShowPopularTagsHelper, Converter={StaticResource cvtBool2Visibility}}"/>
+                        <RadioButton Content="Recent" Name="rdoRecent" GroupName="tags" Margin="5,0" IsChecked="{Binding Path=IsTagsRecentChecked}"  Visibility="{Binding Path=IsShowRecentTagsHelper, Converter={StaticResource cvtBool2Visibility}}"/>
                     </StackPanel>
                 </Grid>
             </Expander.Content>
@@ -220,6 +248,22 @@
                 Command="{Binding Path=SelectFileCommand}"
                 Visibility="{Binding ElementName=rdoFile, Path=IsChecked, Converter={StaticResource cvtBool2Visibility}}"
                 Content="Select File"/>
+        <Border Grid.Column="2" Grid.Row="6" Grid.RowSpan="3" Background="{StaticResource StandardBackground}"
+              Visibility="{Binding ElementName=rdoSchema, Path=IsChecked, Converter={StaticResource cvtBool2Visibility}}">
+            <Border x:Name="brdDetail" Margin="10" Padding="10" BorderBrush="Gainsboro" BorderThickness="3" CornerRadius="10">
+                <ContentControl x:Name="ccContent" HorizontalContentAlignment="Stretch" 
+                                    ContentTemplateSelector="{StaticResource SchemaSelector}"
+                                    Content="{Binding Path=Input.SelectedSchema}"/>
+            </Border>
+        </Border>
+
+
+            <Border  Grid.Column="2" Grid.Row="6" Grid.RowSpan="3" Background="{StaticResource StandardBackground}"
+              Visibility="{Binding ElementName=rdoTab, Path=IsChecked, Converter={StaticResource cvtBool2Visibility}}" >
+                <local:ContentItemTabularDataView DataContext="{Binding Path=Input}"/>
+            </Border>
+
+
         <Label Grid.Column="0" Grid.Row="10" Content="Path" HorizontalAlignment="Right"/>
         <!--<TextBox Grid.Column="2" Grid.Row="10" Text="{Binding Path=Input.Path}" Background="Transparent"/>-->
         <TextBox Grid.Column="2" Grid.Row="10" Text="{Binding Path=Input.Paths, Converter={StaticResource cvtPaths}}" Background="Transparent"/>

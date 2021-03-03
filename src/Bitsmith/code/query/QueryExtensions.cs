@@ -1,12 +1,10 @@
 ﻿using Bitsmith.Indexing;
 using Bitsmith.Models;
 using Bitsmith.ViewModels;
-using DocumentFormat.OpenXml.Bibliography;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Bitsmith.Search
 {

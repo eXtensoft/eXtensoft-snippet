@@ -586,12 +586,12 @@ namespace Bitsmith.ViewModels
                     item.Mime = "url";
                     break;
                 case ContentTypeOption.Text:
-                    item.Display = "new note";
-                    if (AddAsFile && contentmodule.ContentManager.TryInloadAsFile($"Noe for task={this.Identifier}",item.Id,out string body, out FileInfo fileInfo) )
+                    
+                    if (AddAsFile && contentmodule.ContentManager.TryInloadAsFile($"Note for task={this.Identifier}",item.Id,out string body, out FileInfo fileInfo) )
                     {
                         item.Mime = "txt";
                         item.Body = body;
-                        item.Display = $"task: {this.Identifier}";
+                        item.Display = "new text file";
                         item.Properties.Add(new Property() { 
                             Name = $"{AppConstants.Tags.Prefix}-{AppConstants.Tags.Extension}",
                             Value = item.Mime
@@ -599,6 +599,7 @@ namespace Bitsmith.ViewModels
                     }
                     else
                     {
+                        item.Display = "new snippet";
                         item.Mime = "text";
                     }
                     b = true;
@@ -724,6 +725,7 @@ namespace Bitsmith.ViewModels
                 }
             }
         }
+
 
 
         private ContentItemViewModel _SelectedItem;

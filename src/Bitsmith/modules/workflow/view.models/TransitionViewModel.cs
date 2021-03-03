@@ -36,6 +36,7 @@ namespace Bitsmith.ViewModels
             {
                 _To = value;
                 Model.DestinationState = value.Name;
+                Name = value.Name;
                 Display = ToString();
                 OnPropertyChanged("To");
                 OnPropertyChanged("Monker");

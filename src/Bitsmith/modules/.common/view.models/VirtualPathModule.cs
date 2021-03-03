@@ -1,6 +1,5 @@
 ﻿using Bitsmith.DataServices.Abstractions;
 using Bitsmith.Models;
-using DocumentFormat.OpenXml.Bibliography;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

@@ -1,16 +1,12 @@
 ﻿using Bitsmith.DataServices;
 using Bitsmith.DataServices.Abstractions;
-using Bitsmith.Models;
 using Bitsmith.NaturalLanguage;
-using DocumentFormat.OpenXml.Office2013.Drawing.ChartStyle;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
+
 
 namespace Bitsmith.ViewModels
 {
@@ -24,10 +20,14 @@ namespace Bitsmith.ViewModels
             get { return _DataService; }
             set
             {
-                _DataService = value;
+                // must ensurelazy loaded modules are
+                // loaded before dataservice can change
+                EnsureLazyLoadedModulesSetup();
+                _DataService = value;               
                 OnPropertyChanged("DataService");
             }
         }
+
 
         public ObservableCollection<IDataService> DataServices { get; set; } = new ObservableCollection<IDataService>();
 
@@ -70,13 +70,15 @@ namespace Bitsmith.ViewModels
             {
                 if (_Chronos == null)
                 {
-                    _Chronos = new ChronosModule( DataService );
+                    _Chronos = new ChronosModule(DataService);
                     _Chronos.Setup();
+                    _Chronos.RefreshWorkEffort(Tasks.Project.Items);
                 }
                 return _Chronos;
             }
-            
         }
+
+
         public CredentialsModule Credentials { get; set; }
         public SettingsModule Settings { get; set; }
         public ContentModule Content { get; set; }
@@ -91,6 +93,14 @@ namespace Bitsmith.ViewModels
         public VirtualPathModule Paths { get; set; }
 
         public MimeModule Mimes { get; set; }
+
+        public ProjectsModule Projects { get; set; }
+
+        public SchemaModule Schema { get; set; }
+
+        public RolodexModule Rolodex { get; set; }
+
+        public DatatoolModule Datatool { get; set; } 
 
         #region overlay
 
@@ -110,9 +120,12 @@ namespace Bitsmith.ViewModels
 
         #endregion
 
+        public Action HandleDataServiceChanged { get; set; }
 
         public WorkspaceViewModel(Workspace model)
         {
+            // first time setting we don't want 
+            // 'setup lazy loaded modules to fire
             _DataServiceStrategy = model.DataServiceStrategy;
 
             DataServices.Add(new XmlDataService());
@@ -140,15 +153,29 @@ namespace Bitsmith.ViewModels
             Indexer = new IndexerModule(DataService, Settings);
             Indexer.Setup();
 
-            Content = new ContentModule(DataService, Settings, Indexer, Paths);
+            Schema = new SchemaModule(DataService, Settings);
+            Schema.Setup();
+
+            Content = new ContentModule(DataService, Settings, Indexer, Paths, Schema);
             Content.Setup(Mimes);
 
             Credentials = new CredentialsModule(DataService) { };
             Credentials.Setup();
 
+            Rolodex = new RolodexModule(DataService);
+            Rolodex.Setup();
+
+            Datatool = new DatatoolModule(DataService);
+            Datatool.Setup();
 
             Workflow = new WorkflowModule();
 
+        }
+
+        private void EnsureLazyLoadedModulesSetup()
+        {
+            var chronos = Chronos;
+            var styx = Styx;
         }
 
         internal void Save()
@@ -163,7 +190,9 @@ namespace Bitsmith.ViewModels
                 Content.DataService = _DataService;
                 Credentials.DataService = _DataService;
                 Indexer.DataService = _DataService;
+                Chronos.DataService = _DataService;               
                 Mimes.DataService = _DataService;
+                Schema.DataService = _DataService;
                 Mimes.SaveWorkspace();
             }
             if (Content.CanSaveWorkspace())
@@ -172,6 +201,11 @@ namespace Bitsmith.ViewModels
                 Content.SaveWorkspace();
             }
 
+            if (Schema.CanSaveWorkspace())
+            {
+                Schema.SetPreferences();
+                Schema.SaveWorkspace();
+            }
             if (Indexer.CanSaveWorkspace())
             {
                 Indexer.SaveWorkspace();
@@ -182,7 +216,7 @@ namespace Bitsmith.ViewModels
                 Tasks.SetPreferences();
                 Tasks.SaveWorkspace();
             }
-            if (_Chronos != null && Chronos.CanSaveWorkspace())
+            if (_Chronos !=null && _Chronos.CanSaveWorkspace())
             {
                 _Chronos.SaveWorkspace();
             }
@@ -196,5 +230,6 @@ namespace Bitsmith.ViewModels
                 Settings.SaveWorkspace();
             }
         }
+    
     }
 }

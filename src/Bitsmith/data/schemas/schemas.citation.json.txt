@@ -1,0 +1,42 @@
+﻿{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "$ref": "#/definitions/Welcome",
+    "definitions": {
+        "Citation": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "Author": {
+                    "type": "string"
+                },
+                "Source": {
+                    "type": "string"
+                },
+                "Location": {
+                    "type": "integer"
+                },
+                "Quote": {
+                    "type": "string"
+                },
+                "Note": {
+                    "type": "string"
+                },
+                "Tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "required": [
+                "Author",
+                "Location",
+                "Note",
+                "Quote",
+                "Source",
+                "Tags"
+            ],
+            "title": "Citation"
+        }
+    }
+}

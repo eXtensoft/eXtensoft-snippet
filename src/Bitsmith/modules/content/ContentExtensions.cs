@@ -2,30 +2,127 @@
 using Bitsmith.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.Data;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Media;
 
 namespace Bitsmith.Models
 {
     public static class ContentExtensions
     {
+        public static string ToCsv(this DataTable dt, char delimiter = ',')
+        {
+            int max = dt.Columns.Count;
+            StringBuilder table = new StringBuilder();
+            StringBuilder header = new StringBuilder();
+            for (int i = 0; i < max; i++)
+            {
+                var col = dt.Columns[i];
+                if (i > 0)
+                {
+                    header.Append(delimiter);
+                }
+                header.Append(col.ColumnName);
+            }
+            table.AppendLine(header.ToString());
+            foreach (DataRow row in dt.Rows)
+            {
+                StringBuilder line = new StringBuilder();
+                for (int i = 0; i < max; i++)
+                {
+                    if (i > 0)
+                    {
+                        line.Append(delimiter);
+                    }
+                    var contents = row[i].ToString();
+                    if (!string.IsNullOrWhiteSpace(contents))
+                    {
+                        line.Append(contents.EscapeCsv());
+                    }
+                }
+                table.AppendLine(line.ToString());
+            }
+            return table.ToString();
+        }
+        public static string EscapeCsv(this string text)
+        {
+            bool mustQuote = (text.Contains(",") || text.Contains("\"") || text.Contains("\r") || text.Contains("\n"));
+            if (mustQuote)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("\"");
+                foreach (char nextChar in text)
+                {
+                    sb.Append(nextChar);
+                    if (nextChar == '"')
+                        sb.Append("\"");
+                }
+                sb.Append("\"");
+                return sb.ToString();
+            }
+
+            return text;
+        }
+
+        public static List<Query> Cleanse(this List<Query> queries)
+        {
+            foreach (var query in queries)
+            {
+                foreach (var item in query.TokenQueries)
+                {
+                    item.Ids.Clear();
+                }
+            }
+            return queries;
+        }
         public static string GetHash(this Query query)
         {
+            var d = query.TokenQueries.Depopulate();
             var name = query.Name;
+            query.Name = null;
             var querytype = query.QueryType;
             query.QueryType = QueryTypeOption.None;
             var hash = query.ComputeHash();
             query.Name = name;
             query.QueryType = querytype;
+            query.TokenQueries.Repopulate(d);
             return hash;
         }
+
+        private static Dictionary<string,List<string>> Depopulate(this List<TokenQuery> tokens)
+        {
+            Dictionary<string, List<string>> d = new Dictionary<string, List<string>>();
+            tokens.ForEach(tq => {
+                var key = tq.ToKey();
+                if (!d.ContainsKey(key))
+                {
+                    d.Add(key, tq.Ids);
+                    tq.Ids.Clear();
+                }
+            });
+            return d;
+        }
+
+        private static void Repopulate(this List<TokenQuery> tokens, Dictionary<string,List<string>> entries)
+        {
+            tokens.ForEach(tq => {
+                var key = tq.ToKey();
+                if (entries.ContainsKey(key))
+                {
+                    tq.Ids = entries[key];
+                }
+            });
+        }
+
+        private static string ToKey(this TokenQuery tokenQuery)
+        {
+            return $"{tokenQuery.Token}-{tokenQuery.SearchType.ToString()}";
+        }
+
         public static string ComputeHash<T>(this T data) where T : class
         {
             var json = Newtonsoft.Json.JsonConvert.SerializeObject(data);
@@ -307,7 +404,12 @@ namespace Bitsmith.Models
             return b;
         }
 
-        private static bool StartsWithAny(this string text, IEnumerable<string> tokens)
+        public static bool StartsWithAny(this string text, params string[] items)
+        {
+            IEnumerable<string> list = new List<string>(items);
+            return text.StartsWithAny(list);
+        }
+        public static bool StartsWithAny(this string text, IEnumerable<string> tokens)
         {
             bool b = false;
             if (!string.IsNullOrWhiteSpace(text))
@@ -536,7 +638,7 @@ namespace Bitsmith.Models
             {
                 if (info.Extension.Equals(".docx",StringComparison.OrdinalIgnoreCase))
                 {
-                    return info.TryBuildFlowDocumentFromDocx(out flowDocument, termsToHighlight);
+                    //return info.TryBuildFlowDocumentFromDocx(out flowDocument, termsToHighlight);
                 }
                 else if(info.Extension.Equals(".pdf",StringComparison.OrdinalIgnoreCase))
                 {
@@ -553,70 +655,70 @@ namespace Bitsmith.Models
             return b;
         }
 
-        public static bool TryBuildFlowDocumentFromDocx(this FileInfo info, out FlowDocument flowDocument, IEnumerable<string> termsToHighlight)
-        {
-            bool b = false;
-            flowDocument = new FlowDocument();
-            try
-            {
+        //public static bool TryBuildFlowDocumentFromDocx(this FileInfo info, out FlowDocument flowDocument, IEnumerable<string> termsToHighlight)
+        //{
+        //    bool b = false;
+        //    flowDocument = new FlowDocument();
+        //    try
+        //    {
                 
-                using (var doc = DocumentFormat.OpenXml.Packaging.WordprocessingDocument.Open(info.FullName,false))
-                {
-                    //if (String.IsNullOrWhiteSpace(termToHighlight))
-                    //{
-                    //    foreach (var paragraph in doc.MainDocumentPart.Document.Body)
-                    //    {
-                    //        Paragraph p = new Paragraph(new Run(paragraph.InnerText));
+        //        using (var doc = DocumentFormat.OpenXml.Packaging.WordprocessingDocument.Open(info.FullName,false))
+        //        {
+        //            if (String.IsNullOrWhiteSpace(termToHighlight))
+        //            {
+        //                foreach (var paragraph in doc.MainDocumentPart.Document.Body)
+        //                {
+        //                    Paragraph p = new Paragraph(new Run(paragraph.InnerText));
 
-                    //        flowDocument.Blocks.Add(p);                        
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    foreach (var paragraph in doc.MainDocumentPart.Document.Body)
-                    //    {
+        //                    flowDocument.Blocks.Add(p);
+        //                }
+        //            }
+        //            else
+        //            {
+        //                foreach (var paragraph in doc.MainDocumentPart.Document.Body)
+        //                {
 
-                    //        if (!paragraph.InnerText.Contains(termToHighlight))
-                    //        {
-                    //            Paragraph p = new Paragraph(new Run(paragraph.InnerText));
-                    //            flowDocument.Blocks.Add(p);
-                    //        }
-                    //        else
-                    //        {
-                    //            Paragraph p = new Paragraph();
-                    //            string text = paragraph.InnerText.Trim();
-                    //            int pos = 0;
-                    //            while (pos < text.Length)
-                    //            {
-                    //                int x = text.IndexOf(termToHighlight,pos);
-                    //                if (x < 0)
-                    //                {
-                    //                    string s = text.Substring(pos);
-                    //                    p.Inlines.Add(new Run(s));
-                    //                    pos = text.Length;
-                    //                }
-                    //                else
-                    //                {
-                    //                    string s = text.Substring(pos, x-pos);
-                    //                    string t = text.Substring(x, termToHighlight.Length);
-                    //                    p.Inlines.Add(new Run(s));
-                    //                    p.Inlines.Add(new Span(new Run(t) { Background = Brushes.Yellow }));
-                    //                    pos = x + termToHighlight.Length;
-                    //                }
+        //                    if (!paragraph.InnerText.Contains(termToHighlight))
+        //                    {
+        //                        Paragraph p = new Paragraph(new Run(paragraph.InnerText));
+        //                        flowDocument.Blocks.Add(p);
+        //                    }
+        //                    else
+        //                    {
+        //                        Paragraph p = new Paragraph();
+        //                        string text = paragraph.InnerText.Trim();
+        //                        int pos = 0;
+        //                        while (pos < text.Length)
+        //                        {
+        //                            int x = text.IndexOf(termToHighlight, pos);
+        //                            if (x < 0)
+        //                            {
+        //                                string s = text.Substring(pos);
+        //                                p.Inlines.Add(new Run(s));
+        //                                pos = text.Length;
+        //                            }
+        //                            else
+        //                            {
+        //                                string s = text.Substring(pos, x - pos);
+        //                                string t = text.Substring(x, termToHighlight.Length);
+        //                                p.Inlines.Add(new Run(s));
+        //                                p.Inlines.Add(new Span(new Run(t) { Background = Brushes.Yellow }));
+        //                                pos = x + termToHighlight.Length;
+        //                            }
 
-                    //            }
-                    //            flowDocument.Blocks.Add(p);
-                    //        }
-                    //    }
-                    //}
-                    b = true;
-                }
-            }
-            catch (Exception ex)
-            {
-            }
+        //                        }
+        //                        flowDocument.Blocks.Add(p);
+        //                    }
+        //                }
+        //            }
+        //            b = true;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //    }
 
-            return b;
-        }
+        //    return b;
+        //}
     }
 }

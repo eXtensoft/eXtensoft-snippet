@@ -14,5 +14,7 @@
         </Grid.ColumnDefinitions>
         <local:WorkflowListView Grid.Column="0"/>
         <local:WorkflowView Grid.Column="2"/>
+
+
     </Grid>
 </UserControl>

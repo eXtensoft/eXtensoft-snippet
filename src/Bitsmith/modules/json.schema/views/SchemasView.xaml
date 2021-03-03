@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="Bitsmith.SchemasView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Bitsmith"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" MinWidth="150"/>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="*"/>
+            
+        </Grid.ColumnDefinitions>
+        <GroupBox Grid.Column="0" Margin="10,5">
+            <GroupBox.Header>
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox Content="Enable Content Schemas" IsChecked="{Binding Path=Settings.IsEnableContentSchemas}"/>
+                    <Label Content="{Binding Path=Display}"/>
+                </StackPanel>
+
+
+            </GroupBox.Header>
+            <GroupBox.Content>
+                <ListBox DataContext="{Binding Path=Schema}" Margin="5" ItemsSource="{Binding Path=JsonSchemas}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="{Binding Path=Display}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </GroupBox.Content>
+        </GroupBox>
+
+    </Grid>
+</UserControl>

@@ -12,11 +12,13 @@ namespace Bitsmith.Models
         [XmlAttribute("display")]
         public string Display { get; set; }
         [XmlAttribute("mime")]
-        public string Mime { get; set; }
+        public string Mime { get; set; }      
         [XmlAttribute("scope")]
         public ScopeOption Scope { get; set; }
         [XmlAttribute("lang")]
         public string Language { get; set; }
+        [XmlAttribute("type")]
+        public string Schema { get; set; } = "none";
         [XmlElement("Path")]
         public List<string> Paths { get; set; } = new List<string>() { };
         [XmlElement("Tag")]

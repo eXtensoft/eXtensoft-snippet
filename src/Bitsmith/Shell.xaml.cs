@@ -116,6 +116,22 @@ namespace Bitsmith
             }
         }
 
+        private ICommand _NavigateToRolodexCommand;
+        public ICommand NavigateToRolodexCommand
+        {
+            get
+            {
+                if (_NavigateToRolodexCommand == null)
+                {
+                    _NavigateToRolodexCommand = new RelayCommand(
+                    param => { Workspace.Instance.State.ExecuteTransition("Settings"); },
+                    param => true);
+                }
+                return _NavigateToRolodexCommand;
+            }
+        }
+
+
         private ChronosView _Chronos;
         public ChronosView Chronos
         {
@@ -178,6 +194,34 @@ namespace Bitsmith
                     _Settings = new SettingsView();
                 }
                 return _Settings;
+           
+            
+            }
+        }
+
+        private RolodexView _Rolodex;
+        public RolodexView Rolodex
+        {
+            get
+            {
+                if (_Rolodex == null)
+                {
+                    _Rolodex = new RolodexView();
+                }
+                return _Rolodex;
+            }
+        }
+
+        private DatatoolView _Datatool;
+        public DatatoolView Datatool
+        {
+            get
+            {
+                if (_Datatool == null)
+                {
+                    _Datatool = new DatatoolView();
+                }
+                return _Datatool;
             }
         }
 
@@ -252,7 +296,19 @@ namespace Bitsmith
                 }
             });
 
+            mgr.RegisterEndpointAction(ActivityStateOption.Rolodex.ToString(), EndpointOption.Arrival, new Action[] { () =>
+                {
+                    grdRoot.Children.Clear();
+                    grdRoot.Children.Add(Rolodex);
+                }
+            });
 
+            mgr.RegisterEndpointAction(ActivityStateOption.Datatool.ToString(), EndpointOption.Arrival, new Action[] { () =>
+                {
+                    grdRoot.Children.Clear();
+                    grdRoot.Children.Add(Datatool);
+                }
+            });
             mgr.RegisterEndpointAction(ActivityStateOption.LoggedOff.ToString(), EndpointOption.Arrival, OnLoggedOff);
 
             this.InputBindings.Add(new KeyBinding(NavigateToCredentialsCommand, new KeyGesture(Key.P, ModifierKeys.Alt)));

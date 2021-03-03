@@ -21,6 +21,11 @@
             <local:ImageMapConverter x:Key="cvtImageMaps"/>
             <local:BooleanToBrushConverter x:Key="Bool2Brush"/>
             <local:TagsConverter x:Key="cvtTags"/>
+            <ObjectDataProvider x:Key="Datatypes" MethodName="GetValues" ObjectType="{x:Type sys:Enum }">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="model:DatatypeOption"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
             <ObjectDataProvider x:Key="Scopes" MethodName="GetValues" ObjectType="{x:Type sys:Enum }">
                 <ObjectDataProvider.MethodParameters>
                     <x:Type TypeName="model:ScopeOption"/>

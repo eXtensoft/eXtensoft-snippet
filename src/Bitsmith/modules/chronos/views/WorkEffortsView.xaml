@@ -6,7 +6,12 @@
              xmlns:local="clr-namespace:Bitsmith"
              mc:Ignorable="d" DataContextChanged="UserControl_DataContextChanged"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid x:Name="grdWorkeffort">
+    <Grid x:Name="grdWorkeffort" Background="LightPink">
+        <Grid Margin="40,20" Background="Gainsboro">
+            <TreeView ItemsSource="{Binding}">
             
+            </TreeView>
+        </Grid>
+
     </Grid>
 </UserControl>

@@ -38,6 +38,11 @@ namespace Bitsmith.BusinessProcess
             return model;
         }
 
+        public static void ToDiagram(this StateMachine machine, Workflow workflow)
+        {
+            
+        }
+
         public static string ToDsl(this StateMachine machine, Workflow workflow)
         {
             StringBuilder sb = new StringBuilder();
@@ -51,7 +56,19 @@ namespace Bitsmith.BusinessProcess
             foreach (var state in machine.States)
             {
                 sb.AppendLine($"state");
-                sb.AppendLine($"\t[name: {state.Name}] [display: {state.Display}]");
+                string statename = $"\t[name: {state.Name}] [display: {state.Display}]";
+                if (machine.BeginState.Equals(state.Name, StringComparison.OrdinalIgnoreCase))
+                {
+                    sb.AppendLine($"{statename} [begin]");
+                }
+                else if (machine.EndStates.Contains(state.Name))
+                {
+                    sb.AppendLine($"{statename} [end]");
+                }
+                else
+                {
+                    sb.AppendLine(statename);
+                }
 
                 foreach (var transition in machine.Transitions.Where(x => x.OriginState.Equals(state.Name, StringComparison.OrdinalIgnoreCase)))
                 {

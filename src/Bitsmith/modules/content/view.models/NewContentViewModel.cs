@@ -1,8 +1,11 @@
 ﻿using Bitsmith.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -10,8 +13,186 @@ namespace Bitsmith.ViewModels
 {
     public class NewContentViewModel : INotifyPropertyChanged
     {
+        private static Dictionary<string, Type> _ColumnTypeMaps = new Dictionary<string, Type>()
+        {
+            { "Text", typeof(string) },
+            { "Date" ,typeof(DateTime) },
+            { "Integer" ,typeof(Int32) },
+            { "Decimal" ,typeof(decimal) },
+            { "Yes/No" ,typeof(bool) },
+        };
 
-        private const int MaxLength = 300;
+        private ICommand _SaveTabularDataCommand;
+        public ICommand SaveTabularDataCommand
+        {
+            get
+            {
+                if (_SaveTabularDataCommand == null)
+                {
+                    _SaveTabularDataCommand = new RelayCommand(
+                    param => SaveTabularData(),
+                    param => CanSaveTabularData());
+                }
+                return _SaveTabularDataCommand;
+            }
+        }
+        private bool CanSaveTabularData()
+        {
+            return TabularData != null && TabularData.Rows.Count > 0;
+        }
+        private void SaveTabularData()
+        {
+            Body = TabularData.ToCsv();
+        }
+
+
+        private bool _IsTabularDataDirty = true;
+        public bool IsTabularDataDirty
+        {
+            get { return _IsTabularDataDirty; }
+            set
+            {
+                _IsTabularDataDirty = value;
+                OnPropertyChanged("IsTabularDataDirty");
+            }
+        }
+
+        private ICommand _AddColumnCommand;
+        public ICommand AddColumnCommand
+        {
+            get
+            {
+                if (_AddColumnCommand == null)
+                {
+                    _AddColumnCommand = new RelayCommand(
+                    param => AddColumn(),
+                    param => CanAddColumn());
+                }
+                return _AddColumnCommand;
+            }
+        }
+        private bool CanAddColumn()
+        {
+            return SelectedColumnType != null && !String.IsNullOrWhiteSpace(ColumnName);
+        }
+        private void AddColumn()
+        {
+            TabularData.Columns.Add(new DataColumn(ColumnName, _ColumnTypeMaps[SelectedColumnType.Key]));
+            ColumnName = string.Empty;
+            RefreshTabularData();
+        }
+
+        private void RefreshTabularData()
+        {
+            var dt = TabularData;
+            TabularData = null;
+            OnPropertyChanged("TabularData");
+            TabularData = dt;
+            OnPropertyChanged("TabularData");
+            RefreshColumns();   
+
+        }
+        private void RefreshColumns()
+        {
+            Columns.Clear();
+            foreach (DataColumn item in TabularData.Columns)
+            {
+                Columns.Add(new DataColumnViewModel(item) { RefreshData = RefreshTabularData });
+            }
+        }
+
+
+        private string _ColumnName;
+        public string ColumnName
+        {
+            get
+            {
+                return _ColumnName;
+            }
+            set
+            {
+                _ColumnName = value;
+                OnPropertyChanged("ColumnName");
+            }
+        }
+
+
+        private TypedItem _SelectedColumnType;
+        public TypedItem SelectedColumnType
+        {
+            get { return _SelectedColumnType; }
+            set
+            {
+                _SelectedColumnType = value;
+                OnPropertyChanged("SelectedColumnType");
+            }
+        }
+        public ObservableCollection<TypedItem> ColumnTypes { get; set; }
+
+        public DataColumnCollection DataColumns
+        {
+            get
+            {
+                return TabularData.Columns;
+            }
+        }
+
+        public ObservableCollection<DataColumnViewModel> Columns { get; set; } = new ObservableCollection<DataColumnViewModel>();
+        public DataTable TabularData { get; set; } = new DataTable();
+
+
+
+        private SchemaBuilderViewModel _SelectedSchema;
+        public SchemaBuilderViewModel SelectedSchema
+        {
+            get { return _SelectedSchema; }
+            set
+            {
+                _SelectedSchema = value;
+                OnPropertyChanged("SelectedSchema");
+            }
+        }
+       
+        public void EnsureSelectedSchema(SchemaBuilderViewModel selectedSchema)
+        {
+            if (SelectedSchema == null || 
+                !SelectedSchema.Token.Equals(selectedSchema.Token, StringComparison.OrdinalIgnoreCase))
+            {
+                SelectedSchema = selectedSchema;
+            }
+        }
+
+        private bool _IsEnableContentSchemas = false;
+        public bool IsEnableContentSchemas
+        {
+            get
+            {
+                return _IsEnableContentSchemas;
+            }
+            set
+            {
+                _IsEnableContentSchemas = value;
+                if (!value && ContentType == ContentTypeOption.Schema)
+                {
+                    ContentType = ContentTypeOption.Text;
+                    OnPropertyChanged("IsText");
+                }
+                OnPropertyChanged("IsEnableContentSchemas");
+                OnPropertyChanged("IsShowSchemas");
+            }
+        }
+
+
+        private  int _MaxLength = 300;
+        public int MaxLength
+        {
+            get { return _MaxLength; }
+            set
+            {
+                _MaxLength = value;
+                OnPropertyChanged("MaxLength");
+            }
+        }
 
         private TagMapViewModel _SelectedTag;
         public TagMapViewModel SelectedTag
@@ -262,9 +443,6 @@ namespace Bitsmith.ViewModels
                 {
                     _Mime = "url";
                 }
-                //IsLink = _ContentType == ContentTypeOption.Link;
-                //IsFile = _ContentType == ContentTypeOption.File;
-                //IsText = _ContentType == ContentTypeOption.Text;
             }
         } 
 
@@ -315,9 +493,55 @@ namespace Bitsmith.ViewModels
             }
         }
 
+        public bool IsSchema
+        {
+            get
+            {
+                return ContentType == ContentTypeOption.Schema;
+            }
+            set
+            {
+                if (value)
+                {
+                    ContentType = ContentTypeOption.Schema;
+                }
+            }
+        }
+
+        public bool IsTabular
+        {
+            get
+            {
+                return ContentType == ContentTypeOption.TabularData;
+            }
+            set
+            {
+                if (value)
+                {
+                    ContentType = ContentTypeOption.TabularData;
+                    Mime = "tab";
+                }
+            }
+        }
+
+        private bool _IsShowSchemas = true;
+        public bool IsShowSchemas
+        {
+            get { return _IsEnableContentSchemas && _IsShowSchemas; }
+            set
+            {
+                _IsShowSchemas = value;
+                OnPropertyChanged("IsShowSchemas");
+            }
+        }
+
         public NewContentViewModel()
         {
             Paths = new List<string>(new string[] { $"/content" });
+            ColumnTypes = new ObservableCollection<TypedItem>(from key in _ColumnTypeMaps.Keys select new TypedItem(key, key));
+            SelectedColumnType = ColumnTypes[0];
+
+            RefreshTabularData();
         }
 
         internal void Refresh(TagMapViewModel tag, ContentTypeOption contentType)

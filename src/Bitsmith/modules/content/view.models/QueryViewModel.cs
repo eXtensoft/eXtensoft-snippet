@@ -1,10 +1,50 @@
 ﻿using Bitsmith.Models;
 using System;
+using System.Windows.Input;
 
 namespace Bitsmith.ViewModels
 {
     public class QueryViewModel : ViewModel<Query>
     {
+
+        private ICommand _CycleQueryTypeCommand;
+        public ICommand CycleQueryTypeCommand
+        {
+            get
+            {
+                if (_CycleQueryTypeCommand == null)
+                {
+                    _CycleQueryTypeCommand = new RelayCommand(
+                    param => CycleQueryType(),
+                    param => CanCycleQueryType());
+                }
+                return _CycleQueryTypeCommand;
+            }
+        }
+        private bool CanCycleQueryType()
+        {
+            return true;
+        }
+        private void CycleQueryType()
+        {
+            switch (Model.QueryType)
+            {
+                case QueryTypeOption.None:
+                    break;
+                case QueryTypeOption.Recent:
+                    Model.QueryType = QueryTypeOption.Favorite;
+                    break;
+                case QueryTypeOption.Favorite:
+                    Model.QueryType = QueryTypeOption.None;
+                    break;
+                case QueryTypeOption.Named:
+                    break;
+                default:
+                    break;
+            }
+            OnPropertyChanged("QueryType");
+        }
+
         public string QueryText
         {
             get
@@ -42,6 +82,16 @@ namespace Bitsmith.ViewModels
             }
         }
 
+        public string SearchType 
+        {
+            get
+            {
+                return $"querytype-search-{(int)Model.GetSearchType()}";
+            }
+            set { }
+        
+        }
+
         public string Operator
         {
             get
@@ -50,6 +100,7 @@ namespace Bitsmith.ViewModels
             }
             set
             {
+
             }
         }
 

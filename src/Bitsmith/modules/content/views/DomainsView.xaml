@@ -73,14 +73,15 @@
             <TabItem Header="Workflows">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition Width="32*"/>
+                        <ColumnDefinition Width="298*"/>
+                        <ColumnDefinition Width="329*"/>
                     </Grid.ColumnDefinitions>
-                    <ItemsControl ItemsSource="{Binding Path=DomainWorkflowSelections}">
+                    <ItemsControl ItemsSource="{Binding Path=DomainWorkflowSelections}" Grid.ColumnSpan="3" Margin="0,0,328.857,-0.286">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <CheckBox Content="{Binding Path=Display}" Unchecked="CheckBox_Unchecked" Checked="CheckBox_Checked" Tag="{Binding Path=Id}"/>
+                                    <CheckBox Content="{Binding Path=Display}" IsChecked="{Binding Path=IsSelected}" Tag="{Binding Path=Id}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>

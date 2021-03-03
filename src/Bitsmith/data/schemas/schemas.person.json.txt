@@ -1,0 +1,26 @@
+﻿{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "$ref": "#/definitions/Welcome",
+    "definitions": {
+        "Person": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "Name": {
+                    "type": "string"
+                },
+                "Email": {
+                    "type": "string"
+                },
+                "Age": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "Email",
+                "Name"
+            ],
+            "title": "Person"
+        }
+    }
+}

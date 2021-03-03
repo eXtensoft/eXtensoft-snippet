@@ -1,0 +1,69 @@
+﻿
+object model
+	Task - singular, homogenous, encapsulated unit-of-work
+
+
+	WorkEffortViewModel
+		a grouping collection
+
+
+
+selection & presentation
+	
+
+
+	project planning tasks
+		vs actual work effort task
+		it is the structure, or shape of the project tree
+		that may contain tasks at any node.
+	each project node (task) may be composed of or 'have' ienumerable<task> leaves
+
+
+	ptask
+		ptask
+			task[]
+			ptask
+			ptask
+			ptask
+				task[]
+				ptask
+			ptask
+				ptask
+					ptask
+
+	need project designer (ala Styx)
+		include
+			-template projects
+			-can be 'pure' project nodes, edges
+			= can have 'task'
+
+
+simple version
+	Grouping Task		Project/WorkEffort/Task->Task->Task  .Activity[]
+		Tree structure
+
+		Organizing Principle
+			WorkEffort {Phase Name ('Sprint-{n}', Begin->End, Unit [Day,Week,Month], Duration: [1,2,3...]}
+				Task[]
+
+[x] Show Activities
+[+] [-]  (Expand/Collapse All)  [Grouping | Grouping/Task]
+
+									[	WorkEffort +- Estimate		+- Actual		]
+
+[							]	||	[estimate pts/hrs]	||	actual [rollup-sum]	[sum]	||	[ +- activities rollup-sum sum] ||	[estimate/actual/burndown]	||	WorkEffortView
+[-]	GroupingTaskId
+	[+]	TaskId
+	[+]	TaskId
+	[+]	TaskId
+
+[-]	GroupingTaskId
+	[-]	TaskId
+		[+]	TaskId
+			TaskId 
+		TaskId
+			Activity
+			Activity
+
+[+]	GroupingTaskId
+

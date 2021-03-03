@@ -12,6 +12,8 @@ namespace Bitsmith.Models
     {
         [XmlAttribute("name")]
         public string Name { get; set; }
+        [XmlAttribute("display")]
+        public string Display { get; set; }
         public object Value { get; set; }
 
         public override string ToString()

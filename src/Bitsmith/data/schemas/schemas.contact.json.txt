@@ -1,0 +1,51 @@
+﻿{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "$ref": "#/definitions/Welcome",
+    "definitions": {
+        "Contact": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "LastName": {
+                    "type": "string"
+                },
+                "FirstName": {
+                    "type": "string"
+                },
+                "Email": {
+                    "type": "string"
+                },
+                "PhoneNumbers": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PhoneNumber"
+                    }
+                }
+            },
+            "required": [
+                "Email",
+                "FirstName",
+                "LastName",
+                "PhoneNumbers"
+            ],
+            "title": "Contact"
+        },
+        "PhoneNumber": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "Type": {
+                    "type": "string"
+                },
+                "Number": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "Number",
+                "Type"
+            ],
+            "title": "PhoneNumber"
+        }
+    }
+}

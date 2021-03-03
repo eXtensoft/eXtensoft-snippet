@@ -7,111 +7,139 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
-    <DockPanel LastChildFill="True">
-        <Expander ExpandDirection="Right" DockPanel.Dock="Left">
-            <Expander.Header>
-                <Label Content="Machine"/>
-            </Expander.Header>
-            <Expander.Content>
+    <Grid Grid.Column="2"  DataContext="{Binding Path=Settings.SelectedWorkflow}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <GroupBox Grid.Row="0" Grid.Column="0">
+            <GroupBox.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Button Style="{StaticResource AddCommandButton}" Command="{Binding Path=AddStateCommand}"/>
+                    <TextBlock Text="Workflow States"/>
+                </StackPanel>
 
-                        <TabControl MaxWidth="400" DataContext="{Binding Path=Settings.SelectedWorkflow}">
-                            <TabItem Header="{Binding Path=Name}">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="10"/>
-                                        <RowDefinition Height="*"/>
-                                    </Grid.RowDefinitions>
-                                    <GroupBox Grid.Row="0">
-                                        <GroupBox.Header>
-                                            <Button Style="{StaticResource AddCommandButton}" Command="{Binding Path=AddStateCommand}"/>
-                                        </GroupBox.Header>
-                                        <GroupBox.Content>
-                                            <ListBox ItemsSource="{Binding Path=States}">
-                                                <ListBox.ItemTemplate>
-                                                    <DataTemplate>
-                                                <!--<TextBlock Text="{Binding Path=Display}"/>-->
-                                                <Grid>
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="Auto" MinWidth="50"/>
-                                                                <ColumnDefinition Width="*"/>
-                                                                <ColumnDefinition Width="Auto"/>
-                                                            </Grid.ColumnDefinitions>
-                                                            <TextBox Grid.Column="0" Text="{Binding Path=Display}"/>
-                                                            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                                                                <CheckBox IsChecked="{Binding Path=IsBegin}"/>
-                                                                <Label Content="Start  End"/>
-                                                                <CheckBox IsChecked="{Binding Path=IsEnd}"/>
-                                                            </StackPanel>
-                                                            <TextBlock Grid.Column="2" Text="{Binding Path=Name}"/>
-                                                        </Grid>
-                                                    </DataTemplate>
-                                                </ListBox.ItemTemplate>
-                                            </ListBox>
-                                        </GroupBox.Content>
-                                    </GroupBox>
-                                    <GroupBox Grid.Row="2">
-                                        <GroupBox.Header>
-                                            <Button Style="{StaticResource AddCommandButton}" Command="{Binding Path=AddTransitionCommand}"/>
-                                        </GroupBox.Header>
-                                        <GroupBox.Content>
-                                            <ListBox x:Name="lsbTransitions" ItemsSource="{Binding Path=Transitions}">
-                                                <ListBox.ItemTemplate>
-                                                    <DataTemplate>
-                                                <!--<TextBlock Text="transition"/>-->
-                                                <Grid>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                        <ColumnDefinition Width="*"/>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition Height="Auto"/>
-                                                        <RowDefinition Height="5"/>
-                                                        <RowDefinition Height="Auto"/>
-                                                    </Grid.RowDefinitions>
-                                                    <Label Grid.Row="0" Grid.Column="3" HorizontalAlignment="Right" Content="From:"/>
-                                                    <ComboBox Grid.Row="0" Grid.Column="4" ItemsSource="{Binding Path=States}" 
-                                                      SelectedItem="{Binding Path=From}"
-                                                      DisplayMemberPath="Display"/>
-                                                    <Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" Content="Name:"/>
-                                                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=Display}"/>
-                                                    <Label Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" Content="Moniker:"/>
-                                                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Path=Moniker}"/>
-                                                    <Label Grid.Row="2" Grid.Column="3" HorizontalAlignment="Right" Content="To:"/>
-                                                    <ComboBox Grid.Row="2" Grid.Column="4" ItemsSource="{Binding Path=States}" 
-                                                      SelectedItem="{Binding Path=To}" 
-                                                      DisplayMemberPath="Display"/>
-                                                </Grid>
-                                            </DataTemplate>
-                                                </ListBox.ItemTemplate>
-                                            </ListBox>
-                                        </GroupBox.Content>
-                                    </GroupBox>
+            </GroupBox.Header>
+            <GroupBox.Content>
+                <ListView ItemsSource="{Binding Path=States}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Style="{StaticResource RemoveCommandButton}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
 
-                                </Grid>
-                            </TabItem>
-                            <TabItem >
-                                <TabItem.Header>
-                                    <StackPanel Orientation="Horizontal">
-                                <Button Style="{StaticResource RefreshCommandButton}" Command="{Binding Path=ToDslCommand}"/>
-                                        <Label Content="DSL" Margin="5,0"/>
-                                    </StackPanel>
-                                </TabItem.Header>
-                                <TabItem.Content>
-                                    <TextBox TextWrapping="NoWrap" 
-                                     AcceptsReturn="True" AcceptsTab="True" 
-                                     VerticalScrollBarVisibility="Visible" 
-                                             Text="{Binding Path=DslBody}"  
-                                     HorizontalScrollBarVisibility="Auto"/>
-                                </TabItem.Content>
+                            <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Path=Name}" />
+                            <GridViewColumn Header="Display">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding Path=Display}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Start">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox Margin="5,0" IsChecked="{Binding Path=IsBegin}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="End">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox Margin="5,0" IsChecked="{Binding Path=IsEnd}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </GroupBox.Content>
+        </GroupBox>
 
-                            </TabItem>
-                        </TabControl>
+        <GroupBox Grid.Row="2" Grid.Column="0">
+            <GroupBox.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Button Style="{StaticResource AddCommandButton}" Command="{Binding Path=AddTransitionCommand}"/>
+                    <TextBlock Text="Workflow Transitions"/>
+                </StackPanel>
+            </GroupBox.Header>
+            <GroupBox.Content>
+                <ListView x:Name="lsbTransitions" ItemsSource="{Binding Path=Transitions}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Style="{StaticResource RemoveCommandButton}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Path=Name}" />
+                            <GridViewColumn Header="Display">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding Path=Display}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="From">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ComboBox Grid.Row="0" Grid.Column="4" ItemsSource="{Binding Path=States}" 
+                                                SelectedItem="{Binding Path=From}"
+                                                DisplayMemberPath="Display"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="To">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ComboBox Grid.Row="2" Grid.Column="4" ItemsSource="{Binding Path=States}" 
+                                                SelectedItem="{Binding Path=To}" 
+                                                DisplayMemberPath="Display"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </GroupBox.Content>
+        </GroupBox>
 
-            </Expander.Content>
-        </Expander>
-    </DockPanel>
+        <TabControl Grid.Column="1" Grid.RowSpan="3">
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Style="{StaticResource RefreshCommandButton}" Command="{Binding Path=ToDslCommand}"/>
+                        <Label Content="DSL" Margin="5,0"/>
+                    </StackPanel>
+                </TabItem.Header>
+
+                <TextBox TextWrapping="NoWrap" 
+                            AcceptsReturn="True" AcceptsTab="True" 
+                            VerticalScrollBarVisibility="Visible" 
+                                    Text="{Binding Path=DslBody}"  
+                            HorizontalScrollBarVisibility="Auto"/>
+
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Diagram" Margin="5,0"/>
+                    </StackPanel>
+                </TabItem.Header>
+            </TabItem>
+        </TabControl>
+
+    </Grid>
+
 </UserControl>

@@ -1,0 +1,60 @@
+﻿ <Task id="3ddecf44-3973-4dd9-9f49-7621b243e570" workflow="ac8f2435-cc07-4095-8314-e9c935b7c183" domain="cb883c5d-3141-4a67-97d8-6475527f3179" dueOn="2021-01-12T15:49:57.0138346-05:00">
+  <Identifier id="3ddecf44-3973-4dd9-9f49-7621b243e570" display="X-101" token="x-101" masterId="cb883c5d-3141-4a67-97d8-6475527f3179" />
+  <DueOn>2021-01-15T15:49:57.0138346-05:00</DueOn>
+  <Display>Content Api</Display>
+  <Dispositions>
+   <Disposition key="importance" display="None" token="none" start="2021-01-12T15:49:57.0138346-05:00" />
+   <Disposition key="urgency" display="None" token="none" start="2021-01-12T15:49:57.0138346-05:00" />
+   <Disposition key="status" display="None" token="none" start="2021-01-12T15:49:57.0138346-05:00" />
+  </Dispositions>
+ </Task>
+ <Task id="f1edf681-851f-4784-8596-38f1535660ee" workflow="ac8f2435-cc07-4095-8314-e9c935b7c183" domain="cb883c5d-3141-4a67-97d8-6475527f3179" dueOn="2021-01-12T15:50:45.9832993-05:00">
+  <Identifier id="f1edf681-851f-4784-8596-38f1535660ee" display="X-201" token="x-201" masterId="cb883c5d-3141-4a67-97d8-6475527f3179" />
+  <DueOn>2021-01-15T15:50:45.9832993-05:00</DueOn>
+  <Display>Desktop Client</Display>
+  <Dispositions>
+   <Disposition key="importance" display="None" token="none" start="2021-01-12T15:50:45.9832993-05:00" />
+   <Disposition key="urgency" display="None" token="none" start="2021-01-12T15:50:45.9832993-05:00" />
+   <Disposition key="status" display="None" token="none" start="2021-01-12T15:50:45.9832993-05:00" />
+  </Dispositions>
+ </Task>
+ <Task id="8c323c4c-d52a-4656-9ef3-bba6de01ccef" workflow="ac8f2435-cc07-4095-8314-e9c935b7c183" domain="cb883c5d-3141-4a67-97d8-6475527f3179" dueOn="2021-01-12T15:51:35.6154271-05:00">
+  <Identifier id="8c323c4c-d52a-4656-9ef3-bba6de01ccef" display="X-102" token="x-102" masterId="3ddecf44-3973-4dd9-9f49-7621b243e570" />
+  <DueOn>2021-01-15T15:51:35.6154271-05:00</DueOn>
+  <Display>Api Auth</Display>
+  <Dispositions>
+   <Disposition key="importance" display="None" token="none" start="2021-01-12T15:51:35.6154271-05:00" />
+   <Disposition key="urgency" display="None" token="none" start="2021-01-12T15:51:35.6154271-05:00" />
+   <Disposition key="status" display="None" token="none" start="2021-01-12T15:51:35.6154271-05:00" />
+  </Dispositions>
+ </Task>
+ <Task id="8514d264-7cdd-4365-bc1d-b86bcdfae687" workflow="ac8f2435-cc07-4095-8314-e9c935b7c183" domain="cb883c5d-3141-4a67-97d8-6475527f3179" dueOn="2021-01-12T15:51:56.9913067-05:00">
+  <Identifier id="8514d264-7cdd-4365-bc1d-b86bcdfae687" display="X-103" token="x-103" masterId="3ddecf44-3973-4dd9-9f49-7621b243e570" />
+  <DueOn>2021-01-15T15:51:56.9913067-05:00</DueOn>
+  <Display>Api Infrastructure</Display>
+  <Dispositions>
+   <Disposition key="importance" display="None" token="none" start="2021-01-12T15:51:56.9913067-05:00" />
+   <Disposition key="urgency" display="None" token="none" start="2021-01-12T15:51:56.9913067-05:00" />
+   <Disposition key="status" display="None" token="none" start="2021-01-12T15:51:56.9913067-05:00" />
+  </Dispositions>
+ </Task>
+ <Task id="89d6cd72-c8ec-4148-b95a-f233c01ffda2" workflow="ac8f2435-cc07-4095-8314-e9c935b7c183" domain="cb883c5d-3141-4a67-97d8-6475527f3179" dueOn="2021-01-12T15:52:26.3998213-05:00">
+  <Identifier id="89d6cd72-c8ec-4148-b95a-f233c01ffda2" display="X-201" token="x-201" masterId="f1edf681-851f-4784-8596-38f1535660ee" />
+  <DueOn>2021-01-15T15:52:26.3998213-05:00</DueOn>
+  <Display>Styling Assets</Display>
+  <Dispositions>
+   <Disposition key="importance" display="None" token="none" start="2021-01-12T15:52:26.3998213-05:00" />
+   <Disposition key="urgency" display="None" token="none" start="2021-01-12T15:52:26.3998213-05:00" />
+   <Disposition key="status" display="None" token="none" start="2021-01-12T15:52:26.3998213-05:00" />
+  </Dispositions>
+ </Task>
+ <Task id="c78efb33-9d48-45d8-9264-7084ef2e59eb" workflow="ac8f2435-cc07-4095-8314-e9c935b7c183" domain="cb883c5d-3141-4a67-97d8-6475527f3179" dueOn="2021-01-12T15:52:45.0069216-05:00">
+  <Identifier id="c78efb33-9d48-45d8-9264-7084ef2e59eb" display="X-203" token="x-203" masterId="f1edf681-851f-4784-8596-38f1535660ee" />
+  <DueOn>2021-01-15T15:52:45.0069216-05:00</DueOn>
+  <Display>Api Client</Display>
+  <Dispositions>
+   <Disposition key="importance" display="None" token="none" start="2021-01-12T15:52:45.0069216-05:00" />
+   <Disposition key="urgency" display="None" token="none" start="2021-01-12T15:52:45.0069216-05:00" />
+   <Disposition key="status" display="None" token="none" start="2021-01-12T15:52:45.0069216-05:00" />
+  </Dispositions>
+ </Task>

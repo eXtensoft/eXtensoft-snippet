@@ -6,11 +6,20 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
+using System.Windows.Input;
 
 namespace Bitsmith
 {
-    public class TagResolver
+    public class TagResolver : INotifyPropertyChanged
     {
+        public int MaxRecentTags { get; set; } = 10;
+        public int MaxPopularTags { get; set; } = 10;
+        public void TagsFilterMin()
+        {
+            RefreshFiltering();
+        }
+
+
         private DomainViewModel _Domain;
         public DomainViewModel Domain
         {
@@ -23,11 +32,12 @@ namespace Bitsmith
 
                 _Domain = value;
                 _SelectedDomain = _Domain.Id;
-            foreach (var item in TagItems)
-            {
-                item.Model.Counters.Total(_SelectedDomain);
-            }
-            RefreshFiltering();                             
+                foreach (var item in TagItems)
+                {
+                    item.Model.Counters.Total(_SelectedDomain);
+                }
+                RefreshFiltering();
+                OnPropertyChanged("DomainTagExclusions");
             }
         }
 
@@ -37,6 +47,8 @@ namespace Bitsmith
         }
 
         private string _SelectedDomain = AppConstants.Default;
+
+
 
 
         private ICollectionView _Items;
@@ -82,6 +94,57 @@ namespace Bitsmith
             }
         }
 
+        private ICommand _RemoveTagExclusionsCommand;
+        public ICommand RemoveTagExclusionsCommand
+        {
+            get
+            {
+                if (_RemoveTagExclusionsCommand == null)
+                {
+                    _RemoveTagExclusionsCommand = new RelayCommand(
+                    param => RemoveTagExclusions(),
+                    param => CanRemoveTagExclusions());
+                }
+                return _RemoveTagExclusionsCommand;
+            }
+        }
+        private bool CanRemoveTagExclusions()
+        {
+            return true;
+        }
+        private void RemoveTagExclusions()
+        {
+            if (Domain != null && Exclusions.ContainsKey(Domain.Id))
+            {
+                var removals = Exclusions[Domain.Id].Where(t => !t.StartsWithAny("x-", "created", "modified")).ToList();
+                removals.ForEach(r => { Exclusions[Domain.Id].Remove(r); });
+                _DomainTagExclusions.Refresh();
+            }
+        }
+
+
+        private ICollectionView _DomainTagExclusions;
+        public ICollectionView DomainTagExclusions
+        {
+            get
+            {
+                _DomainTagExclusions = CollectionViewSource.GetDefaultView(TagExclusions);
+                _DomainTagExclusions.Filter = FilterExclusions;
+                return _DomainTagExclusions;
+            }
+        }
+
+        private bool FilterExclusions(object o)
+        {
+            bool b = false;
+            var tag = o as string;
+            if (o != null)
+            {
+                b = !tag.StartsWithAny("x-","created","modified");
+            }
+            return b;
+        }
+
         private bool FilterForDomain(object o)
         {
             bool b = false;
@@ -89,7 +152,7 @@ namespace Bitsmith
             var vm = o as TagMapViewModel;
             if (vm != null && !DomainExcludes(vm.Key))
             {
-                b = vm.SetFilter(_SelectedDomain) && vm.Count > Domain.MinimumTagCount;               
+                b = vm.SetFilter(_SelectedDomain) && vm.Count >= Domain.MinimumTagCount;               
             }
             return b;
         }
@@ -104,15 +167,27 @@ namespace Bitsmith
         public ObservableCollection<TagMapViewModel> RecentTags { get; set; } = new ObservableCollection<TagMapViewModel>();
         public ObservableCollection<TagMapViewModel> PopularTags { get; set; } = new ObservableCollection<TagMapViewModel>();
 
-
         public void RefreshFiltering()
         {
             Items.Refresh();
             Popular.Refresh();
             Recent.Refresh();
         }
-        public Dictionary<string,List<string>> Exclusions { get; set; }
-
+        public ObservableCollection<string> TagExclusions
+        {
+            get
+            {
+                if (Domain != null && Exclusions.ContainsKey(Domain.Id))
+                {
+                    return Exclusions[Domain.Id];
+                }
+                else
+                {
+                    return new ObservableCollection<string>();
+                }
+            }
+        }
+        public Dictionary<string, ObservableCollection<string>> Exclusions { get; set; } = new Dictionary<string, ObservableCollection<string>>();
         public List<Property> Resolve(string tags)
         {
             var candidates = tags.Split(new char[] { ';', ',' });
@@ -159,7 +234,14 @@ namespace Bitsmith
 
                         if (recenttags.Add(found.Key))
                         {
-                            RecentTags.Add(found);
+                            RecentTags.Insert(0, found);
+                            if (RecentTags.Count > MaxRecentTags)
+                            {
+                                while (RecentTags.Count > MaxRecentTags)
+                                {
+                                    RecentTags.RemoveAt(RecentTags.Count-1);
+                                }                               
+                            }
                         }
                         list.Add(property);
                     }
@@ -183,7 +265,12 @@ namespace Bitsmith
 
         public TagResolver(Dictionary<string, List<string>> exclusions)
         {
-            Exclusions = exclusions;
+            foreach (var key in exclusions.Keys)
+            {
+                var collection = new ObservableCollection<string>(exclusions[key]);
+                Exclusions.Add(key, collection);
+            }
+            //Exclusions = exclusions;
         }
 
 
@@ -223,15 +310,26 @@ namespace Bitsmith
                                          
                                          select z).ToList();
             int i = 0;
-            int max = 5;          
+          
             foreach (var item in vms.OrderByDescending(o => o.Count))
             {
-                if (i++ < max)
+                if (i++ < MaxPopularTags)
                 {
                     PopularTags.Add(item);
                 }
                 TagItems.Add(item);
             }
         }
+
+        #region INotifyPropertyChanged Members
+        public event PropertyChangedEventHandler PropertyChanged;
+        public virtual void OnPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+        #endregion
     }
 }

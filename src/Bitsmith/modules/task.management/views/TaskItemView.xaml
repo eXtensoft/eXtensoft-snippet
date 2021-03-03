@@ -6,11 +6,11 @@
              xmlns:local="clr-namespace:Bitsmith" DataContextChanged="UserControl_DataContextChanged"
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="300">
-    <Grid MaxWidth="300">
+    <Grid >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="10"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="185"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
